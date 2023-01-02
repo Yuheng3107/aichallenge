@@ -1,11 +1,11 @@
 {
   "model_name": "roberta-base",
-  "x_train_path": "C:/Users/ivany/Documents/Programming/Py3.9/SGnlp/input/dailydialog_classification_train_with_context.csv",
-  "x_valid_path": "C:/Users/ivany/Documents/Programming/Py3.9/SGnlp/input/dailydialog_classification_valid_with_context.csv",
+  "x_train_path": "input/dailydialog_classification_train_with_context.csv",
+  "x_valid_path": "input/dailydialog_classification_valid_with_context.csv",
   "max_seq_length": 512,
   "train_args": {
     "do_eval": true,
-    "output_dir": "C:/Users/ivany/Documents/Programming/Py3.9/SGnlp/output/",
+    "output_dir": "output/",
     "overwrite_output_dir": true,
     "evaluation_strategy": "steps",
     "save_steps":1861,
@@ -26,9 +26,9 @@
     "report_to": "none"
   },
   "eval_args": {
-    "trained_model_dir": "C:/Users/ivany/Documents/Programming/Py3.9/SGnlp/output",
-    "x_test_path": "C:/Users/ivany/Documents/Programming/Py3.9/SGnlp/input/dailydialog_classification_test_with_context.csv",
-    "results_path": "C:/Users/ivany/Documents/Programming/Py3.9/SGnlp/output/classification_result.txt",
+    "trained_model_dir": "output",
+    "x_test_path": "input/dailydialog_classification_test_with_context.csv",
+    "results_path": "output/classification_result.txt",
     "per_device_eval_batch_size": 8,
     "no_cuda": false
   }
