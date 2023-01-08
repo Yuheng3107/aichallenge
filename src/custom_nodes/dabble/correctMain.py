@@ -41,11 +41,11 @@ class Node(AbstractNode):
         
         # return outputs
         return {}
-        
+
     def comparePoses(self, evalPose: np.float64, curPose: np.float64, angleWeights: np.float64):
         pass
 
-    def processData(self,rawData: np.ndarray[np.float64], height, width):
+    def processData(self,rawData: np.float64, height: int, width: int):
         #for datasec purposes, 0 is invalid data
         data = np.zeros((17,2)) 
         #counter
@@ -63,7 +63,7 @@ class Node(AbstractNode):
         midHip = (data[11] + data[12])/2
 
         #make line from 2 points
-        def makeLine(point1: np.ndarray[np.float64],point2: np.ndarray[np.float64]):
+        def makeLine(point1: np.float64, point2: np.float64):
             if (point1[0] == 0. and point1[1] == 0.) or (point2[0] == 0. and point2[1] == 0.):
                 return np.zeros(2)
             return point2-point1
@@ -111,10 +111,9 @@ class Node(AbstractNode):
         #rightKnee-rightAnkle
         lines[18] = makeLine(data[14],data[16])
         
-
         #calculate angle between 2 lines. note that it takes lines AB & BC to calculate angle ABC
         #this is because line AB is inverted with the negative sign.
-        def calcAngle(line1: np.ndarray[np.float64],line2: np.ndarray[np.float64]):
+        def calcAngle(line1: np.float64, line2: np.float64):
             if (line1[0] == 0. and line1[1] == 0.) or (line2[0] == 0. and line2[1] == 0.):
                 return 0.
             cosine_angle = np.dot(-line1, line2) / (np.linalg.norm(-line1) * np.linalg.norm(line2))
