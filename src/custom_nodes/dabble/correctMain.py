@@ -25,12 +25,16 @@ class Node(AbstractNode):
         """This node does ___.
 
         Args:
-            inputs (dict): Dictionary with keys "__", "__".
+            inputs (dict): Dictionary with keys "img", "keypoints".
 
         Returns:
-            outputs (dict): Dictionary with keys "__".
+            outputs (dict): empty.
         """
-
+        img = inputs["img"]
+        keypoints = inputs["keypoints"]
+        print(keypoints)
+        print(keypoints.shape)
         # result = do_something(inputs["in1"], inputs["in2"])
         # outputs = {"out1": result}
         # return outputs
+        return {}
