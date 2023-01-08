@@ -2,8 +2,8 @@
 Node template for creating custom nodes.
 """
 
-from typing import Any, Dict
-
+from typing import Any, Dict, List
+import numpy as np
 from peekingduck.pipeline.nodes.abstract_node import AbstractNode
 
 
@@ -31,10 +31,18 @@ class Node(AbstractNode):
             outputs (dict): empty.
         """
         img = inputs["img"]
-        keypoints = inputs["keypoints"]
+        # Keypoints has a shape of (1, 17, 2), since we only 
+        # detecting one person can take first index, so now 
+        # it has shape of (17,2)
+        keypoints = inputs["keypoints"][0]
         print(keypoints)
         print(keypoints.shape)
-        # result = do_something(inputs["in1"], inputs["in2"])
-        # outputs = {"out1": result}
+        
         # return outputs
         return {}
+    def comparePoses(self, evalPose: np.ndarray[np.float64], curPose: np.ndarray[np.float64], angleWeights: np.ndarray[np.float64]):
+        # Compares current pose to ideal pose using weighted angles
+
+        # Output: Output: float between 0 to 1, representing closeness of the 2 poses.
+        pass
+    
