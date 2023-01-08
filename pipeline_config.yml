@@ -1,6 +1,7 @@
 nodes:
 - input.visual:
-    source: https://storage.googleapis.com/peekingduck/videos/wave.mp4
+    source: 0
 - model.posenet
+- custom_nodes.dabble.correctMain
 - draw.poses
 - output.screen
