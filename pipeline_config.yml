@@ -1,7 +1,7 @@
 nodes:
 - input.visual:
-    source: 0
+    source: test.jpeg
 - model.posenet
 - custom_nodes.dabble.correctMain
 - draw.poses
-- output.screen
+- output.media_writer
