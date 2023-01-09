@@ -1,10 +1,10 @@
 import numpy as np
 
 
-def processData(rawData: np.float64, height: int, width: int):
+def processData(keypoints: np.float64, height: int, width: int):
         #for datasec purposes, 0 is invalid data
         data = np.zeros((17,2)) 
-        for i,x in enumerate(rawData[0]):
+        for i,x in enumerate(keypoints[0]):
             if x[0] == -1.:
                 continue
             data[i,0] = x[0]*width
