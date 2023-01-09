@@ -7,8 +7,8 @@ def processData(keypoints: np.float64, height: int, width: int):
         for i,x in enumerate(keypoints[0]):
             if x[0] == -1.:
                 continue
-            data[i,0] = x[0]*width
-            data[i,1] = x[1]*height
+            data[i,0] = x[0]*(width - 1)
+            data[i,1] = x[1]*(height - 1)
         #array of lines, 0,0 is invalid data
         lines = np.zeros((19,2))
         midShoulder = (data[5] + data[6])/2
