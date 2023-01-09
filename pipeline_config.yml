@@ -1,7 +1,8 @@
 nodes:
 - input.visual:
-    source: Training_Data/Good_Pose/Front_View.mp4
-- model.posenet
+    source: Training_Data/Good_Pose/Side_View.mp4
+- model.posenet:
+    score_threshold: 0.8
 - custom_nodes.dabble.correctMain
 - draw.poses
 - output.media_writer
