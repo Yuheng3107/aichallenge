@@ -4,15 +4,11 @@ import numpy as np
 def processData(rawData: np.float64, height: int, width: int):
         #for datasec purposes, 0 is invalid data
         data = np.zeros((17,2)) 
-        #counter
-        i = 0
-        for x in rawData[0]:
+        for i,x in enumerate(rawData[0]):
             if x[0] == -1.:
-                i = i+1
                 continue
             data[i,0] = x[0]*width
             data[i,1] = x[1]*height
-            i = i+1
         #array of lines, 0,0 is invalid data
         lines = np.zeros((19,2))
         midShoulder = (data[5] + data[6])/2
