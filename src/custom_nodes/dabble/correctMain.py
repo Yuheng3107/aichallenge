@@ -23,8 +23,16 @@ class Node(AbstractNode):
         # self.logger.info(f"model loaded with configs: config")
 
     def run(self, inputs: Dict[str, Any]) -> Dict[str, Any]:  # type: ignore
-        """This node does ___.
+        """This node imports the evalPose and angleWeights data,
+        then determines whether the rep is in the start or middle
+        position
 
+        It does so by evaluating both the start and the middle at
+        the same time, if start_score > mid_score (deviation from ideal data)
+        it is start state, else if mid > start, it is in middle state
+
+        node will process the data, compare the poses to ideal pose,
+        then give feedback to the user 
         Args:
             inputs (dict): Dictionary with keys "img", "keypoints".
 
@@ -36,7 +44,9 @@ class Node(AbstractNode):
         keypoints = inputs["keypoints"]
         height = img.shape[0]
         width = img.shape[1]
+        # Calculates angles in radians of live feed
         curPose = self.processData(keypoints, height, width)
+
         
 
         
