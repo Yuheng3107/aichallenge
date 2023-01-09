@@ -32,14 +32,12 @@ class Node(AbstractNode):
             outputs (dict): empty.
         """
         img = inputs["img"]
-        # Keypoints has a shape of (1, 17, 2), since we only 
-        # detecting one person can take first index, so now 
-        # it has shape of (17,2)
+        # Keypoints has a shape of (1, 17, 2)
         keypoints = inputs["keypoints"]
         height = img.shape[0]
         width = img.shape[1]
         curPose = self.processData(keypoints, height, width)
-        print(curPose)
+        
 
         
         # return outputs
