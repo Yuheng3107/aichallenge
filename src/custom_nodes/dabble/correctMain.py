@@ -53,7 +53,24 @@ class Node(AbstractNode):
         return {}
 
     def comparePoses(self, evalPose: np.float64, curPose: np.float64, angleWeights: np.float64):
-        pass
+        #for datasec purposes
+        data = 0.
+        #sum of angle weights
+        angleWeightSum = np.sum(angleWeights)
+        print(angleWeightSum)
+        for i,x in enumerate(curPose):
+            if angleWeights[i] == 0:
+                continue
+            if x == 0:
+                #error handle: return -1
+                if angleWeights[i] != 0:
+                    return -1
+                continue
+            #explanation of formula:
+                #abs(x-evalPose[i])/np.pi: diff betwn 2 angles on a scale of 0 to 1, 1 being 180 degrees
+                #angleWeights[i]/angleWeightSum: weighted value of the current angle difference
+            data += (abs(x-evalPose[i])/np.pi) * (angleWeights[i]/angleWeightSum)
+        return data
 
     
 
