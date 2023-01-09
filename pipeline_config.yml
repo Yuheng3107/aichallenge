@@ -1,6 +1,6 @@
 nodes:
 - input.visual:
-    source: test.jpeg
+    source: Training_Data/Good_Pose/Front_View.mp4
 - model.posenet
 - custom_nodes.dabble.correctMain
 - draw.poses
