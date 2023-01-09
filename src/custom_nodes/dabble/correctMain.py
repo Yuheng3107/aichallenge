@@ -23,15 +23,15 @@ class Node(AbstractNode):
         # self.logger.info(f"model loaded with configs: config")
 
     def run(self, inputs: Dict[str, Any]) -> Dict[str, Any]:  # type: ignore
-        """This node imports the evalPose and angleWeights data,
+        """This node imports the evalPose and angleWeights score,
         then determines whether the rep is in the start or middle
         position
 
         It does so by evaluating both the start and the middle at
-        the same time, if start_score > mid_score (deviation from ideal data)
+        the same time, if start_score > mid_score (deviation from ideal score)
         it is start state, else if mid > start, it is in middle state
 
-        node will process the data, compare the poses to ideal pose,
+        node will process the score, compare the poses to ideal pose,
         then give feedback to the user 
         Args:
             inputs (dict): Dictionary with keys "img", "keypoints".
@@ -53,8 +53,8 @@ class Node(AbstractNode):
         return {}
 
     def comparePoses(self, evalPose: np.float64, curPose: np.float64, angleWeights: np.float64):
-        #for datasec purposes
-        data = 0.
+        #for scoresec purposes
+        score = 0.
         #sum of angle weights
         angleWeightSum = np.sum(angleWeights)
         print(angleWeightSum)
@@ -69,8 +69,8 @@ class Node(AbstractNode):
             #explanation of formula:
                 #abs(x-evalPose[i])/np.pi: diff betwn 2 angles on a scale of 0 to 1, 1 being 180 degrees
                 #angleWeights[i]/angleWeightSum: weighted value of the current angle difference
-            data += (abs(x-evalPose[i])/np.pi) * (angleWeights[i]/angleWeightSum)
-        return data
+            score += (abs(x-evalPose[i])/np.pi) * (angleWeights[i]/angleWeightSum)
+        return score
 
     
 
