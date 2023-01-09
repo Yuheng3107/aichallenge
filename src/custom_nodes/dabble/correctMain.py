@@ -36,8 +36,11 @@ class Node(AbstractNode):
         # detecting one person can take first index, so now 
         # it has shape of (17,2)
         keypoints = inputs["keypoints"]
-        print(keypoints)
-        print(keypoints.shape)
+        height = img.shape[0]
+        width = img.shape[1]
+        curPose = self.processData(keypoints, height, width)
+        print(curPose)
+
         
         # return outputs
         return {}
@@ -119,7 +122,7 @@ class Node(AbstractNode):
             cosine_angle = np.dot(-line1, line2) / (np.linalg.norm(-line1) * np.linalg.norm(line2))
             return np.arccos(cosine_angle)
         
-        print(lines)
+        
         #curPose, 0 is invalid data
         curPose = np.zeros(19)
         #leftEar-nose-midShoulder
