@@ -25,6 +25,7 @@ class Node(AbstractNode):
     def comparePoses(self, evalPose: np.float64, curPose: np.float64, angleWeights: np.float64):
         #for data security 
         score = 0.
+            
         angleWeightSum = np.sum(angleWeights)
         if angleWeightSum == 0:
             return -1
@@ -75,9 +76,15 @@ class Node(AbstractNode):
         testPose = np.array([0.,0.54795029,0.59766692,2.54392573,3.1299541,0.07864504,
         3.1299541,3.06294761,2.77424622,2.79817716,0.91208052,2.22951213,
         1.24551993,1.05832394,1.66790494,0.,0.85814533,2.29384891,1.70588907])
-        weights = np.array([0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,1.,0.,1.,0.,1.,1.])
+        weights = np.array([0.,1.,1.,1.,1.,1.,1.,1.,1.,1.,1.,1.,1.,1.,1.,0.,1.,1.,1.])
         x = self.comparePoses(testPose,curPose,weights)
-        if x != -1:
-            print(x)
+
+    
+        print(x)
         # return outputs
         return {}
+
+
+    
+
+   
