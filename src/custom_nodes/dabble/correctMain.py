@@ -46,6 +46,28 @@ class Node(AbstractNode):
             score += (abs(x-evalPose[i])/np.pi) * (angleWeights[i]/angleWeightSum)
         return score
 
+    def selectFrames(self, score, curPose: np.float64, frames: np.float64):
+        # threshold score of 0.25
+        if score < 0.25:
+            # add to running avg: average contains past 10 good frames
+            frames.append(curPose)
+            if frames.shape[0] > 10:
+                # remove earliest frame to maintain running average at 10
+                frames = frames[1:]
+        return frames
+
+    def compareAngles(self, frames, evalPose, compareAngleWeights: np.float64):
+        feedback = []
+        # positive is too large, negative is too small 
+        differences = np.average(frames,axis=0) - evalPose
+        for i,x in enumerate(differences):
+            if compareAngleWeights[i] == 0:
+                continue
+            # if difference is significant enough
+            if x > compareAngleWeights[i]:
+                feedback.append([i,x])
+        return feedback
+
     def run(self, inputs: Dict[str, Any]) -> Dict[str, Any]:  # type: ignore
         """This node imports the evalPose and angleWeights score,
         then determines whether the rep is in the start or middle
