@@ -3,7 +3,7 @@ import numpy as np
 
 def processData(keypoints: np.float64, height: int, width: int):
         if (keypoints.shape != (1, 17, 2)):
-            return "No Keypoints Detected"
+            return np.zeros(19)
         #for datasec purposes, 0 is invalid data
         data = np.zeros((17,2)) 
         for i,x in enumerate(keypoints[0]):
