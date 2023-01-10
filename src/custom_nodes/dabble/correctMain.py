@@ -46,26 +46,35 @@ class Node(AbstractNode):
             score += (abs(x-evalPose[i])/np.pi) * (angleWeights[i]/angleWeightSum)
         return score
 
-    def selectFrames(self, score, curPose: np.float64, frames: np.float64):
+    # shifts selectFrames and adds curPose to the back of the array
+        # returns True if frame is selected, False if frame is not selected
+    def selectFrames(self, score, curPose: np.float64, frames: np.ndarray[np.float64]):
+        #error catch for invalid frame
+        if score == -1:
+            return False
         # threshold score of 0.25
         if score < 0.25:
-            # add to running avg: average contains past 10 good frames
-            frames.append(curPose)
-            if frames.shape[0] > 10:
-                # remove earliest frame to maintain running average at 10
-                frames = frames[1:]
-        return frames
+            frames[:-1] = frames[1:]
+            # replace the last entry with curPose
+            frames[frames.shape[0]-1] = curPose
+        return True
 
-    def compareAngles(self, frames, evalPose, compareAngleWeights: np.float64):
-        feedback = []
+    # returns np.arr(19) of differences, 0 is no significant difference
+    def compareAngles(self, frames: np.float64, evalPose: np.float64, compareAngleWeights: np.float64):
+        feedback = np.zeros(evalPose.shape)
+        # remove empty data
+        for i,x in enumerate(frames):
+            if np.sum(x) != 0:
+                frames = frames[i:]
+                break
         # positive is too large, negative is too small 
         differences = np.average(frames,axis=0) - evalPose
         for i,x in enumerate(differences):
-            if compareAngleWeights[i] == 0:
+            if compareAngleWeights[i] == 0.:
                 continue
             # if difference is significant enough
             if x > compareAngleWeights[i]:
-                feedback.append([i,x])
+                feedback[i] = differences[i]
         return feedback
 
     def run(self, inputs: Dict[str, Any]) -> Dict[str, Any]:  # type: ignore
