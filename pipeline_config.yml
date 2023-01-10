@@ -1,6 +1,6 @@
 nodes:
 - input.visual:
-    source: Training_Data/Bad_Pose/Butt/Side_View.mp4
+    source: 0
 - model.posenet
 - custom_nodes.dabble.correctMain
 - draw.poses
