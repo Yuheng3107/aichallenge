@@ -17,6 +17,7 @@ class Node(AbstractNode):
 
     def __init__(self, config: Dict[str, Any] = None, **kwargs: Any) -> None:
         super().__init__(config, node_path=__name__, **kwargs)
+        self.frames = np.zeros((10,19))
 
         # initialize/load any configs and models here
         # configs can be called by self.<config_name> e.g. self.filepath
@@ -48,28 +49,28 @@ class Node(AbstractNode):
 
     # shifts selectFrames and adds curPose to the back of the array
         # returns True if frame is selected, False if frame is not selected
-    def selectFrames(self, score, curPose: np.float64, frames: np.ndarray[np.float64]):
+    def selectFrames(self, score, curPose: np.float64):
         #error catch for invalid frame
         if score == -1:
             return False
         # threshold score of 0.25
         if score < 0.25:
-            frames[:-1] = frames[1:]
+            self.frames[:-1] = self.frames[1:]
             # replace the last entry with curPose
-            frames[frames.shape[0]-1] = curPose
+            self.frames[self.frames.shape[0]-1] = curPose
         return True
 
     # returns np.arr(19) of differences, 0 is no significant difference
-    def compareAngles(self, frames: np.float64, evalPose: np.float64, compareAngleWeights: np.float64):
+    def compareAngles(self, evalPose: np.float64, compareAngleWeights: np.float64):
         feedback = np.zeros(evalPose.shape)
         # remove empty data
-        for i,x in enumerate(frames):
+        for i, x in enumerate(self.frames):
             if np.sum(x) != 0:
-                frames = frames[i:]
+                self.frames = self.frames[i:]
                 break
         # positive is too large, negative is too small 
-        differences = np.average(frames,axis=0) - evalPose
-        for i,x in enumerate(differences):
+        differences = np.average(self.frames, axis=0) - evalPose
+        for i, x in enumerate(differences):
             if compareAngleWeights[i] == 0.:
                 continue
             # if difference is significant enough
@@ -101,14 +102,16 @@ class Node(AbstractNode):
         width = img.shape[1]
         # Calculates angles in radians of live feed
         curPose = processData(keypoints, height, width)
-
+        
         #print(curPose)
         testPose = np.array([0.,0.54795029,0.59766692,2.54392573,3.1299541,0.07864504,
         3.1299541,3.06294761,2.77424622,2.79817716,0.91208052,2.22951213,
         1.24551993,1.05832394,1.66790494,0.,0.85814533,2.29384891,1.70588907])
         weights = np.array([0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,1.,0.,1.,0.,1.,1.])
-        x = self.comparePoses(testPose,curPose,weights)
-        if x != -1:
-            print(x)
+
+        score = self.comparePoses(testPose,curPose,weights)
+        frameSelected = self.selectFrames(score, curPose)
+        feedback = self.compareAngles(testPose, weights)
+        
         # return outputs
         return {}
