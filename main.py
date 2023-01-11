@@ -14,7 +14,7 @@ def main():
     posenet_node = posenet.Node()
     poses_node = poses.Node()
     
-    screen_node = screen.Node()
+    # screen_node = screen.Node()
     # media_writer_node = media_writer.Node(output_dir=str(Path.cwd() / "results"))
 
     runner = Runner(
@@ -23,7 +23,7 @@ def main():
             posenet_node,
             processing_node,
             poses_node,
-            #screen_node,
+            # screen_node,
             # media_writer_node
         ]
     )
