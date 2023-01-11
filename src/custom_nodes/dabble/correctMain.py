@@ -63,7 +63,7 @@ class Node(AbstractNode):
 
     # returns np.arr(19) of differences, 0 is no significant difference
     def compareAngles(self, evalPose: np.float64, compareAngleWeights: np.float64):
-        feedback = np.zeros(evalPose.shape)
+        angleDifferences = np.zeros(evalPose.shape)
         # remove empty data
         for i, x in enumerate(self.frames):
             if np.sum(x) != 0:
@@ -76,8 +76,8 @@ class Node(AbstractNode):
                 continue
             # if difference is significant enough
             if x > compareAngleWeights[i]:
-                feedback[i] = differences[i]
-        return feedback
+                angleDifferences[i] = differences[i]
+        return angleDifferences
 
     def run(self, inputs: Dict[str, Any]) -> Dict[str, Any]:  # type: ignore
         """This node imports the evalPose and angleWeights score,
@@ -89,7 +89,7 @@ class Node(AbstractNode):
         it is start state, else if mid > start, it is in middle state
 
         node will process the score, compare the poses to ideal pose,
-        then give feedback to the user 
+        then give angleDifferences to the user 
         Args:
             inputs (dict): Dictionary with keys "img", "keypoints".
 
@@ -111,11 +111,20 @@ class Node(AbstractNode):
         weights = np.array([0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,1.,0.,1.,0.,1.,1.])
 
         score = self.comparePoses(testPose,curPose,weights)
-        frameSelected = self.selectFrames(score, curPose)
-        feedback = self.compareAngles(testPose, weights)
+
         
-        # return outputs
+        if self.selectFrames(score, curPose):
+            angleDifferences = self.compareAngles(testPose, weights)
+
+        
+        
+        # return feedback which will be accessed by view
         return {}
+
+    def giveFeedback(self, angleDifferences: np.float64):
+        # gives feedback to a view, so returns json data which can be accessed from datapool
+
+
 
 
     
