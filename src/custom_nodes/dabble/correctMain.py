@@ -122,6 +122,7 @@ class Node(AbstractNode):
         return {}
 
     def giveFeedback(self, angleDifferences: np.float64):
+        pass
         # gives feedback to a view, so returns json data which can be accessed from datapool
 
 
