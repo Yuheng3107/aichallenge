@@ -26,6 +26,7 @@ class Node(AbstractNode):
     def comparePoses(self, evalPose: np.float64, curPose: np.float64, angleWeights: np.float64):
         #for data security 
         score = 0.
+            
         angleWeightSum = np.sum(angleWeights)
         if angleWeightSum == 0:
             return -1
@@ -115,3 +116,8 @@ class Node(AbstractNode):
         
         # return outputs
         return {}
+
+
+    
+
+   
