@@ -105,6 +105,7 @@ class Node(AbstractNode):
         
         img = inputs["img"]
         app.img = img
+        print(app.img)
         # Keypoints has a shape of (1, 17, 2)
         keypoints = inputs["keypoints"]
         height = img.shape[0]
