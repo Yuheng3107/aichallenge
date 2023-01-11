@@ -7,7 +7,7 @@ import numpy as np
 import csv
 from peekingduck.pipeline.nodes.abstract_node import AbstractNode
 from .helper import processData
-import app
+import globals
 class Node(AbstractNode):
     """This is a template class of how to write a node for PeekingDuck.
 
@@ -104,8 +104,7 @@ class Node(AbstractNode):
         
         
         img = inputs["img"]
-        app.img = img
-        print(app.img)
+        globals.img = img
         # Keypoints has a shape of (1, 17, 2)
         keypoints = inputs["keypoints"]
         height = img.shape[0]
