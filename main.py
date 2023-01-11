@@ -10,26 +10,28 @@ from peekingduck.runner import Runner
 
 def main():
     processing_node = correctMain.Node(pkd_base_dir=Path.cwd() / "src" / "custom_nodes")
-
     visual_node = visual.Node(source=0)
-
     posenet_node = posenet.Node()
     poses_node = poses.Node()
-
+    
     screen_node = screen.Node()
-    media_writer_node = media_writer.Node(output_dir=str(Path.cwd() / "results"))
+    # media_writer_node = media_writer.Node(output_dir=str(Path.cwd() / "results"))
 
     runner = Runner(
         nodes=[
             visual_node,
             posenet_node,
+            processing_node,
             poses_node,
-            screen_node,
-            media_writer_node
+            #screen_node,
+            # media_writer_node
         ]
     )
-    runner.run()
 
+
+
+    runner.run()
+    
 
 
 if __name__ == "__main__":
