@@ -75,7 +75,7 @@ class Node(AbstractNode):
             if angleThresholds[i] == 0.:
                 continue
             # if difference is significant enough
-            if x > angleThresholds[i]:
+            if abs(x) > angleThresholds[i]:
                 angleDifferences[i] = differences[i]
         return angleDifferences
 
@@ -109,19 +109,21 @@ class Node(AbstractNode):
         # Calculates angles in radians of live feed
         curPose = processData(keypoints, height, width)
         
-        ## print(curPose)
-        testPose = np.array([0.,0.54795029,0.59766692,2.54392573,3.1299541,0.07864504,
-        3.1299541,3.06294761,2.77424622,2.79817716,0.91208052,2.22951213,
-        1.24551993,1.05832394,1.66790494,0.,0.85814533,2.29384891,1.70588907])
-        weights = np.array([0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,1.,0.,1.,0.,1.,1.])
-        weights2 = np.array([0,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.1,0.,0.1,0.,0.1,0.1])
+        ## print(f"curPose: {curPose}")
+        testPose = np.array([0.,0.98390493,1.51094115,1.6306515,0.26590253,2.81373512
+            ,0.26590253,0.32785753,1.02067892,1.59934942,1.35720082,1.78439183
+            ,0.79900877,1.33113154,1.22965078,1.52982444,0.90668716,2.49591843
+            ,0.26101294])
+        
+        weights = np.array([0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,1.,0.,1.,0.,1.,0.])
+        weights2 = np.array([0,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.1,0.,0.1,0.,0.1,0])
 
         score = self.comparePoses(testPose,curPose,weights)
         
         if score != -1:
             print(f"score: {score}")
         
-        if self.selectFrames(score, curPose, 0.25):
+        if self.selectFrames(score, curPose, 0.1):
             angleDifferences = self.compareAngles(testPose, weights2)
             print(f"angleDifferences: {angleDifferences}")
             ## print(f"frames: {self.frames}")
