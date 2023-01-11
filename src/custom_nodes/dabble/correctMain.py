@@ -62,7 +62,7 @@ class Node(AbstractNode):
         return False
 
     # returns np.arr(19) of differences, 0 is no significant difference
-    def compareAngles(self, evalPose: np.float64, compareAngleWeights: np.float64):
+    def compareAngles(self, evalPose: np.float64, angleThresholds: np.float64):
         angleDifferences = np.zeros(evalPose.shape)
         # remove empty data
         for i, x in enumerate(self.frames):
@@ -72,10 +72,10 @@ class Node(AbstractNode):
         # positive is too large, negative is too small 
         differences = np.average(filledFrames, axis=0) - evalPose
         for i, x in enumerate(differences):
-            if compareAngleWeights[i] == 0.:
+            if angleThresholds[i] == 0.:
                 continue
             # if difference is significant enough
-            if x > compareAngleWeights[i]:
+            if x > angleThresholds[i]:
                 angleDifferences[i] = differences[i]
         return angleDifferences
 
