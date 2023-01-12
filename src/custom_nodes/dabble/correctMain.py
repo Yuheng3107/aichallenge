@@ -18,6 +18,7 @@ class Node(AbstractNode):
     def __init__(self, config: Dict[str, Any] = None, **kwargs: Any) -> None:
         super().__init__(config, node_path=__name__, **kwargs)
         self.frames = np.zeros((10,19))
+        self.frame_count = 0
         # initialize/load any configs and models here
         # configs can be called by self.<config_name> e.g. self.filepath
         # self.logger.info(f"model loaded with configs: config")
@@ -138,7 +139,7 @@ class Node(AbstractNode):
             outputs (dict): empty.
         """
         
-        
+        self.frame_count += 1
         globals.img = inputs["img"]
         # Keypoints has a shape of (1, 17, 2)
         keypoints = inputs["keypoints"]
