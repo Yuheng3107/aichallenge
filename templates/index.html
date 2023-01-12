@@ -1,16 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
     <title>Document</title>
 </head>
-<body>
-    
-    <button><a href="start">Video</a></button>
-    <button><a href="endExercise">End Exercise</a></button>
 
-    <img src="{{url_for('video_feed')}}" alt="Video">
+<body>
+    <header class="top-bar">
+        <span class="brand">AI Challenge 2023</span>
+    </header>
+    <main class="main-content">
+        <img class="video-feed" src="{{url_for('video_feed')}}" alt="Video">
+        <a class="start-button" href="start">Start</a>
+    </main>
+
+
 </body>
+
 </html>
