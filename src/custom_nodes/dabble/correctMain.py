@@ -52,8 +52,11 @@ class Node(AbstractNode):
     # shifts selectFrames and adds curPose to the back of the array
         # returns True if frame is selected, False if frame is not selected
     def selectFrames(self, score, curPose: np.float64, scoreThreshold):
-        #error catch for invalid frame
+        # error catch for invalid frame
         if score == -1:
+            return False
+        # check if frames is full
+        if self.frameCount == self.frames.shape[0]-1:
             return False
         # test if score is lesser than threshold
         if score < scoreThreshold:
