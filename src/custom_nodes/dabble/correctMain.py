@@ -106,11 +106,13 @@ class Node(AbstractNode):
  'vertical(nose)-nose-midShoulder'])
 
         threshold = 0.05 # set deviation threshold from ideal pose
+        angleDifferences /= np.pi
+
         for angle_id, difference in enumerate(angleDifferences):
             if difference == 0.:
                 continue
-            elif (abs(difference/np.pi) > threshold):
-                if (difference/np.pi > 0):
+            elif (abs(difference) > threshold):
+                if (difference > 0):
                     # angle needs to be smaller, as it is larger than ideal pose
                     feedback.append(f"{glossary[angle_id]} needs to be smaller")
                 else:
