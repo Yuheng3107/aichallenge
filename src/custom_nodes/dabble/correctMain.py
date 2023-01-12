@@ -103,12 +103,11 @@ class Node(AbstractNode):
         """
         
         
-        img = inputs["img"]
-        globals.img = img
+        globals.img = inputs["img"]
         # Keypoints has a shape of (1, 17, 2)
         keypoints = inputs["keypoints"]
-        height = img.shape[0]
-        width = img.shape[1]
+        height = globals.img.shape[0]
+        width = globals.img.shape[1]
         # Calculates angles in radians of live feed
         curPose = processData(keypoints, height, width)
         
