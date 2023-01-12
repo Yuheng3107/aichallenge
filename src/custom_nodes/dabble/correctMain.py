@@ -66,7 +66,17 @@ class Node(AbstractNode):
             globals.currentExercise = 0
         # start exercise
         globals.runSwitch = True
-        pass
+        return None
+    
+    def endExercise(self):
+        angleDifferences = self.compareAngles(self.evalPoses[globals.currentExercise], self.angleThresholds[globals.currentExercise])
+        # feedback is global variable which can be accessed by view in app.py
+        globals.feedback = self.giveFeedback(angleDifferences)
+        print(globals.feedback)
+        # turn off run
+        globals.runSwitch = False
+        return None
+
 
     """COMPUTATIONAL METHODS"""
     def comparePoses(self, evalPose: np.float64, curPose: np.float64, angleWeights: np.float64):
@@ -157,15 +167,16 @@ class Node(AbstractNode):
             outputs (dict): empty.
         """
 
+
         """UI METHODS"""
+        if globals.exerciseSelected:
+            self.changeExercise()
+            globals.exerciseSelected = False
+
         if globals.exerciseEnded and self.selectedFrameCount != 0:
-            angleDifferences = self.compareAngles(self.evalPoses[globals.currentExercise], self.angleThresholds[globals.currentExercise])
-            # feedback is global variable which can be accessed by view in app.py
-            globals.feedback = self.giveFeedback(angleDifferences)
-            print(globals.feedback)
-            # turn off run
-            globals.runSwitch = False
+            self.endExercise()
             globals.exerciseEnded = False
+
 
         """COMPUTATIONAL METHODS"""
         if globals.runSwitch:
