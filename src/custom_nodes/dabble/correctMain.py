@@ -85,7 +85,7 @@ class Node(AbstractNode):
         feedback = []
         # Probably will read glossary from csv in the end
         # Glossary will map angle_id to corresponding angle
-        glossary = ['leftEar-nose-midShoulder',
+        glossary = np.array(['leftEar-nose-midShoulder',
  'rightEar-nose-midShoulder',
  'nose-midShoulder-leftShoulder',
  'nose-midShoulder-rightShoulder',
@@ -103,7 +103,7 @@ class Node(AbstractNode):
  'rightHip-rightKnee-rightAnkle',
  'nose-midShoulder-midHip',
  'vertical(midShoulder)-midShoulder-midHip',
- 'vertical(nose)-nose-midShoulder']
+ 'vertical(nose)-nose-midShoulder'])
 
         threshold = 0.05 # set deviation threshold from ideal pose
         for angle_id, difference in enumerate(angleDifferences):
