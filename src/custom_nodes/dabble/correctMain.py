@@ -159,14 +159,16 @@ class Node(AbstractNode):
         score = self.comparePoses(testPose,curPose,weights)
         
         if score != -1:
-            print(f"score: {score}")
+            pass
+            # print(f"score: {score}")
         
         if self.selectFrames(score, curPose, 0.1):
             angleDifferences = self.compareAngles(testPose, weights2)
-            print(f"angleDifferences: {angleDifferences}")
+            # now feedback is global variable which can be accessed by view in app.py
+            globals.feedback = self.giveFeedback(angleDifferences)
+            # print(f"angleDifferences: {angleDifferences}")
             ## print(f"frames: {self.frames}")
-
-        # return feedback which will be accessed by view
+        
         return {}
 
 
