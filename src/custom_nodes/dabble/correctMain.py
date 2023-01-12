@@ -122,8 +122,6 @@ class Node(AbstractNode):
             else:
                 # angle needs to be greater, as it is smaller than ideal pose
                 feedback.append(f"{glossary[angle_id]} needs to be larger")
-        
-        globals.mistakes = feedback
         return feedback
 
     def run(self, inputs: Dict[str, Any]) -> Dict[str, Any]:  # type: ignore
@@ -173,7 +171,7 @@ class Node(AbstractNode):
 
             # check for not in frame
             if self.frameCount > 100 and self.selectedFrameCount == 0:
-                globals.mistakes = ["PUT UR ASS IN THE IMAGE"]
+                globals.feedback = ["PUT UR ASS IN THE IMAGE"]
             
             """DEBUG"""
             ## print(f"curPose: {curPose}")
