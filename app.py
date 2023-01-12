@@ -28,3 +28,6 @@ def start():
 def video_feed():
     return Response(gen(),
     mimetype='multipart/x-mixed-replace; boundary=frame')
+
+
+
