@@ -18,6 +18,7 @@ class Node(AbstractNode):
     def __init__(self, config: Dict[str, Any] = None, **kwargs: Any) -> None:
         super().__init__(config, node_path=__name__, **kwargs)
         self.frames = np.zeros((10,19))
+        self.frame_count = 0
         # initialize/load any configs and models here
         # configs can be called by self.<config_name> e.g. self.filepath
         # self.logger.info(f"model loaded with configs: config")
@@ -81,7 +82,43 @@ class Node(AbstractNode):
 
     
     def giveFeedback(self, angleDifferences: np.float64):
-        pass
+        feedback = []
+        # Probably will read glossary from csv in the end
+        # Glossary will map angle_id to corresponding angle
+        glossary = ['leftEar-nose-midShoulder',
+ 'rightEar-nose-midShoulder',
+ 'nose-midShoulder-leftShoulder',
+ 'nose-midShoulder-rightShoulder',
+ 'midShoulder-leftShoulder-leftElbow',
+ 'midShoulder-rightShoulder-rightElbow',
+ 'nose-midShoulder-leftElbow',
+ 'nose-midShoulder-rightElbow',
+ 'leftShoulder-leftElbow-leftWrist',
+ 'rightShoulder-rightElbow-rightWrist',
+ 'midShoulder-midHip-leftHip',
+ 'midShoulder-midHip-rightHip',
+ 'leftShoulder-leftHip-leftKnee',
+ 'rightShoulder-rightHip-rightKnee',
+ 'leftHip-leftKnee-leftAnkle',
+ 'rightHip-rightKnee-rightAnkle',
+ 'nose-midShoulder-midHip',
+ 'vertical(midShoulder)-midShoulder-midHip',
+ 'vertical(nose)-nose-midShoulder']
+
+        threshold = 0.05 # set deviation threshold from ideal pose
+        for angle_id, difference in enumerate(angleDifferences):
+            if difference == 0.:
+                continue
+            elif (abs(difference/np.pi) > threshold):
+                if (difference/np.pi > 0):
+                    # angle needs to be smaller, as it is larger than ideal pose
+                    feedback.append(f"{glossary[angle_id]} needs to be smaller")
+                else:
+                    # angle needs to be greater, as it is smaller than ideal pose
+                    feedback.append(f"{glossary[angle_id]} needs to be larger")
+        return feedback
+
+
         # gives feedback to a view, so returns json data which can be accessed from datapool
 
     def run(self, inputs: Dict[str, Any]) -> Dict[str, Any]:  # type: ignore
@@ -102,13 +139,12 @@ class Node(AbstractNode):
             outputs (dict): empty.
         """
         
-        
-        img = inputs["img"]
-        globals.img = img
+        self.frame_count += 1
+        globals.img = inputs["img"]
         # Keypoints has a shape of (1, 17, 2)
         keypoints = inputs["keypoints"]
-        height = img.shape[0]
-        width = img.shape[1]
+        height = globals.img.shape[0]
+        width = globals.img.shape[1]
         # Calculates angles in radians of live feed
         curPose = processData(keypoints, height, width)
         
@@ -124,14 +160,16 @@ class Node(AbstractNode):
         score = self.comparePoses(testPose,curPose,weights)
         
         if score != -1:
-            print(f"score: {score}")
+            pass
+            # print(f"score: {score}")
         
         if self.selectFrames(score, curPose, 0.1):
             angleDifferences = self.compareAngles(testPose, weights2)
-            print(f"angleDifferences: {angleDifferences}")
+            # now feedback is global variable which can be accessed by view in app.py
+            globals.feedback = self.giveFeedback(angleDifferences)
+            # print(f"angleDifferences: {angleDifferences}")
             ## print(f"frames: {self.frames}")
-
-        # return feedback which will be accessed by view
+        
         return {}
 
 
