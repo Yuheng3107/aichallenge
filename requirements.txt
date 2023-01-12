@@ -1,2 +1,4 @@
 peekingduck
 flask
+json
+numpy
