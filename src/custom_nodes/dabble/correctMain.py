@@ -16,17 +16,27 @@ class Node(AbstractNode):
     """
 
     def __init__(self, config: Dict[str, Any] = None, **kwargs: Any) -> None:
-        super().__init__(config, node_path=__name__, **kwargs)
-        self.frames = np.zeros((500,19))
-        self.frameCount = 0
         # initialize/load any configs and models here
         # configs can be called by self.<config_name> e.g. self.filepath
         # self.logger.info(f"model loaded with configs: config")
 
+        super().__init__(config, node_path=__name__, **kwargs)
+        self.selectedFrames = np.zeros((500,19))
+        self.selectedFrameCount = 0
+        self.frameCount = 0
+    
+    """UI METHODS"""
+    def changeExercise(self):
+        self.selectedFrames = np.zeros((500,19))
+        self.selectedFrameCount = 0
+        self.frameCount = 0
+        pass
+
+    """COMPUTATIONAL METHODS"""
     def comparePoses(self, evalPose: np.float64, curPose: np.float64, angleWeights: np.float64):
-        #for data security 
+        # for data security 
         score = 0.
-            
+        
         angleWeightSum = np.sum(angleWeights)
         if angleWeightSum == 0:
             return -1
@@ -34,7 +44,6 @@ class Node(AbstractNode):
             if angleWeights[i] == 0:
                 continue
             if x == 0:
-
                 # Check if peekingDuck missed out any useful 
                 # keypoints, i.e no value but still have weight
                 if angleWeights[i] != 0:
@@ -44,7 +53,6 @@ class Node(AbstractNode):
             # explanation of formula:
                 # abs(x-evalPose[i])/np.pi: diff betwn 2 angles on a scale of 0 to 1, 1 being 180 degrees
                 # angleWeights[i]/angleWeightSum: weighted value of the current angle difference
-            
             score += (abs(x-evalPose[i])/np.pi) * (angleWeights[i]/angleWeightSum)
         return score
 
@@ -54,23 +62,23 @@ class Node(AbstractNode):
         # error catch for invalid frame
         if score == -1:
             return False
-        # check if frames is full
-        if self.frameCount == self.frames.shape[0]-1:
+        # check if selectedFrames is full
+        if self.selectedFrameCount == self.selectedFrames.shape[0]-1:
             return False
         # test if score is lesser than threshold
         if score < scoreThreshold:
-            self.frames[self.frameCount] = curPose
-            self.frameCount += 1
+            self.selectedFrames[self.selectedFrameCount] = curPose
+            self.selectedFrameCount += 1
             return True
         return False
 
     # returns np.arr(19) of differences, 0 is no significant difference
     def compareAngles(self, evalPose: np.float64, angleThresholds: np.float64):
-        angleDifferences = np.zeros(evalPose.shape)
+        angleDifferences = np.zeros(evalPose.shape) 
         # remove empty data
-        filledFrames = self.frames[0:self.frameCount]
+        filledselectedFrames = self.selectedFrames[0:self.selectedFrameCount]
         # positive is too large, negative is too small 
-        differences = np.average(filledFrames, axis=0) - evalPose
+        differences = np.average(filledselectedFrames, axis=0) - evalPose
         for i, x in enumerate(differences):
             if angleThresholds[i] == 0.:
                 continue
@@ -79,7 +87,7 @@ class Node(AbstractNode):
                 angleDifferences[i] = differences[i]
         return angleDifferences
 
-    
+    # gives feedback to a view, so returns json data which can be accessed from datapool
     def giveFeedback(self, angleDifferences: np.float64):
         feedback = []
         # Probably will read glossary from csv in the end
@@ -103,7 +111,6 @@ class Node(AbstractNode):
             'nose-midShoulder-midHip',
             'vertical(midShoulder)-midShoulder-midHip',
             'vertical(nose)-nose-midShoulder'])
-
         angleDifferences /= np.pi
 
         for angle_id, difference in enumerate(angleDifferences):
@@ -116,9 +123,6 @@ class Node(AbstractNode):
                 # angle needs to be greater, as it is smaller than ideal pose
                 feedback.append(f"{glossary[angle_id]} needs to be larger")
         return feedback
-
-
-        # gives feedback to a view, so returns json data which can be accessed from datapool
 
     def run(self, inputs: Dict[str, Any]) -> Dict[str, Any]:  # type: ignore
         """This node imports the evalPose and angleWeights score,
@@ -137,16 +141,6 @@ class Node(AbstractNode):
         Returns:
             outputs (dict): empty.
         """
-        
-        globals.img = inputs["img"]
-        # Keypoints has a shape of (1, 17, 2)
-        keypoints = inputs["keypoints"]
-        height = globals.img.shape[0]
-        width = globals.img.shape[1]
-        # Calculates angles in radians of live feed
-        curPose = processData(keypoints, height, width)
-        
-        ## print(f"curPose: {curPose}")
         testPose = np.array([0.,0.98390493,1.51094115,1.6306515,0.26590253,2.81373512
             ,0.26590253,0.32785753,1.02067892,1.59934942,1.35720082,1.78439183
             ,0.79900877,1.33113154,1.22965078,1.52982444,0.90668716,2.49591843
@@ -155,23 +149,37 @@ class Node(AbstractNode):
         weights = np.array([0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,1.,0.,1.,0.,1.,0.])
         weights2 = np.array([0,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.1,0.,0.1,0.,0.1,0])
 
-        score = self.comparePoses(testPose,curPose,weights)
-        
-        if score != -1:
-            pass
-            ## print(f"score: {score}")
-        self.selectFrames(score, curPose, 0.1)
-        print(self.frameCount)
-        if globals.exerciseEnded and self.frameCount != 0:
-            globals.exerciseEnded = False
-            angleDifferences = self.compareAngles(testPose, weights2)
+        """UI METHODS"""
+        if globals.exerciseEnded and self.selectedFrameCount != 0:
+            angleDifferences = self.compareAngles(testPose, weights2) # weights2 to be replaced by angleThresholds[globals.currentExercise] 
             # now feedback is global variable which can be accessed by view in app.py
-            
             globals.feedback = self.giveFeedback(angleDifferences)
             print(globals.feedback)
-            ## print(f"angleDifferences: {angleDifferences}")
+            globals.exerciseEnded = False
+
+        """COMPUTATIONAL METHODS"""
+        if globals.runSwitch:
+            globals.img = inputs["img"]
+            # Keypoints has a shape of (1, 17, 2)
+            keypoints = inputs["keypoints"]
+            # add 1 to frameCount
+            self.frameCount += 1
+            # Calculates angles in radians of live feed
+            curPose = processData(keypoints, globals.img.shape[0], globals.img.shape[1])
+            score = self.comparePoses(testPose,curPose,weights) # testPose to be replaced with evalPoses[globals.currentExercise], weights to be replaced with angleWeights[globals.currentExercise]
+            self.selectFrames(score, curPose, 0.1)
+
+            # check for not in frame
+            if self.frameCount > 100 and self.selectedFrameCount == 0:
+                globals.feedback = ["PUT UR ASS IN THE IMAGE"]
             
-        
+            """DEBUG"""
+            ## print(f"curPose: {curPose}")
+            if score != -1:
+                ## print(f"score: {score}")
+                pass
+            ## print(f"angleDifferences: {angleDifferences}")   
+            print(self.selectedFrameCount)
         
         return {}
 
