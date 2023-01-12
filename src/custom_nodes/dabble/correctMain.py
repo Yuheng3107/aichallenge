@@ -4,10 +4,10 @@ Node template for creating custom nodes.
 
 from typing import Any, Dict, List
 import numpy as np
-import csv
 from peekingduck.pipeline.nodes.abstract_node import AbstractNode
 from .helper import processData
 import globals
+
 class Node(AbstractNode):
     """This is a template class of how to write a node for PeekingDuck.
 
@@ -17,7 +17,8 @@ class Node(AbstractNode):
 
     def __init__(self, config: Dict[str, Any] = None, **kwargs: Any) -> None:
         super().__init__(config, node_path=__name__, **kwargs)
-        self.frames = np.zeros((10,19))
+        self.frames = np.zeros((500,19))
+        self.frameCount = 0
         # initialize/load any configs and models here
         # configs can be called by self.<config_name> e.g. self.filepath
         # self.logger.info(f"model loaded with configs: config")
@@ -50,14 +51,16 @@ class Node(AbstractNode):
     # shifts selectFrames and adds curPose to the back of the array
         # returns True if frame is selected, False if frame is not selected
     def selectFrames(self, score, curPose: np.float64, scoreThreshold):
-        #error catch for invalid frame
+        # error catch for invalid frame
         if score == -1:
+            return False
+        # check if frames is full
+        if self.frameCount == self.frames.shape[0]-1:
             return False
         # test if score is lesser than threshold
         if score < scoreThreshold:
-            self.frames[:-1] = self.frames[1:]
-            # replace the last entry with curPose
-            self.frames[self.frames.shape[0]-1] = curPose
+            self.frames[self.frameCount] = curPose
+            self.frameCount += 1
             return True
         return False
 
@@ -65,10 +68,7 @@ class Node(AbstractNode):
     def compareAngles(self, evalPose: np.float64, angleThresholds: np.float64):
         angleDifferences = np.zeros(evalPose.shape)
         # remove empty data
-        for i, x in enumerate(self.frames):
-            if np.sum(x) != 0:
-                filledFrames = self.frames[i:]
-                break
+        filledFrames = self.frames[0:self.frameCount]
         # positive is too large, negative is too small 
         differences = np.average(filledFrames, axis=0) - evalPose
         for i, x in enumerate(differences):
@@ -81,7 +81,43 @@ class Node(AbstractNode):
 
     
     def giveFeedback(self, angleDifferences: np.float64):
-        pass
+        feedback = []
+        # Probably will read glossary from csv in the end
+        # Glossary will map angle_id to corresponding angle
+        glossary = np.array(['leftEar-nose-midShoulder',
+            'rightEar-nose-midShoulder',
+            'nose-midShoulder-leftShoulder',
+            'nose-midShoulder-rightShoulder',
+            'midShoulder-leftShoulder-leftElbow',
+            'midShoulder-rightShoulder-rightElbow',
+            'nose-midShoulder-leftElbow',
+            'nose-midShoulder-rightElbow',
+            'leftShoulder-leftElbow-leftWrist',
+            'rightShoulder-rightElbow-rightWrist',
+            'midShoulder-midHip-leftHip',
+            'midShoulder-midHip-rightHip',
+            'leftShoulder-leftHip-leftKnee',
+            'rightShoulder-rightHip-rightKnee',
+            'leftHip-leftKnee-leftAnkle',
+            'rightHip-rightKnee-rightAnkle',
+            'nose-midShoulder-midHip',
+            'vertical(midShoulder)-midShoulder-midHip',
+            'vertical(nose)-nose-midShoulder'])
+
+        angleDifferences /= np.pi
+
+        for angle_id, difference in enumerate(angleDifferences):
+            if difference == 0.:
+                continue
+            if (difference > 0):
+                # angle needs to be smaller, as it is larger than ideal pose
+                feedback.append(f"{glossary[angle_id]} needs to be smaller")
+            else:
+                # angle needs to be greater, as it is smaller than ideal pose
+                feedback.append(f"{glossary[angle_id]} needs to be larger")
+        return feedback
+
+
         # gives feedback to a view, so returns json data which can be accessed from datapool
 
     def run(self, inputs: Dict[str, Any]) -> Dict[str, Any]:  # type: ignore
@@ -101,7 +137,6 @@ class Node(AbstractNode):
         Returns:
             outputs (dict): empty.
         """
-        
         
         globals.img = inputs["img"]
         # Keypoints has a shape of (1, 17, 2)
@@ -123,14 +158,21 @@ class Node(AbstractNode):
         score = self.comparePoses(testPose,curPose,weights)
         
         if score != -1:
-            print(f"score: {score}")
-        
-        if self.selectFrames(score, curPose, 0.1):
+            pass
+            ## print(f"score: {score}")
+        self.selectFrames(score, curPose, 0.1)
+        print(self.frameCount)
+        if globals.exerciseEnded and self.frameCount != 0:
+            globals.exerciseEnded = False
             angleDifferences = self.compareAngles(testPose, weights2)
-            print(f"angleDifferences: {angleDifferences}")
-            ## print(f"frames: {self.frames}")
-
-        # return feedback which will be accessed by view
+            # now feedback is global variable which can be accessed by view in app.py
+            
+            globals.feedback = self.giveFeedback(angleDifferences)
+            print(globals.feedback)
+            ## print(f"angleDifferences: {angleDifferences}")
+            
+        
+        
         return {}
 
 

@@ -1,5 +1,6 @@
 
 import cv2
+import json
 from flask import Flask, render_template, Response
 import globals
 from main import main
@@ -15,7 +16,6 @@ def gen():
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
-
 @app.route('/')
 def index():
     globals.initialise()
@@ -30,6 +30,16 @@ def start():
 def video_feed():
     return Response(gen(),
     mimetype='multipart/x-mixed-replace; boundary=frame')
+
+@app.route('/feedback')
+def send_feedback():
+    return json.dumps(globals.feedback)
+
+@app.route('/endExercise')
+def end_exercise():
+    if not globals.exerciseEnded:
+        globals.exerciseEnded = True
+    return render_template('./index.html')
 
 
 
