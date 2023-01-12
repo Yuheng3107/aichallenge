@@ -35,6 +35,12 @@ def video_feed():
 def send_feedback():
     return json.dumps(globals.feedback)
 
+@app.route('/endExercise')
+def end_exercise():
+    if not globals.exerciseEnded:
+        globals.exerciseEnded = True
+    return render_template('./index.html')
+
 
 
 if __name__ == '__main__':
