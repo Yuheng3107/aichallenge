@@ -81,7 +81,43 @@ class Node(AbstractNode):
 
     
     def giveFeedback(self, angleDifferences: np.float64):
-        pass
+        feedback = []
+        # Probably will read glossary from csv in the end
+        # Glossary will map angle_id to corresponding angle
+        glossary = ['leftEar-nose-midShoulder',
+ 'rightEar-nose-midShoulder',
+ 'nose-midShoulder-leftShoulder',
+ 'nose-midShoulder-rightShoulder',
+ 'midShoulder-leftShoulder-leftElbow',
+ 'midShoulder-rightShoulder-rightElbow',
+ 'nose-midShoulder-leftElbow',
+ 'nose-midShoulder-rightElbow',
+ 'leftShoulder-leftElbow-leftWrist',
+ 'rightShoulder-rightElbow-rightWrist',
+ 'midShoulder-midHip-leftHip',
+ 'midShoulder-midHip-rightHip',
+ 'leftShoulder-leftHip-leftKnee',
+ 'rightShoulder-rightHip-rightKnee',
+ 'leftHip-leftKnee-leftAnkle',
+ 'rightHip-rightKnee-rightAnkle',
+ 'nose-midShoulder-midHip',
+ 'vertical(midShoulder)-midShoulder-midHip',
+ 'vertical(nose)-nose-midShoulder']
+
+        threshold = 0.05 # set deviation threshold from ideal pose
+        for angle_id, difference in enumerate(angleDifferences):
+            if difference == 0.:
+                continue
+            elif (abs(difference/np.pi) > threshold):
+                if (difference/np.pi > 0):
+                    # angle needs to be smaller, as it is larger than ideal pose
+                    feedback.append(f"{glossary[angle_id]} needs to be smaller")
+                else:
+                    # angle needs to be greater, as it is smaller than ideal pose
+                    feedback.append(f"{glossary[angle_id]} needs to be larger")
+        return feedback
+
+
         # gives feedback to a view, so returns json data which can be accessed from datapool
 
     def run(self, inputs: Dict[str, Any]) -> Dict[str, Any]:  # type: ignore
