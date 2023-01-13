@@ -22,9 +22,18 @@ class Node(AbstractNode):
 
         super().__init__(config, node_path=__name__, **kwargs)
         globals.feedback = ["Please Select Exercise"]
+
+        """FRAME SELECTION"""
         self.selectedFrames = np.zeros((500,19))
         self.selectedFrameCount = 0
-        self.frameCount = 0
+
+        """REP COUNTER"""
+        self.repCount = 0
+        # inPose tracks if you are currently in evalPose
+        self.inPose = False
+        # switchPoseCount counts how many frames you have switched pose for in order to account for anomalies
+        self.switchPoseCount = 0
+        self.invalidFrameCount = 0
 
         """TO BE IMPORTED FROM NUMPY ARRAYS"""
         self.evalPoses = np.array([[0.,0.98390493,1.51094115,1.6306515,0.26590253,2.81373512
@@ -105,21 +114,21 @@ class Node(AbstractNode):
             score += (abs(x-evalPose[i])/np.pi) * (angleWeights[i]/angleWeightSum)
         return score
 
-    # shifts selectFrames and adds curPose to the back of the array
-        # returns True if frame is selected, False if frame is not selected
+    # Adds curPose to the 'back' of the array if score is lesser than scoreThreshold
+        # returns 1 if frame is selected, 0 if frame is not selected, 2 if selectedFrames is full, -1 if frame is invalid
     def selectFrames(self, score, curPose: np.float64, scoreThreshold):
         # error catch for invalid frame
         if score == -1:
-            return False
+            return -1
         # check if selectedFrames is full
         if self.selectedFrameCount == self.selectedFrames.shape[0]-1:
-            return False
+            return 2
         # test if score is lesser than threshold
         if score < scoreThreshold:
             self.selectedFrames[self.selectedFrameCount] = curPose
             self.selectedFrameCount += 1
-            return True
-        return False
+            return 1
+        return 0
 
     # returns np.arr(19) of differences, 0 is no significant difference
     def compareAngles(self, evalPose: np.float64, angleThresholds: np.float64):
@@ -145,7 +154,7 @@ class Node(AbstractNode):
         if angleDifferences[0] == -99:
             return ["No frames detected"]
 
-        feedback = []
+        feedback = [f"Reps Done: {self.repCount}"]
         angleDifferences /= np.pi
 
         for angle_id, difference in enumerate(angleDifferences):
@@ -190,18 +199,54 @@ class Node(AbstractNode):
         """COMPUTATIONAL METHODS"""
         if globals.runSwitch:
             globals.img = inputs["img"]
+            globals.feedback = [f"Reps Done: {self.repCount}"]
             # Keypoints has a shape of (1, 17, 2)
             keypoints = inputs["keypoints"]
             # add 1 to frameCount
-            self.frameCount += 1
+            
             # Calculates angles in radians of live feed
             curPose = processData(keypoints, globals.img.shape[0], globals.img.shape[1])
             score = self.comparePoses(self.evalPoses[globals.currentExercise],curPose, self.angleWeights[globals.currentExercise]) 
-            self.selectFrames(score, curPose, 0.1)
+            
+            """FRAME STATUS"""
+            frameStatus = self.selectFrames(score, curPose, 0.1)
+            
+            if self.inPose == True:
+                # if currently in pose state but person in a rest frame
+                if frameStatus == 0:
+                    self.switchPoseCount += 1
+                    # if 5 rest frames in a row
+                    if self.switchPoseCount > 5:
+                        # transition into rest state
+                        self.inPose = False
+                        self.switchPoseCount = 0
+                        self.repCount += 1
+                # reset switchPoseCount
+                if frameStatus == 1:
+                    self.restFrameCount = 0
+            
+            if self.inPose == False:
+                # if currently in rest state but person in a pose frame
+                if frameStatus == 1:
+                    self.switchPoseCount += 1
+                    # if 5 pose frames in a row
+                    if self.restFrameCount > 5:
+                        # transition into pose state
+                        self.inPose = True
+                        self.switchPoseCount = 0
+                # reset switchPoseCount
+                if frameStatus == 1:
+                    self.switchPoseCount = 0
 
+            if frameStatus == 2:
+                globals.feedback = ["Frames filled up"]
+            
             # check for not in frame
-            if self.frameCount > 100 and self.selectedFrameCount == 0:
-                globals.feedback = ["PUT UR ASS IN THE IMAGE"]
+            if frameStatus == -1:
+                self.invalidFrameCount += 1
+                self.switchPoseCount = globals.feedback = ["PUT UR ASS IN THE IMAGE"]
+            else:
+                self.invalidFrameCount = 0
             
             """DEBUG"""
             ## print(f"curPose: {curPose}")
