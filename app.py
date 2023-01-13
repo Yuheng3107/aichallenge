@@ -39,13 +39,13 @@ def send_feedback():
 def end_exercise():
     if not globals.exerciseEnded:
         globals.exerciseEnded = True
-    return render_template('./index.html')
+    return ""
 
 @app.route('/changeExercise', methods= ['POST'])
 def change_exercise():
 
     exerciseId = request.form["exerciseId"]
-    globals.currentExercise = exerciseId
+    globals.currentExercise = int(exerciseId)
     globals.exerciseSelected = True
     # Sends post request which returns "" to dummy iframe
     # This circumvents the issue of form redirect
