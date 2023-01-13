@@ -54,7 +54,7 @@ def end_exercise():
 
 @app.route('/changeExercise', methods= ['POST'])
 def change_exercise():
-
+    
     exerciseId = request.form["exerciseId"]
     globals.currentExercise = int(exerciseId)
     globals.exerciseSelected = True
