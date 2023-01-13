@@ -21,6 +21,7 @@ class Node(AbstractNode):
         # self.logger.info(f"model loaded with configs: config")
 
         super().__init__(config, node_path=__name__, **kwargs)
+        globals.feedback = ["Please Select Exercise"]
         self.selectedFrames = np.zeros((500,19))
         self.selectedFrameCount = 0
         self.frameCount = 0
@@ -66,6 +67,7 @@ class Node(AbstractNode):
             globals.currentExercise = 0
         # start exercise
         globals.runSwitch = True
+        globals.feedback = ["Exercise Begin"]
         return None
     
     def endExercise(self):
@@ -184,7 +186,6 @@ class Node(AbstractNode):
         if globals.exerciseEnded:
             self.endExercise()
             globals.exerciseEnded = False
-
 
         """COMPUTATIONAL METHODS"""
         if globals.runSwitch:

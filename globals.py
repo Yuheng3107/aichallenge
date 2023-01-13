@@ -11,9 +11,9 @@ def initialise():
     
     
     img = np.zeros((720, 1280, 3))
-    feedback = ["Please do the exercise stipulated"]
+    feedback = ["Press Start"]
     
-    runSwitch = True
+    runSwitch = False
     currentExercise = 0
     exerciseSelected = False
     exerciseEnded = False
