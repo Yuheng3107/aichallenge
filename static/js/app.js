@@ -24,14 +24,14 @@ function getFeedback(feedback) {
             startButton.style.display = "none";
             started = true;
             // updates feedback every second
-            setInterval(getFeedback, 100, feedback);
+            setInterval(getFeedback, 1000, feedback);
         }
     });
     endButton.addEventListener('click', () => {
         fetch(endButton.getAttribute('data-url'));
         // adds the feedback to the div which displays it
         // waits for 2s
-        setTimeout(getFeedback(feedback), 200);
+        setTimeout(getFeedback(feedback), 2000);
     });
 
 
