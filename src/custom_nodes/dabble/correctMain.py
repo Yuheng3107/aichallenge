@@ -211,7 +211,7 @@ class Node(AbstractNode):
             score = self.comparePoses(self.evalPoses[globals.currentExercise],curPose, self.angleWeights[globals.currentExercise]) 
             
             """FRAME STATUS"""
-            frameStatus = self.selectFrames(score, curPose, 0.15)
+            frameStatus = self.selectFrames(score, curPose, 0.2)
             
             if self.inPose == True:
                 # if currently in pose state but person in a rest frame
