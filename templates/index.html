@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
-    <script src="{{url_for('static', filename='js/app.js')}}"></script>
+    <script src="{{url_for('static', filename='js/app.js')}}" defer></script>
     <title>Document</title>
 </head>
 
@@ -17,8 +17,8 @@
     </header>
     <main class="main-content">
         <img class="video-feed" src="{{url_for('video_feed')}}" alt="Video">
-        <a class="start-button" href="start">Start</a>
-        <a class="end-button" href="{{url_for('end_exercise')}}">End</a>
+        <button class="start-button" data-url="{{url_for('start')}}">Start</button>
+        <button class="end-button" data-url="{{url_for('end_exercise')}}">End</button>
         <form action="{{url_for('change_exercise')}}" method="post" target="dummy">
             <select name="exerciseId" id="changeExercise">
                 <option value="0">Squat</option>
