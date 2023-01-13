@@ -124,7 +124,7 @@ class Node(AbstractNode):
         angleDifferences = np.zeros(evalPose.shape) 
         # check for 0 frames
         if self.selectedFrameCount == 0:
-            return -1
+            return np.array([-99])
         # remove empty data
         filledselectedFrames = self.selectedFrames[0:self.selectedFrameCount]
         # positive is too large, negative is too small 
@@ -140,7 +140,7 @@ class Node(AbstractNode):
     # gives feedback to a view, so returns json data which can be accessed from datapool
     def giveFeedback(self, angleDifferences: np.float64):
         #check for error in compareAngles
-        if angleDifferences == -1:
+        if angleDifferences[0] == -99:
             return ["No frames detected"]
 
         feedback = []
