@@ -223,14 +223,14 @@ class Node(AbstractNode):
                         self.repCount += 1
                 # reset switchPoseCount
                 if frameStatus == 1:
-                    self.restFrameCount = 0
+                    self.switchPoseCount = 0
             
             if self.inPose == False:
                 # if currently in rest state but person in a pose frame
                 if frameStatus == 1:
                     self.switchPoseCount += 1
                     # if 5 pose frames in a row
-                    if self.restFrameCount > 5:
+                    if self.switchPoseCount > 5:
                         # transition into pose state
                         self.inPose = True
                         self.switchPoseCount = 0
@@ -244,7 +244,8 @@ class Node(AbstractNode):
             # check for not in frame
             if frameStatus == -1:
                 self.invalidFrameCount += 1
-                self.switchPoseCount = globals.feedback = ["PUT UR ASS IN THE IMAGE"]
+                if self.invalidFrameCount > 10:
+                    globals.feedback = ["PUT UR ASS IN THE IMAGE"]
             else:
                 self.invalidFrameCount = 0
             
