@@ -42,10 +42,13 @@ def end_exercise():
     return render_template('./index.html')
 
 @app.route('/changeExercise', methods= ['POST'])
-def changeExercise():
+def change_exercise():
+
     exerciseId = request.form["exerciseId"]
     globals.currentExercise = exerciseId
     globals.exerciseSelected = True
+    # Sends post request which returns "" to dummy iframe
+    # This circumvents the issue of form redirect
     return ""
 
 if __name__ == '__main__':
