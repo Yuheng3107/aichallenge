@@ -11,7 +11,7 @@ from peekingduck.runner import Runner
 def main():
     processing_node = correctMain.Node(pkd_base_dir=Path.cwd() / "src" / "custom_nodes")
     visual_node = visual.Node(source=0)
-    posenet_node = posenet.Node()
+    posenet_node = posenet.Node(max_pose_detection=1)
     poses_node = poses.Node()
     
     # screen_node = screen.Node()
