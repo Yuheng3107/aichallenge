@@ -24,13 +24,59 @@ class Node(AbstractNode):
         self.selectedFrames = np.zeros((500,19))
         self.selectedFrameCount = 0
         self.frameCount = 0
+
+        """TO BE IMPORTED FROM NUMPY ARRAYS"""
+        self.evalPoses = np.array([[0.,0.98390493,1.51094115,1.6306515,0.26590253,2.81373512
+            ,0.26590253,0.32785753,1.02067892,1.59934942,1.35720082,1.78439183
+            ,0.79900877,1.33113154,1.22965078,1.52982444,0.90668716,2.49591843
+            ,0.26101294]])
+        self.angleWeights = np.array([[0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,1.,0.,1.,0.,1.,0.]])
+        self.angleThresholds = np.array([[0,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.1,0.,0.1,0.,0.1,0]])
+        # Probably will read glossary from csv in the end
+        # Glossary will map angle_id to corresponding angle
+        self.glossary = np.array(['leftEar-nose-midShoulder',
+            'rightEar-nose-midShoulder',
+            'nose-midShoulder-leftShoulder',
+            'nose-midShoulder-rightShoulder',
+            'midShoulder-leftShoulder-leftElbow',
+            'midShoulder-rightShoulder-rightElbow',
+            'nose-midShoulder-leftElbow',
+            'nose-midShoulder-rightElbow',
+            'leftShoulder-leftElbow-leftWrist',
+            'rightShoulder-rightElbow-rightWrist',
+            'midShoulder-midHip-leftHip',
+            'midShoulder-midHip-rightHip',
+            'leftShoulder-leftHip-leftKnee',
+            'rightShoulder-rightHip-rightKnee',
+            'leftHip-leftKnee-leftAnkle',
+            'rightHip-rightKnee-rightAnkle',
+            'nose-midShoulder-midHip',
+            'vertical(midShoulder)-midShoulder-midHip',
+            'vertical(nose)-nose-midShoulder'])
+        
     
     """UI METHODS"""
     def changeExercise(self):
+        # reset frame-related variables
         self.selectedFrames = np.zeros((500,19))
         self.selectedFrameCount = 0
         self.frameCount = 0
-        pass
+        # check for invalid exercise
+        if globals.currentExercise >= self.angleWeights.shape[0]:
+            globals.currentExercise = 0
+        # start exercise
+        globals.runSwitch = True
+        return None
+    
+    def endExercise(self):
+        angleDifferences = self.compareAngles(self.evalPoses[globals.currentExercise], self.angleThresholds[globals.currentExercise])
+        # feedback is global variable which can be accessed by view in app.py
+        globals.feedback = self.giveFeedback(angleDifferences)
+        print(globals.feedback)
+        # turn off run
+        globals.runSwitch = False
+        return None
+
 
     """COMPUTATIONAL METHODS"""
     def comparePoses(self, evalPose: np.float64, curPose: np.float64, angleWeights: np.float64):
@@ -90,27 +136,6 @@ class Node(AbstractNode):
     # gives feedback to a view, so returns json data which can be accessed from datapool
     def giveFeedback(self, angleDifferences: np.float64):
         feedback = []
-        # Probably will read glossary from csv in the end
-        # Glossary will map angle_id to corresponding angle
-        glossary = np.array(['leftEar-nose-midShoulder',
-            'rightEar-nose-midShoulder',
-            'nose-midShoulder-leftShoulder',
-            'nose-midShoulder-rightShoulder',
-            'midShoulder-leftShoulder-leftElbow',
-            'midShoulder-rightShoulder-rightElbow',
-            'nose-midShoulder-leftElbow',
-            'nose-midShoulder-rightElbow',
-            'leftShoulder-leftElbow-leftWrist',
-            'rightShoulder-rightElbow-rightWrist',
-            'midShoulder-midHip-leftHip',
-            'midShoulder-midHip-rightHip',
-            'leftShoulder-leftHip-leftKnee',
-            'rightShoulder-rightHip-rightKnee',
-            'leftHip-leftKnee-leftAnkle',
-            'rightHip-rightKnee-rightAnkle',
-            'nose-midShoulder-midHip',
-            'vertical(midShoulder)-midShoulder-midHip',
-            'vertical(nose)-nose-midShoulder'])
         angleDifferences /= np.pi
 
         for angle_id, difference in enumerate(angleDifferences):
@@ -118,10 +143,10 @@ class Node(AbstractNode):
                 continue
             if (difference > 0):
                 # angle needs to be smaller, as it is larger than ideal pose
-                feedback.append(f"{glossary[angle_id]} needs to be smaller")
+                feedback.append(f"{self.glossary[angle_id]} needs to be smaller")
             else:
                 # angle needs to be greater, as it is smaller than ideal pose
-                feedback.append(f"{glossary[angle_id]} needs to be larger")
+                feedback.append(f"{self.glossary[angle_id]} needs to be larger")
         return feedback
 
     def run(self, inputs: Dict[str, Any]) -> Dict[str, Any]:  # type: ignore
@@ -141,21 +166,17 @@ class Node(AbstractNode):
         Returns:
             outputs (dict): empty.
         """
-        testPose = np.array([0.,0.98390493,1.51094115,1.6306515,0.26590253,2.81373512
-            ,0.26590253,0.32785753,1.02067892,1.59934942,1.35720082,1.78439183
-            ,0.79900877,1.33113154,1.22965078,1.52982444,0.90668716,2.49591843
-            ,0.26101294])
-        
-        weights = np.array([0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,1.,0.,1.,0.,1.,0.])
-        weights2 = np.array([0,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.1,0.,0.1,0.,0.1,0])
+
 
         """UI METHODS"""
+        if globals.exerciseSelected:
+            self.changeExercise()
+            globals.exerciseSelected = False
+
         if globals.exerciseEnded and self.selectedFrameCount != 0:
-            angleDifferences = self.compareAngles(testPose, weights2) # weights2 to be replaced by angleThresholds[globals.currentExercise] 
-            # now feedback is global variable which can be accessed by view in app.py
-            globals.feedback = self.giveFeedback(angleDifferences)
-            print(globals.feedback)
+            self.endExercise()
             globals.exerciseEnded = False
+
 
         """COMPUTATIONAL METHODS"""
         if globals.runSwitch:
@@ -166,7 +187,7 @@ class Node(AbstractNode):
             self.frameCount += 1
             # Calculates angles in radians of live feed
             curPose = processData(keypoints, globals.img.shape[0], globals.img.shape[1])
-            score = self.comparePoses(testPose,curPose,weights) # testPose to be replaced with evalPoses[globals.currentExercise], weights to be replaced with angleWeights[globals.currentExercise]
+            score = self.comparePoses(self.evalPoses[globals.currentExercise],curPose, self.angleWeights[globals.currentExercise]) 
             self.selectFrames(score, curPose, 0.1)
 
             # check for not in frame
