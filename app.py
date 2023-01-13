@@ -1,7 +1,7 @@
 
 import cv2
 import json
-from flask import Flask, render_template, Response
+from flask import Flask, render_template, Response, request
 import globals
 from main import main
 app = Flask(__name__)
@@ -41,7 +41,12 @@ def end_exercise():
         globals.exerciseEnded = True
     return render_template('./index.html')
 
-
+@app.route('/changeExercise', methods= ['POST'])
+def changeExercise():
+    exerciseId = request.form["exerciseId"]
+    globals.currentExercise = exerciseId
+    globals.exerciseSelected = True
+    return ""
 
 if __name__ == '__main__':
     app.run()
