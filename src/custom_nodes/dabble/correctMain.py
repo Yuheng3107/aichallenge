@@ -166,6 +166,8 @@ class Node(AbstractNode):
             else:
                 # angle needs to be greater, as it is smaller than ideal pose
                 feedback.append(f"Angle between {self.glossary[angle_id]} needs to be larger")
+        if len(feedback) == 1:
+            feedback.append("U ARE PERFECT")
         return feedback
 
     def run(self, inputs: Dict[str, Any]) -> Dict[str, Any]:  # type: ignore
@@ -209,15 +211,14 @@ class Node(AbstractNode):
             score = self.comparePoses(self.evalPoses[globals.currentExercise],curPose, self.angleWeights[globals.currentExercise]) 
             
             """FRAME STATUS"""
-            frameStatus = self.selectFrames(score, curPose, 0.1)
+            frameStatus = self.selectFrames(score, curPose, 0.2)
             
-            switchPoseThreshold = 2
             if self.inPose == True:
                 # if currently in pose state but person in a rest frame
                 if frameStatus == 0:
                     self.switchPoseCount += 1
                     # if 5 rest frames in a row
-                    if self.switchPoseCount > switchPoseThreshold:
+                    if self.switchPoseCount > 5:
                         # transition into rest state
                         self.inPose = False
                         self.switchPoseCount = 0
@@ -231,7 +232,7 @@ class Node(AbstractNode):
                 if frameStatus == 1:
                     self.switchPoseCount += 1
                     # if 5 pose frames in a row
-                    if self.switchPoseCount > switchPoseThreshold:
+                    if self.switchPoseCount > 3:
                         # transition into pose state
                         self.inPose = True
                         self.switchPoseCount = 0
@@ -259,11 +260,3 @@ class Node(AbstractNode):
             ## print(self.selectedFrameCount)
         
         return {}
-
-
-
-
-
-    
-
-   
