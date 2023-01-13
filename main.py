@@ -5,7 +5,7 @@ from peekingduck.pipeline.nodes.input import visual
 from peekingduck.pipeline.nodes.model import posenet
 from src.custom_nodes.dabble import correctMain
 from peekingduck.pipeline.nodes.draw import poses
-from peekingduck.pipeline.nodes.output import media_writer, screen
+# from peekingduck.pipeline.nodes.output import media_writer, screen
 from peekingduck.runner import Runner
 
 def main():
