@@ -73,6 +73,7 @@ class Node(AbstractNode):
         # feedback is global variable which can be accessed by view in app.py
         globals.feedback = self.giveFeedback(angleDifferences)
         print(globals.feedback)
+        img = np.zeros((720, 1280, 3))
         # turn off run
         globals.runSwitch = False
         return None
