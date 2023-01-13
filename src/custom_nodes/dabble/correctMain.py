@@ -122,6 +122,9 @@ class Node(AbstractNode):
     # returns np.arr(19) of differences, 0 is no significant difference
     def compareAngles(self, evalPose: np.float64, angleThresholds: np.float64):
         angleDifferences = np.zeros(evalPose.shape) 
+        # check for 0 frames
+        if self.selectedFrameCount == 0:
+            return -1
         # remove empty data
         filledselectedFrames = self.selectedFrames[0:self.selectedFrameCount]
         # positive is too large, negative is too small 
@@ -136,6 +139,10 @@ class Node(AbstractNode):
 
     # gives feedback to a view, so returns json data which can be accessed from datapool
     def giveFeedback(self, angleDifferences: np.float64):
+        #check for error in compareAngles
+        if angleDifferences == -1:
+            return ["No frames detected"]
+
         feedback = []
         angleDifferences /= np.pi
 
@@ -174,7 +181,7 @@ class Node(AbstractNode):
             self.changeExercise()
             globals.exerciseSelected = False
 
-        if globals.exerciseEnded and self.selectedFrameCount != 0:
+        if globals.exerciseEnded:
             self.endExercise()
             globals.exerciseEnded = False
 
