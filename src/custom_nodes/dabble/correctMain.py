@@ -38,7 +38,7 @@ class Node(AbstractNode):
         """TO BE IMPORTED FROM NUMPY ARRAYS"""
         self.evalPoses = np.array([[0.,0.98390493,1.51094115,1.6306515,0.26590253,2.81373512
             ,0.26590253,0.32785753,1.02067892,1.59934942,1.35720082,1.78439183
-            ,0.79900877,1.33113154,1.22965078,1.52982444,0.90668716,2.49591843
+            ,0.79900877,1.33113154,1.22965078,1.52982444,0.90668716,0.64567422
             ,0.26101294]])
         self.angleWeights = np.array([[0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,1.,0.,1.,0.,1.,0.]])
         self.angleThresholds = np.array([[0,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.1,0.,0.1,0.,0.1,0]])
@@ -57,11 +57,11 @@ class Node(AbstractNode):
             'midShoulder-midHip-leftHip',
             'midShoulder-midHip-rightHip',
             'leftShoulder-leftHip-leftKnee',
-            'rightShoulder-rightHip-rightKnee',
+            'Chest and Thigh',
             'leftHip-leftKnee-leftAnkle',
-            'rightHip-rightKnee-rightAnkle',
+            'Thigh and Leg',
             'nose-midShoulder-midHip',
-            'vertical(midShoulder)-midShoulder-midHip',
+            'vertical and Back',
             'vertical(nose)-nose-midShoulder'])
         
     
@@ -71,6 +71,7 @@ class Node(AbstractNode):
         self.selectedFrames = np.zeros((500,19))
         self.selectedFrameCount = 0
         self.frameCount = 0
+        self.repCount = 0
         # check for invalid exercise
         if globals.currentExercise >= self.angleWeights.shape[0]:
             globals.currentExercise = 0
@@ -83,7 +84,6 @@ class Node(AbstractNode):
         angleDifferences = self.compareAngles(self.evalPoses[globals.currentExercise], self.angleThresholds[globals.currentExercise])
         # feedback is global variable which can be accessed by view in app.py
         globals.feedback = self.giveFeedback(angleDifferences)
-        print(globals.feedback)
         globals.img = np.zeros((720, 1280, 3))
         # turn off run
         globals.runSwitch = False
@@ -162,10 +162,10 @@ class Node(AbstractNode):
                 continue
             if (difference > 0):
                 # angle needs to be smaller, as it is larger than ideal pose
-                feedback.append(f"{self.glossary[angle_id]} needs to be smaller")
+                feedback.append(f"Angle Between {self.glossary[angle_id]} needs to be smaller")
             else:
                 # angle needs to be greater, as it is smaller than ideal pose
-                feedback.append(f"{self.glossary[angle_id]} needs to be larger")
+                feedback.append(f"Angle Between {self.glossary[angle_id]} needs to be larger")
         return feedback
 
     def run(self, inputs: Dict[str, Any]) -> Dict[str, Any]:  # type: ignore
@@ -211,12 +211,13 @@ class Node(AbstractNode):
             """FRAME STATUS"""
             frameStatus = self.selectFrames(score, curPose, 0.1)
             
+            switchPoseThreshold = 2
             if self.inPose == True:
                 # if currently in pose state but person in a rest frame
                 if frameStatus == 0:
                     self.switchPoseCount += 1
                     # if 5 rest frames in a row
-                    if self.switchPoseCount > 5:
+                    if self.switchPoseCount > switchPoseThreshold:
                         # transition into rest state
                         self.inPose = False
                         self.switchPoseCount = 0
@@ -230,12 +231,12 @@ class Node(AbstractNode):
                 if frameStatus == 1:
                     self.switchPoseCount += 1
                     # if 5 pose frames in a row
-                    if self.switchPoseCount > 5:
+                    if self.switchPoseCount > switchPoseThreshold:
                         # transition into pose state
                         self.inPose = True
                         self.switchPoseCount = 0
                 # reset switchPoseCount
-                if frameStatus == 1:
+                if frameStatus == 0:
                     self.switchPoseCount = 0
 
             if frameStatus == 2:
@@ -251,11 +252,11 @@ class Node(AbstractNode):
             
             """DEBUG"""
             ## print(f"curPose: {curPose}")
-            if score != -1:
+            ## if score != -1:
                 ## print(f"score: {score}")
-                pass
+                ## pass
             ## print(f"angleDifferences: {angleDifferences}")   
-            print(self.selectedFrameCount)
+            ## print(self.selectedFrameCount)
         
         return {}
 
