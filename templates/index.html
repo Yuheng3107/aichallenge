@@ -11,6 +11,7 @@
 </head>
 
 <body>
+    <iframe name="dummy" id="dummy" style="display: none;"></iframe>
     <header class="top-bar">
         <span class="brand">AI Challenge 2023</span>
     </header>
@@ -18,6 +19,12 @@
         <img class="video-feed" src="{{url_for('video_feed')}}" alt="Video">
         <a class="start-button" href="start">Start</a>
         <a class="end-button" href="{{url_for('end_exercise')}}">End</a>
+        <form action="{{url_for('change_exercise')}}" method="post" target="dummy">
+            <select name="exerciseId" id="changeExercise">
+                <option value="0">Squat</option>
+            </select>
+            <input type="submit">
+        </form>
     </main>
 
 
