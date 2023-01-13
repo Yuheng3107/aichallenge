@@ -23,12 +23,13 @@
         <img class="video-feed" src="{{url_for('video_feed')}}" alt="Video">
         <div id="feedback" data-url="{{url_for('send_feedback')}}"></div>
         <button class="start-button btn btn-success mt-3" data-url="{{url_for('start')}}">Start</button>
-        <button class="end-button btn btn-secondary mt-3" data-url="{{url_for('end_exercise')}}">End</button>
         <form class="d-flex flex-row mt-3" action="{{url_for('change_exercise')}}" method="post" target="dummy">
             <select class="form-select" name="exerciseId" id="changeExercise">
                 <option selected value="0">Squat</option>
             </select>
             <input class="ms-2 btn btn-outline-info d-inline" type="submit">
+        <button class="end-button btn btn-secondary mt-3" data-url="{{url_for('end_exercise')}}">End</button>
+        
         </form>
     </main>
 
