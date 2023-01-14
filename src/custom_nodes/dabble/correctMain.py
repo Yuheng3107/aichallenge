@@ -28,7 +28,7 @@ class Node(AbstractNode):
         self.selectedFrameCount = 0
 
         """REP COUNTER"""
-        self.repCount = 0
+        globals.repCount = 0
         # inPose tracks if you are currently in evalPose
         self.inPose = False
         # switchPoseCount counts how many frames you have switched pose for in order to account for anomalies
@@ -72,7 +72,7 @@ class Node(AbstractNode):
         self.selectedFrames = np.zeros((500,19))
         self.selectedFrameCount = 0
         self.frameCount = 0
-        self.repCount = 0
+        globals.repCount = 0
         # check for invalid exercise
         if globals.currentExercise >= self.angleWeights.shape[0]:
             globals.currentExercise = 0
@@ -156,7 +156,7 @@ class Node(AbstractNode):
         if angleDifferences[0] == -99:
             return ["No frames detected"]
 
-        feedback = [f"Reps Done: {self.repCount}"]
+        feedback = []
         angleDifferences /= np.pi
 
         for angle_id, difference in enumerate(angleDifferences):
@@ -203,7 +203,6 @@ class Node(AbstractNode):
         """COMPUTATIONAL METHODS"""
         if globals.runSwitch:
             globals.img = inputs["img"]
-            globals.feedback = [f"Reps Done: {self.repCount}"]
             # Keypoints has a shape of (1, 17, 2)
             keypoints = inputs["keypoints"]
             # add 1 to frameCount
@@ -224,7 +223,7 @@ class Node(AbstractNode):
                         # transition into rest state
                         self.inPose = False
                         self.switchPoseCount = 0
-                        self.repCount += 1
+                        globals.repCount += 1
                 # reset switchPoseCount
                 if frameStatus == 1:
                     self.switchPoseCount = 0
