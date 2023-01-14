@@ -28,7 +28,7 @@ class Node(AbstractNode):
         self.selectedFrameCount = 0
 
         """REP COUNTER"""
-        self.repCount = 0
+        globals.repCount = 0
         # inPose tracks if you are currently in evalPose
         self.inPose = False
         # switchPoseCount counts how many frames you have switched pose for in order to account for anomalies
@@ -41,6 +41,7 @@ class Node(AbstractNode):
             ,0.79900877,1.33113154,1.22965078,1.52982444,0.90668716,2.49591843
             ,0.26101294]])
         self.angleWeights = np.array([[0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,1.,0.,1.,0.,1.,0.]])
+        self.scoreThreshold = 0.2
         self.angleThresholds = np.array([[0,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.1,0.,0.1,0.,0.1,0]])
         # Probably will read glossary from csv in the end
         # Glossary will map angle_id to corresponding angle
@@ -71,7 +72,7 @@ class Node(AbstractNode):
         self.selectedFrames = np.zeros((500,19))
         self.selectedFrameCount = 0
         self.frameCount = 0
-        self.repCount = 0
+        globals.repCount = 0
         # check for invalid exercise
         if globals.currentExercise >= self.angleWeights.shape[0]:
             globals.currentExercise = 0
@@ -140,6 +141,7 @@ class Node(AbstractNode):
         filledselectedFrames = self.selectedFrames[0:self.selectedFrameCount]
         # positive is too large, negative is too small 
         differences = np.average(filledselectedFrames, axis=0) - evalPose
+        print(differences)
         for i, x in enumerate(differences):
             if angleThresholds[i] == 0.:
                 continue
@@ -154,7 +156,7 @@ class Node(AbstractNode):
         if angleDifferences[0] == -99:
             return ["No frames detected"]
 
-        feedback = [f"Reps Done: {self.repCount}"]
+        feedback = []
         angleDifferences /= np.pi
 
         for angle_id, difference in enumerate(angleDifferences):
@@ -201,7 +203,6 @@ class Node(AbstractNode):
         """COMPUTATIONAL METHODS"""
         if globals.runSwitch:
             globals.img = inputs["img"]
-            globals.feedback = [f"Reps Done: {self.repCount}"]
             # Keypoints has a shape of (1, 17, 2)
             keypoints = inputs["keypoints"]
             # add 1 to frameCount
@@ -211,7 +212,7 @@ class Node(AbstractNode):
             score = self.comparePoses(self.evalPoses[globals.currentExercise],curPose, self.angleWeights[globals.currentExercise]) 
             
             """FRAME STATUS"""
-            frameStatus = self.selectFrames(score, curPose, 0.2)
+            frameStatus = self.selectFrames(score, curPose, self.scoreThreshold)
             
             if self.inPose == True:
                 # if currently in pose state but person in a rest frame
@@ -222,7 +223,7 @@ class Node(AbstractNode):
                         # transition into rest state
                         self.inPose = False
                         self.switchPoseCount = 0
-                        self.repCount += 1
+                        globals.repCount += 1
                 # reset switchPoseCount
                 if frameStatus == 1:
                     self.switchPoseCount = 0
