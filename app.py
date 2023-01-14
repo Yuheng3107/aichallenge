@@ -2,7 +2,7 @@
 import cv2
 import json
 from flask import Flask, render_template, Response, request
-from flask_socketio import SocketIO
+from flask_socketio import SocketIO, emit
 import globals
 from main import main
 
@@ -41,12 +41,22 @@ def video_feed():
     return Response(gen(),
     mimetype='multipart/x-mixed-replace; boundary=frame')
 
+"""
 @app.route('/feedback')
 def send_feedback():
-    """This route converts the feedback list into JSON
+
+    return json.dumps(globals.feedback)
+"""
+
+@socketio.on('feedback')
+def send_feedback():
+    """Activated whenever feedback event is called from
+    the client and server will send back a feedback event which
+    converts the feedback list into JSON
     format which can be parsed by JavaScript to be displayed
     on the front end"""
-    return json.dumps(globals.feedback)
+    emit('feedback', json.dumps(globals.feedback))
+
 
 @app.route('/endExercise')
 def end_exercise():
@@ -69,9 +79,9 @@ def change_exercise():
 
 @socketio.on('changeExercise')
 def change_exercise(exerciseId):
-    print(exerciseId)
     globals.currentExercise = int(exerciseId)
     globals.exerciseSelected = True
+
 
 
 if __name__ == '__main__':

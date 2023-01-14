@@ -1,14 +1,6 @@
 
-function getFeedback(feedback, repCount) {
-    fetch(feedback.getAttribute('data-url')).then(response => {
-        return response.json();
-
-    }).then(data => {
-        // data returned from backend is an array
-        // console.log(data[0]);
-        repCount.textContent = data[0];
-        feedback.textContent = data.slice(1);
-    });
+function getFeedback() {
+    socket.emit('feedback');
 }
 
 const startButton = document.querySelector('.start-button');
@@ -26,23 +18,30 @@ startButton.addEventListener('click', (e) => {
         fetch(startButton.getAttribute('data-url'));
         startButton.style.display = "none";
         started = true;
+        
         // updates feedback every second
-        setInterval(getFeedback, 1000, feedback, repCount);
-    }
+        setInterval(getFeedback, 1000);
+        
+    }s
 });
 endButton.addEventListener('click', () => {
     fetch(endButton.getAttribute('data-url'));
-    // adds the feedback to the div which displays it
-    // waits for 2s
-    setTimeout(getFeedback(feedback), 2000);
 });
 
 form.addEventListener('submit', (e) => {
+    // prevents default form submission 
     e.preventDefault();
     let exerciseId = form.elements["exerciseId"].value;
+    // calls python function to update exercise id
     socket.emit('changeExercise', exerciseId);
 });
 
+// Listens for feedback event from server which updates
+// front end 
+socket.on('feedback', data => {
+    repCount.textContent = data[0];
+    feedback.textContent = data.slice(1);
+})
 
 
 
