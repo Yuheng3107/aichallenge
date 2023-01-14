@@ -41,12 +41,6 @@ def video_feed():
     return Response(gen(),
     mimetype='multipart/x-mixed-replace; boundary=frame')
 
-"""
-@app.route('/feedback')
-def send_feedback():
-
-    return json.dumps(globals.feedback)
-"""
 
 @socketio.on('feedback')
 def send_feedback():
@@ -63,19 +57,6 @@ def end_exercise():
     if not globals.exerciseEnded:
         globals.exerciseEnded = True
     return ""
-
-"""
-Deprecated
-@app.route('/changeExercise', methods= ['POST'])
-def change_exercise():
-    
-    exerciseId = request.form["exerciseId"]
-    globals.currentExercise = int(exerciseId)
-    globals.exerciseSelected = True
-    # Sends post request which returns "" to dummy iframe
-    # This circumvents the issue of form redirect
-    return ""
-"""
 
 @socketio.on('changeExercise')
 def change_exercise(exerciseId):
