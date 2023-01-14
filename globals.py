@@ -1,5 +1,7 @@
 import numpy as np
 
+from app import send_feedback
+
 def initialise():
     global img
     global feedback
