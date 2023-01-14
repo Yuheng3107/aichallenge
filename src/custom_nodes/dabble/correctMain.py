@@ -7,8 +7,6 @@ import numpy as np
 from peekingduck.pipeline.nodes.abstract_node import AbstractNode
 from .helper import processData
 import globals
-from flask_socketio import emit
-import json
 
 class Node(AbstractNode):
     """This is a template class of how to write a node for PeekingDuck.
