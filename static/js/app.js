@@ -21,8 +21,7 @@ startButton.addEventListener('click', (e) => {
         
         // updates feedback every second
         setInterval(getFeedback, 1000);
-        
-    }s
+    }
 });
 endButton.addEventListener('click', () => {
     fetch(endButton.getAttribute('data-url'));
@@ -39,6 +38,7 @@ form.addEventListener('submit', (e) => {
 // Listens for feedback event from server which updates
 // front end 
 socket.on('feedback', data => {
+    console.log(data);
     repCount.textContent = data[0];
     feedback.textContent = data.slice(1);
 })
