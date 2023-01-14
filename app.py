@@ -49,7 +49,11 @@ def send_feedback():
     converts the feedback list into JSON
     format which can be parsed by JavaScript to be displayed
     on the front end"""
-    emit('feedback', globals.repCount, json.dumps(globals.feedback))
+    data = {
+        "repCount": globals.repCount,
+        "feedback": globals.feedback
+    }
+    emit('feedback', json.dumps(data))
 
 
 @app.route('/endExercise')
