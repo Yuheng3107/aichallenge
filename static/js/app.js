@@ -8,6 +8,7 @@ const endButton = document.querySelector('.end-button');
 const repCount = document.querySelector('#rep-count');
 const feedback = document.querySelector('#feedback');
 const form = document.querySelector('#changeExercise');
+const feedbackList = document.querySelector('#feedback-list');
 
 let started = false;
 let socket = io();
@@ -18,7 +19,7 @@ startButton.addEventListener('click', (e) => {
         fetch(startButton.getAttribute('data-url'));
         startButton.style.display = "none";
         started = true;
-        
+
         // updates feedback every second
         setInterval(getFeedback, 200);
     }
@@ -39,9 +40,13 @@ form.addEventListener('submit', (e) => {
 // front end 
 socket.on('feedback', (stringData) => {
     let data = JSON.parse(stringData);
-    
+    console.log(data);
     repCount.textContent = "Reps: " + data["repCount"];
-    feedback.textContent = data["feedback"];
+    data.feedback.forEach((item) => {
+        let li = document.createElement("li");
+        li.innerText = item;
+        feedbackList.insertBefore(li, feedbackList.firstChild);
+    })
 })
 
 
