@@ -2,4 +2,4 @@ peekingduck
 flask
 numpy
 flask_socketio
-simple-websockets
+simple-websocket
