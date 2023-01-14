@@ -37,8 +37,9 @@ form.addEventListener('submit', (e) => {
 
 // Listens for feedback event from server which updates
 // front end 
-socket.on('feedback', (data) => {
-    console.log(data)
+socket.on('feedback', (stringData) => {
+    let data = JSON.parse(stringData);
+    
     repCount.textContent = data["repCount"];
     feedback.textContent = data["feedback"];
 })
