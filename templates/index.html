@@ -10,7 +10,7 @@
         integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <script src="{{url_for('static', filename='js/app.js')}}" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
-    <title>Document</title>
+    <title>Gym Poser</title>
 </head>
 
 <body data-bs-theme="dark">
@@ -24,14 +24,14 @@
         <img class="video-feed" src="{{url_for('video_feed')}}" alt="Video">
         <p id="rep-count"></p>
         <p id="feedback"></p>
-        <button class="start-button btn btn-success mt-3" data-url="{{url_for('start')}}">Start</button>
+        <button class="start-button btn btn-success mt-3" data-url="{{url_for('start')}}">Start Camera</button>
         <form class="d-flex flex-row mt-3" id="changeExercise">
             <select class="form-select" name="exerciseId" id="changeExercise">
                 <option selected value="0">Squat</option>
             </select>
-            <input class="ms-2 btn btn-outline-info d-inline" type="submit">
+            <input class="ms-2 btn btn-outline-info d-inline" type="submit" value="Start Exercise">
         </form>
-        <button class="end-button btn btn-secondary mt-3" data-url="{{url_for('end_exercise')}}">End</button>
+        <button class="end-button btn btn-secondary mt-3" data-url="{{url_for('end_exercise')}}">End Exercise</button>
     </main>
 
 
