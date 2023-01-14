@@ -5,7 +5,7 @@ function getFeedback(feedback, repCount) {
 
     }).then(data => {
         // data returned from backend is an array
-        console.log(data[0]);
+        // console.log(data[0]);
         repCount.textContent = data[0];
         feedback.textContent = data.slice(1);
     });
@@ -15,7 +15,10 @@ const startButton = document.querySelector('.start-button');
 const endButton = document.querySelector('.end-button');
 const repCount = document.querySelector('#rep-count');
 const feedback = document.querySelector('#feedback');
+const form = document.querySelector('#changeExercise');
+
 let started = false;
+let socket = io();
 
 startButton.addEventListener('click', (e) => {
     // runs python script that starts Peekingduck
@@ -34,7 +37,11 @@ endButton.addEventListener('click', () => {
     setTimeout(getFeedback(feedback), 2000);
 });
 
-
+form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    let exerciseId = form.elements["exerciseId"].value;
+    socket.emit('changeExercise', exerciseId);
+});
 
 
 

@@ -2,10 +2,12 @@
 import cv2
 import json
 from flask import Flask, render_template, Response, request
+from flask_socketio import SocketIO
 import globals
 from main import main
-app = Flask(__name__)
 
+app = Flask(__name__)
+socketio = SocketIO(app)
 
 
 def gen():
@@ -52,6 +54,8 @@ def end_exercise():
         globals.exerciseEnded = True
     return ""
 
+"""
+Deprecated
 @app.route('/changeExercise', methods= ['POST'])
 def change_exercise():
     
@@ -61,6 +65,14 @@ def change_exercise():
     # Sends post request which returns "" to dummy iframe
     # This circumvents the issue of form redirect
     return ""
+"""
+
+@socketio.on('changeExercise')
+def change_exercise(exerciseId):
+    print(exerciseId)
+    globals.currentExercise = int(exerciseId)
+    globals.exerciseSelected = True
+
 
 if __name__ == '__main__':
-    app.run()
+    socketio.run(app)
