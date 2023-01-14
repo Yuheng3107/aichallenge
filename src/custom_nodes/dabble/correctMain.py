@@ -41,6 +41,7 @@ class Node(AbstractNode):
             ,0.79900877,1.33113154,1.22965078,1.52982444,0.90668716,2.49591843
             ,0.26101294]])
         self.angleWeights = np.array([[0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,1.,0.,1.,0.,1.,0.]])
+        self.scoreThreshold = 0.2
         self.angleThresholds = np.array([[0,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.1,0.,0.1,0.,0.1,0]])
         # Probably will read glossary from csv in the end
         # Glossary will map angle_id to corresponding angle
@@ -140,6 +141,7 @@ class Node(AbstractNode):
         filledselectedFrames = self.selectedFrames[0:self.selectedFrameCount]
         # positive is too large, negative is too small 
         differences = np.average(filledselectedFrames, axis=0) - evalPose
+        print(differences)
         for i, x in enumerate(differences):
             if angleThresholds[i] == 0.:
                 continue
@@ -211,7 +213,7 @@ class Node(AbstractNode):
             score = self.comparePoses(self.evalPoses[globals.currentExercise],curPose, self.angleWeights[globals.currentExercise]) 
             
             """FRAME STATUS"""
-            frameStatus = self.selectFrames(score, curPose, 0.2)
+            frameStatus = self.selectFrames(score, curPose, self.scoreThreshold)
             
             if self.inPose == True:
                 # if currently in pose state but person in a rest frame
