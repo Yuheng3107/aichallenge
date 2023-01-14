@@ -40,7 +40,7 @@ form.addEventListener('submit', (e) => {
 socket.on('feedback', (stringData) => {
     let data = JSON.parse(stringData);
     
-    repCount.textContent = data["repCount"];
+    repCount.textContent = "Reps: " + data["repCount"];
     feedback.textContent = data["feedback"];
 })
 
