@@ -42,7 +42,7 @@ class Node(AbstractNode):
             ,0.26101294]])
         self.angleWeights = np.array([[0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,1.,0.,1.,0.,1.,0.]])
         self.scoreThreshold = 0.2
-        self.angleThresholds = np.array([[0,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.1,0.,0.1,0.,0.1,0]])
+        self.angleThresholds = np.array([[0,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.1,0.,0.15,0.,0.1,0]])
         # Probably will read glossary from csv in the end
         # Glossary will map angle_id to corresponding angle
         self.glossary = np.array(['leftEar-nose-midShoulder',
