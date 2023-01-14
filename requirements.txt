@@ -1,5 +1,6 @@
 peekingduck
 flask
 numpy
+click
 flask_socketio
 simple-websocket
