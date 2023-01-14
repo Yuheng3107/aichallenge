@@ -2,10 +2,12 @@
 import cv2
 import json
 from flask import Flask, render_template, Response, request
+from flask_socketio import SocketIO, emit
 import globals
 from main import main
-app = Flask(__name__)
 
+app = Flask(__name__)
+socketio = SocketIO(app)
 
 
 def gen():
@@ -39,12 +41,16 @@ def video_feed():
     return Response(gen(),
     mimetype='multipart/x-mixed-replace; boundary=frame')
 
-@app.route('/feedback')
+
+@socketio.on('feedback')
 def send_feedback():
-    """This route converts the feedback list into JSON
+    """Activated whenever feedback event is called from
+    the client and server will send back a feedback event which
+    converts the feedback list into JSON
     format which can be parsed by JavaScript to be displayed
     on the front end"""
-    return json.dumps(globals.feedback)
+    emit('feedback', json.dumps(globals.feedback))
+
 
 @app.route('/endExercise')
 def end_exercise():
@@ -52,15 +58,12 @@ def end_exercise():
         globals.exerciseEnded = True
     return ""
 
-@app.route('/changeExercise', methods= ['POST'])
-def change_exercise():
-
-    exerciseId = request.form["exerciseId"]
+@socketio.on('changeExercise')
+def change_exercise(exerciseId):
     globals.currentExercise = int(exerciseId)
     globals.exerciseSelected = True
-    # Sends post request which returns "" to dummy iframe
-    # This circumvents the issue of form redirect
-    return ""
+
+
 
 if __name__ == '__main__':
-    app.run()
+    socketio.run(app)

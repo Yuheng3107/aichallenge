@@ -1,41 +1,47 @@
 
-function getFeedback(feedback) {
-    fetch(feedback.getAttribute('data-url')).then(response => {
-        return response.json();
-        
-    }).then(data => {
-        // data is the json data
-        console.log("Test")
-        let feedbackText = JSON.stringify(data);
-        feedback.textContent = feedbackText;
-    });
+function getFeedback() {
+    socket.emit('feedback');
 }
 
-    const startButton = document.querySelector('.start-button');
-    const endButton = document.querySelector('.end-button');
-    const feedback = document.querySelector('#feedback');
-    let started = false;
+const startButton = document.querySelector('.start-button');
+const endButton = document.querySelector('.end-button');
+const repCount = document.querySelector('#rep-count');
+const feedback = document.querySelector('#feedback');
+const form = document.querySelector('#changeExercise');
 
-    startButton.addEventListener('click', (e) => {
-        // runs python script that starts Peekingduck
-        if (!started)
-            {
-            fetch(startButton.getAttribute('data-url'));
-            startButton.style.display = "none";
-            started = true;
-            // updates feedback every second
-            setInterval(getFeedback, 1000, feedback);
-        }
-    });
-    endButton.addEventListener('click', () => {
-        fetch(endButton.getAttribute('data-url'));
-        // adds the feedback to the div which displays it
-        // waits for 2s
-        setTimeout(getFeedback(feedback), 2000);
-    });
+let started = false;
+let socket = io();
 
+startButton.addEventListener('click', (e) => {
+    // runs python script that starts Peekingduck
+    if (!started) {
+        fetch(startButton.getAttribute('data-url'));
+        startButton.style.display = "none";
+        started = true;
+        
+        // updates feedback every second
+        setInterval(getFeedback, 1000);
+    }
+});
+endButton.addEventListener('click', () => {
+    fetch(endButton.getAttribute('data-url'));
+});
 
+form.addEventListener('submit', (e) => {
+    // prevents default form submission 
+    e.preventDefault();
+    let exerciseId = form.elements["exerciseId"].value;
+    // calls python function to update exercise id
+    socket.emit('changeExercise', exerciseId);
+});
 
+// Listens for feedback event from server which updates
+// front end 
+socket.on('feedback', data => {
+    console.log(data);
+    repCount.textContent = data[0];
+    feedback.textContent = data.slice(1);
+})
 
 
 

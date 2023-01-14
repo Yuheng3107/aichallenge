@@ -253,6 +253,7 @@ class Node(AbstractNode):
             else:
                 self.invalidFrameCount = 0
             
+          
             """DEBUG"""
             ## print(f"curPose: {curPose}")
             ## if score != -1:
