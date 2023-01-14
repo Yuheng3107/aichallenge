@@ -23,7 +23,7 @@
     <main class="d-flex flex-column align-items-lg-center container">
         <img class="video-feed" src="{{url_for('video_feed')}}" alt="Video">
         <p id="rep-count"></p>
-        <p id="feedback" data-url="{{url_for('send_feedback')}}"></p>
+        <p id="feedback"></p>
         <button class="start-button btn btn-success mt-3" data-url="{{url_for('start')}}">Start</button>
         <form class="d-flex flex-row mt-3" id="changeExercise">
             <select class="form-select" name="exerciseId" id="changeExercise">
