@@ -168,7 +168,7 @@ class Node(AbstractNode):
             else:
                 # angle needs to be greater, as it is smaller than ideal pose
                 feedback.append(f"Angle between {self.glossary[angle_id]} needs to be larger")
-        if len(feedback) == 1:
+        if len(feedback) == 0:
             feedback.append("U ARE PERFECT")
         return feedback
 
