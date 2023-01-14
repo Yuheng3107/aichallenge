@@ -3,4 +3,4 @@ flask
 json
 numpy
 flask_socketio
-simple-websocket
+simple-websockets
