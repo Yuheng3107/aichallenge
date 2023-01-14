@@ -1,6 +1,5 @@
 peekingduck
 flask
-json
 numpy
-flask_socketios
+flask_socketio
 simple-websockets
