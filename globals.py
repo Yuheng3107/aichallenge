@@ -3,7 +3,8 @@ import numpy as np
 def initialise():
     global img
     global repCount
-    global feedback
+    global mainFeedback
+    global repFeedback
     
     global runSwitch
     global currentExercise
@@ -13,7 +14,8 @@ def initialise():
     
     img = np.zeros((720, 1280, 3))
     repCount = 0
-    feedback = ["Press Start"]
+    mainFeedback = ["Press Start"]
+    repFeedback = []
     
     runSwitch = False
     currentExercise = 0

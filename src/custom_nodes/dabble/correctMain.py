@@ -21,10 +21,18 @@ class Node(AbstractNode):
         # self.logger.info(f"model loaded with configs: config")
 
         super().__init__(config, node_path=__name__, **kwargs)
-        globals.feedback = ["Please Select Exercise"]
+        globals.mainFeedback = ["Please Select Exercise"]
+
+        """ERROR TRACKING"""
+        # angle needs to be smaller
+        self.smallErrorCount = np.zeros((100,19))
+        # angle needs to be larger
+        self.largeErrorCount = np.zeros((100,19))
+        # perfect rep counter
+        self.perfectReps = 0
 
         """FRAME SELECTION"""
-        self.selectedFrames = np.zeros((500,19))
+        self.selectedFrames = np.zeros((100,19))
         self.selectedFrameCount = 0
 
         """REP COUNTER"""
@@ -69,7 +77,7 @@ class Node(AbstractNode):
     """UI METHODS"""
     def changeExercise(self):
         # reset frame-related variables
-        self.selectedFrames = np.zeros((500,19))
+        self.selectedFrames = np.zeros((100,19))
         self.selectedFrameCount = 0
         self.frameCount = 0
         globals.repCount = 0
@@ -78,18 +86,23 @@ class Node(AbstractNode):
             globals.currentExercise = 0
         # start exercise
         globals.runSwitch = True
-        globals.feedback = ["Exercise Begin"]
+        globals.mainFeedback = ["Exercise Begin"]
         return None
     
     def endExercise(self):
-        angleDifferences = self.compareAngles(self.evalPoses[globals.currentExercise], self.angleThresholds[globals.currentExercise])
-        # feedback is global variable which can be accessed by view in app.py
-        globals.feedback = self.giveFeedback(angleDifferences)
         globals.img = np.zeros((720, 1280, 3))
         # turn off run
         globals.runSwitch = False
-        return None
+        # no reps detected
+        if globals.repCount == 0:
+            globals.mainFeedback = ["No Reps Detected"]
+            return None
+        globals.mainFeedback = self.summariseFeedback(self.smallErrorCount,self.largeErrorCount)
 
+        self.smallErrorCount = np.zeros((100,19))
+        self.largeErrorCount = np.zeros((100,19))
+        self.perfectReps = 0
+        return None
 
     """COMPUTATIONAL METHODS"""
     def comparePoses(self, evalPose: np.float64, curPose: np.float64, angleWeights: np.float64):
@@ -153,24 +166,59 @@ class Node(AbstractNode):
     # gives feedback to a view, so returns json data which can be accessed from datapool
     def giveFeedback(self, angleDifferences: np.float64):
         #check for error in compareAngles
+        feedback = f"Rep {globals.repCount}: "
         if angleDifferences[0] == -99:
-            return ["No frames detected"]
+            feedback += "No Frames Detected"
+            return feedback
 
-        feedback = []
         angleDifferences /= np.pi
-
-        for angle_id, difference in enumerate(angleDifferences):
+        # hasError tracks if there is an error
+        hasError = False
+        for i, difference in enumerate(angleDifferences):
             if difference == 0.:
                 continue
+            hasError = True
             if (difference > 0):
                 # angle needs to be smaller, as it is larger than ideal pose
-                feedback.append(f"Angle between {self.glossary[angle_id]} needs to be smaller")
+                # 0 - 18 is angle needs to be smaller
+                self.smallErrorCount[globals.repCount-1,i] += 1
+                feedback += f"Angle between {self.glossary[i]} needs to be smaller, "
             else:
                 # angle needs to be greater, as it is smaller than ideal pose
-                feedback.append(f"Angle between {self.glossary[angle_id]} needs to be larger")
-        if len(feedback) == 0:
-            feedback.append("U ARE PERFECT")
+                # 19 to 37 is angle needs to be larger
+                self.largeErrorCount[globals.repCount-1,i] += 1
+                feedback += f"Angle between {self.glossary[i]} needs to be larger, "
+        if hasError == False:
+            # 38 is perfect rep
+            self.perfectReps += 1
+            feedback += "Perfect!"
         return feedback
+    
+    # runs when a rep is finished, dump all the selectedFrames and give feedback for the rep
+    def finishRep(self):
+        globals.repCount += 1
+        self.selectedFrames = np.zeros((100,19))
+        self.selectedFrameCount = 0
+        angleDifferences = self.compareAngles(self.evalPoses[globals.currentExercise], self.angleThresholds[globals.currentExercise])
+        # repFeedback is an array that contains the feedback for each rep
+        globals.repFeedback.append(self.giveFeedback(angleDifferences))
+        return None
+
+    def summariseFeedback(self,smallErrorCount: np.float64, largeErrorCount: np.float64):
+        feedback = []
+        for i,count in enumerate(smallErrorCount):
+            #none of that error
+            if count == 0:
+                continue
+            feedback.append(f"Angle between {self.glossary[i]} needed to be smaller {count} times")
+        for i,count in enumerate(largeErrorCount):
+            #none of that error
+            if count == 0:
+                continue
+            feedback.append(f"Angle between {self.glossary[i]} needed to be larger {count} times")
+        feedback.append(f"You did {self.perfectReps} reps perferctly")
+        return feedback
+
 
     def run(self, inputs: Dict[str, Any]) -> Dict[str, Any]:  # type: ignore
         """This node imports the evalPose and angleWeights score,
@@ -223,7 +271,8 @@ class Node(AbstractNode):
                         # transition into rest state
                         self.inPose = False
                         self.switchPoseCount = 0
-                        globals.repCount += 1
+                        self.finishRep()
+                        
                 # reset switchPoseCount
                 if frameStatus == 1:
                     self.switchPoseCount = 0
@@ -242,13 +291,13 @@ class Node(AbstractNode):
                     self.switchPoseCount = 0
 
             if frameStatus == 2:
-                globals.feedback = ["Frames filled up"]
+                globals.mainFeedback = ["Frames filled up"]
             
             # check for not in frame
             if frameStatus == -1:
                 self.invalidFrameCount += 1
                 if self.invalidFrameCount > 10:
-                    globals.feedback = ["PUT UR ASS IN THE IMAGE"]
+                    globals.mainFeedback = ["PUT UR ASS IN THE IMAGE"]
             else:
                 self.invalidFrameCount = 0
             
