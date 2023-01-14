@@ -4,6 +4,7 @@ from app import send_feedback
 
 def initialise():
     global img
+    global repCount
     global feedback
     
     global runSwitch
@@ -13,6 +14,7 @@ def initialise():
     
     
     img = np.zeros((720, 1280, 3))
+    repCount = 0
     feedback = ["Press Start"]
     
     runSwitch = False
