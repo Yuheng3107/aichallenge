@@ -21,10 +21,18 @@ class Node(AbstractNode):
         # self.logger.info(f"model loaded with configs: config")
 
         super().__init__(config, node_path=__name__, **kwargs)
-        globals.feedback = ["Please Select Exercise"]
+        globals.mainFeedback = ["Please Select Exercise"]
+
+        """ERROR TRACKING"""
+        # angle needs to be smaller
+        self.smallErrorCount = np.zeros((100,19))
+        # angle needs to be larger
+        self.largeErrorCount = np.zeros((100,19))
+        # perfect rep counter
+        self.perfectReps = 0
 
         """FRAME SELECTION"""
-        self.selectedFrames = np.zeros((500,19))
+        self.selectedFrames = np.zeros((100,19))
         self.selectedFrameCount = 0
 
         """REP COUNTER"""
@@ -63,36 +71,77 @@ class Node(AbstractNode):
             'Thigh and Leg',
             'nose-midShoulder-midHip',
             'Vertical and Back',
-            'vertical(nose)-nose-midShoulder'])
-        
+            'vertical(nose)-nose-midShoulder'])  
     
     """UI METHODS"""
+
+    def finishRep(self):
+        """
+        Called when a rep is finished.
+        Gets the feedback for the rep and passes it to front-end, then deletes all frame data of previous rep.
+        """
+        globals.repCount += 1
+        self.selectedFrames = np.zeros((100,19))
+        self.selectedFrameCount = 0
+        angleDifferences = self.compareAngles(self.evalPoses[globals.currentExercise], self.angleThresholds[globals.currentExercise])
+        # repFeedback is an array that contains the feedback for each rep
+        globals.repFeedback.append(self.giveFeedback(angleDifferences))
+        return None
+    
     def changeExercise(self):
+        """
+        Called when a new exercise begins.
+        Resets all exercise-related variables and then resumes running rep detection.
+        """    
         # reset frame-related variables
-        self.selectedFrames = np.zeros((500,19))
+        self.selectedFrames = np.zeros((100,19))
         self.selectedFrameCount = 0
         self.frameCount = 0
+        # reset feedback-related variables
+        self.smallErrorCount = np.zeros((100,19))
+        self.largeErrorCount = np.zeros((100,19))
+        self.perfectReps = 0
+
         globals.repCount = 0
         # check for invalid exercise
         if globals.currentExercise >= self.angleWeights.shape[0]:
             globals.currentExercise = 0
         # start exercise
         globals.runSwitch = True
-        globals.feedback = ["Exercise Begin"]
+        globals.mainFeedback = ["Exercise Begin"]
         return None
     
+    
     def endExercise(self):
-        angleDifferences = self.compareAngles(self.evalPoses[globals.currentExercise], self.angleThresholds[globals.currentExercise])
-        # feedback is global variable which can be accessed by view in app.py
-        globals.feedback = self.giveFeedback(angleDifferences)
+        """
+        Called when the current exercise ends.
+        Blacks out image, stops running rep detection, and calls for a feedback summary
+        """   
         globals.img = np.zeros((720, 1280, 3))
         # turn off run
         globals.runSwitch = False
+        # no reps detected
+        if globals.repCount == 0:
+            globals.mainFeedback = ["No Reps Detected"]
+            return None
+        globals.mainFeedback = self.summariseFeedback(self.smallErrorCount,self.largeErrorCount,self.perfectReps)
         return None
 
-
     """COMPUTATIONAL METHODS"""
+
+   
     def comparePoses(self, evalPose: np.float64, curPose: np.float64, angleWeights: np.float64):
+        """
+        Called every frame while rep detection is active.
+        Used to determine if user is currently in a certain pose.
+        Args:
+            evalPose (np array(19 float)): the ideal pose to be compared against.
+            curPose (np array(19 float)): the current pose detected by the camera.
+
+        Returns:
+            score (float): a score between 0 and 1, 0 being completely similar and 1 being completely different.
+                -1 if curPose is missing crucial angle data.
+        """    
         # for data security 
         score = 0.
         
@@ -115,9 +164,21 @@ class Node(AbstractNode):
             score += (abs(x-evalPose[i])/np.pi) * (angleWeights[i]/angleWeightSum)
         return score
 
-    # Adds curPose to the 'back' of the array if score is lesser than scoreThreshold
-        # returns 1 if frame is selected, 0 if frame is not selected, 2 if selectedFrames is full, -1 if frame is invalid
+    
     def selectFrames(self, score, curPose: np.float64, scoreThreshold):
+        """
+        Called every frame while rep detection is active.
+        Used to determine whether to select a frame to be used for evaluation of errors. If selected, frame is added to selectedFrames array.
+        Args:
+            score (float): score returned by comparePoses, 0 being completely similar and 1 being completely different.
+            curPose (np array(19 float)): the current pose detected by the camera.
+            scoreThreshold (float): the threshold within which score has to be for the frame to be selected.
+
+        Returns:
+            output (int): 1 if frame is selected, 0 if frame is not selected 
+                2 if selectedFrames is full, -1 if frame is invalid
+        """
+
         # error catch for invalid frame
         if score == -1:
             return -1
@@ -133,6 +194,17 @@ class Node(AbstractNode):
 
     # returns np.arr(19) of differences, 0 is no significant difference
     def compareAngles(self, evalPose: np.float64, angleThresholds: np.float64):
+        """
+        Called when a rep is finished.
+        Used to compare between ideal and observed angles in user's pose
+            Args:
+                evalPose (np array(19 float)): the ideal pose to be compared against.
+                curPose (np array(19 float)): the current pose detected by the camera.
+                angleThresholds (np array(19 float)): the threshold of angle differences
+
+            Returns:
+                angleDifferences (np array(19 float)): angle differences, positive is too large, negative is too small, 0 is no significant difference    
+        """
         angleDifferences = np.zeros(evalPose.shape) 
         # check for 0 frames
         if self.selectedFrameCount == 0:
@@ -141,7 +213,6 @@ class Node(AbstractNode):
         filledselectedFrames = self.selectedFrames[0:self.selectedFrameCount]
         # positive is too large, negative is too small 
         differences = np.average(filledselectedFrames, axis=0) - evalPose
-        print(differences)
         for i, x in enumerate(differences):
             if angleThresholds[i] == 0.:
                 continue
@@ -150,39 +221,80 @@ class Node(AbstractNode):
                 angleDifferences[i] = differences[i]
         return angleDifferences
 
-    # gives feedback to a view, so returns json data which can be accessed from datapool
     def giveFeedback(self, angleDifferences: np.float64):
+        """
+        Called when a rep is finished.
+        Used to convert angle data into text feedback to feed to front-end
+            Args:
+                angleDifferences (np array(19 float)): angle differences, positive is too large, negative is too small, 0 is no significant difference
+                    
+            Returns:
+                feedback (string): errors made in rep
+        """
         #check for error in compareAngles
+        feedback = f"Rep {globals.repCount}: "
         if angleDifferences[0] == -99:
-            return ["No frames detected"]
+            feedback += "No Frames Detected"
+            return feedback
 
-        feedback = []
         angleDifferences /= np.pi
-
-        for angle_id, difference in enumerate(angleDifferences):
+        # hasError tracks if there is an error
+        hasError = False
+        for i, difference in enumerate(angleDifferences):
             if difference == 0.:
                 continue
+            hasError = True
             if (difference > 0):
                 # angle needs to be smaller, as it is larger than ideal pose
-                feedback.append(f"Angle between {self.glossary[angle_id]} needs to be smaller")
+                # 0 - 18 is angle needs to be smaller
+                self.smallErrorCount[globals.repCount-1,i] += 1
+                feedback += f"Angle between {self.glossary[i]} needs to be smaller, "
             else:
                 # angle needs to be greater, as it is smaller than ideal pose
-                feedback.append(f"Angle between {self.glossary[angle_id]} needs to be larger")
-        if len(feedback) == 0:
-            feedback.append("U ARE PERFECT")
+                # 19 to 37 is angle needs to be larger
+                self.largeErrorCount[globals.repCount-1,i] += 1
+                feedback += f"Angle between {self.glossary[i]} needs to be larger, "
+        if hasError == False:
+            # 38 is perfect rep
+            self.perfectReps += 1
+            feedback += "Perfect!"
         return feedback
 
+    def summariseFeedback(self,smallErrorCount: np.float64, largeErrorCount: np.float64, perfectReps):
+        """
+        Called when the exercise is finished.
+        Used to convert the rep feedback into a feedback summary for the user.
+            Args:
+                smallErrorCount (np array(19 int)): number of times angle was too small
+                largeErrorCount (np array(19 int)): number of times angle was too large
+                perfectReps (int): number of perfect reps (no errors)
+                    
+            Returns:
+                feedback (list (string)): errors made in rep
+        """
+        feedback = []
+        for i,count in enumerate(smallErrorCount):
+            #none of that error
+            if count == 0:
+                continue
+            feedback.append(f"Angle between {self.glossary[i]} needed to be smaller {count} times")
+        for i,count in enumerate(largeErrorCount):
+            #none of that error
+            if count == 0:
+                continue
+            feedback.append(f"Angle between {self.glossary[i]} needed to be larger {count} times")
+        feedback.append(f"You did {perfectReps} reps perferctly")
+        return feedback
+
+
     def run(self, inputs: Dict[str, Any]) -> Dict[str, Any]:  # type: ignore
-        """This node imports the evalPose and angleWeights score,
-        then determines whether the rep is in the start or middle
-        position
+        """
+        This node evaluates the similarity between the current pose (curPose)
+        and the crucial pose (evalPose) to decide whether or not to select the frame.
 
-        It does so by evaluating both the start and the middle at
-        the same time, if start_score > mid_score (deviation from ideal score)
-        it is start state, else if mid > start, it is in middle state
+        If it selects the frame, it will then compare the current pose to ideal pose, 
+        then store the angleDifferences to be processed when the rep is completed.
 
-        node will process the score, compare the poses to ideal pose,
-        then give angleDifferences to the user 
         Args:
             inputs (dict): Dictionary with keys "img", "keypoints".
 
@@ -213,7 +325,8 @@ class Node(AbstractNode):
             
             """FRAME STATUS"""
             frameStatus = self.selectFrames(score, curPose, self.scoreThreshold)
-            
+
+            # switching from in pose state to rest state
             if self.inPose == True:
                 # if currently in pose state but person in a rest frame
                 if frameStatus == 0:
@@ -223,11 +336,13 @@ class Node(AbstractNode):
                         # transition into rest state
                         self.inPose = False
                         self.switchPoseCount = 0
-                        globals.repCount += 1
+                        self.finishRep()
+                        
                 # reset switchPoseCount
                 if frameStatus == 1:
                     self.switchPoseCount = 0
-            
+
+            # switching from rest state to in pose state
             if self.inPose == False:
                 # if currently in rest state but person in a pose frame
                 if frameStatus == 1:
@@ -242,13 +357,13 @@ class Node(AbstractNode):
                     self.switchPoseCount = 0
 
             if frameStatus == 2:
-                globals.feedback = ["Frames filled up"]
+                globals.mainFeedback = ["Frames filled up"]
             
             # check for not in frame
             if frameStatus == -1:
                 self.invalidFrameCount += 1
                 if self.invalidFrameCount > 10:
-                    globals.feedback = ["PUT UR ASS IN THE IMAGE"]
+                    globals.mainFeedback = ["PUT UR ASS IN THE IMAGE"]
             else:
                 self.invalidFrameCount = 0
             

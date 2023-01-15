@@ -2,6 +2,17 @@ import numpy as np
 
 
 def processData(keypoints: np.float64, height: int, width: int):
+    """
+    Called every frame while rep detection is active.
+    Used to convert keypoint data into angle data
+        Args:
+            keypoints (np array(1,17,2 int)): keypoints detected by PeekingDuck
+            height (int): height of img
+
+        Returns:
+            curPose(np array(19 float)): angle data of the pose
+    """
+    
     if (keypoints.shape != (1, 17, 2)):
         return np.zeros(19)
     #for datasec purposes, 0 is invalid data
@@ -16,8 +27,13 @@ def processData(keypoints: np.float64, height: int, width: int):
     midShoulder = (data[5] + data[6])/2
     midHip = (data[11] + data[12])/2
 
-    #make line from 2 points
+    
     def makeLine(point1: np.float64, point2: np.float64):
+        """
+        Returns:
+            output (np array(2 float)): line from point1 to point2
+                (0,0) if the points cannot be calculated due to missing keypoint
+        """
         if (point1[0] == 0. and point1[1] == 0.) or (point2[0] == 0. and point2[1] == 0.):
             return np.zeros(2)
         return point2-point1
@@ -65,9 +81,12 @@ def processData(keypoints: np.float64, height: int, width: int):
     #rightKnee-rightAnkle
     lines[18] = makeLine(data[14],data[16])
     
-    #calculate angle between 2 lines. note that it takes lines AB & BC to calculate angle ABC
-    #this is because line AB is inverted with the negative sign.
     def calcAngle(line1: np.float64, line2: np.float64):
+        """
+        returns: 
+            angle (float): angle between line1 and line2
+                0 if the points cannot be calculated due to missing line
+        """
         if (line1[0] == 0. and line1[1] == 0.) or (line2[0] == 0. and line2[1] == 0.):
             return 0.
         cosine_angle = np.dot(-line1, line2) / (np.linalg.norm(-line1) * np.linalg.norm(line2))
