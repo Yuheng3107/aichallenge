@@ -48,7 +48,7 @@ socket.on('feedback', (stringData) => {
     data.repFeedback.forEach((item) => {
         let li = document.createElement('li');
         li.innerText = item;
-        feedbackList.appendChild(li);
+        feedbackList.insertBefore(li, feedbackList.firstChild);
     });
     }
     repCount.textContent = data["repCount"];
