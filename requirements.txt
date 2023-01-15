@@ -5,3 +5,4 @@ click
 flask_socketio
 simple-websocket
 opencv-contrib-python
+deepface
