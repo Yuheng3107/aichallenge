@@ -50,7 +50,7 @@ class Node(AbstractNode):
         """TO BE IMPORTED FROM NUMPY ARRAYS"""
         self.evalPoses = np.array([[0.,0.98390493,1.51094115,1.6306515,0.26590253,2.81373512
             ,0.26590253,0.32785753,1.02067892,1.59934942,1.35720082,1.78439183
-            ,0.79900877,1.33113154,1.22965078,1.52982444,0.90668716,2.49591843
+            ,0.79900877,1.33113154,1.22965078,1.52982444,0.90668716,0.64567157
             ,0.26101294]])
         self.angleWeights = np.array([[0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,1.,0.,1.,0.,1.,0.]])
         self.scoreThreshold = 0.2
@@ -148,7 +148,8 @@ class Node(AbstractNode):
             if count == 0:
                 continue
             feedback.append(f" {self.glossary[i]} angle needed to be larger {count} times")
-        feedback.append(f" Rep times were too short {self.repTimeError} times")
+        if self.repTimeError != 0:
+            feedback.append(f" Rep times were too short {self.repTimeError} times")
         feedback.append(f" {perfectReps} perferct reps.")
         return feedback
 
