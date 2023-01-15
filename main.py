@@ -5,12 +5,14 @@ from turtle import pos
 from peekingduck.pipeline.nodes.input import visual
 from peekingduck.pipeline.nodes.model import posenet
 from src.custom_nodes.dabble import correctMain
+from src.custom_nodes.dabble import emotion
 from peekingduck.pipeline.nodes.draw import poses
 # from peekingduck.pipeline.nodes.output import media_writer, screen
 from peekingduck.runner import Runner
 
 def main():
     processing_node = correctMain.Node(pkd_base_dir=Path.cwd() / "src" / "custom_nodes")
+    emotion_node = emotion.Node(pkd_base_dir=Path.cwd() / "src" / "custom_nodes")
     # Change source to file name to parse file
     visual_node = visual.Node(source=0)
     posenet_node = posenet.Node(max_pose_detection=1)
@@ -24,6 +26,7 @@ def main():
             visual_node,
             posenet_node,
             processing_node,
+            emotion_node,
             poses_node,
             # screen_node,
             # media_writer_node
