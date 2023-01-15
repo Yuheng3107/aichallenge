@@ -3,6 +3,7 @@ Node template for creating custom nodes.
 """
 
 from typing import Any, Dict
+import numpy as np
 import globals
 from deepface import DeepFace
 from peekingduck.pipeline.nodes.abstract_node import AbstractNode
