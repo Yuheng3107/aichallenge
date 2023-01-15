@@ -11,6 +11,15 @@ const form = document.querySelector('#changeExercise');
 const feedbackList = document.querySelector('#feedback-list');
 const summary = document.querySelector('#summary');
 
+if ('speechSynthesis' in window) {
+    const synth = window.speechSynthesis;
+    let textToSpeech = true;
+}
+else {
+    // replace with overlay and div pop-up in the future
+    alert('text to speech not available');
+    let textToSpeech = false;
+}
 let started = false;
 let socket = io();
 
@@ -50,12 +59,16 @@ socket.on('feedback', (stringData) => {
         li.innerText = item;
         feedbackList.insertBefore(li, feedbackList.firstChild);
     });
+    if (textToSpeech) {
+        // if text to speech available, speak most recent rep
+        let speech = new SpeechSynthesisUtterance(feedbackList.firstChild.textContent);
+        synth.speak(speech);
+    }
     }
     repCount.textContent = data["repCount"];
     summary.innerText = data.summary;
 
 })
-
 
 
 
