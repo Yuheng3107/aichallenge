@@ -11,7 +11,8 @@ def initialise():
     global exerciseSelected
     global exerciseEnded
     
-    
+    global emotion
+
     img = np.zeros((720, 1280, 3))
     repCount = 0
     mainFeedback = ["Press Start"]
@@ -21,3 +22,4 @@ def initialise():
     currentExercise = 0
     exerciseSelected = False
     exerciseEnded = False
+    emotion = "no emotions detected"
