@@ -42,12 +42,16 @@ form.addEventListener('submit', (e) => {
 socket.on('feedback', (stringData) => {
     let data = JSON.parse(stringData);
     console.log(data);
-    repCount.textContent = "Reps: " + data["repCount"];
+// if repCount changes, update text
+    if (Number(repCount.textContent) != data["repCount"]) {
+    feedbackList.textContent = "";
     data.repFeedback.forEach((item) => {
-        let li = document.createElement("li");
+        let li = document.createElement('li');
         li.innerText = item;
-        feedbackList.insertBefore(li, feedbackList.firstChild);
+        feedbackList.appendChild(li);
     });
+    }
+    repCount.textContent = data["repCount"];
     summary.innerText = data.summary;
 
 })

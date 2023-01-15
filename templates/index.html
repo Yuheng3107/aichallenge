@@ -24,7 +24,7 @@
     </nav>
     <main class="d-flex flex-column align-items-lg-center container">
         <img class="video-feed" src="{{url_for('video_feed')}}" alt="Video">
-        <p id="rep-count"></p>
+        <p><span>"Reps: </span><span id="rep-count"></span></p>
         <ul id="feedback-list"></ul>
         <p id="summary"></p>
         <button class="start-button btn btn-success mt-3" data-url="{{url_for('start')}}">Start Camera</button>
