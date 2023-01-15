@@ -1,6 +1,9 @@
 import numpy as np
 
-
+"""
+FRAME METHODS
+These methods are called every frame
+"""
 def processData(keypoints: np.float64, height: int, width: int):
     """
     Called every frame while rep detection is active.
@@ -135,3 +138,37 @@ def processData(keypoints: np.float64, height: int, width: int):
     curPose[18] = calcAngle(lines[9],lines[3])
 
     return curPose
+
+def comparePoses(evalPose: np.float64, curPose: np.float64, angleWeights: np.float64):
+    """
+    Called every frame while rep detection is active.
+    Used to determine if user is currently in a certain pose.
+    Args:
+        evalPose (np array(19 float)): the ideal pose to be compared against.
+        curPose (np array(19 float)): the current pose detected by the camera.
+
+    Returns:
+        score (float): a score between 0 and 1, 0 being completely similar and 1 being completely different.
+            -1 if curPose is missing crucial angle data.
+    """    
+    # for data security 
+    score = 0.
+    
+    angleWeightSum = np.sum(angleWeights)
+    if angleWeightSum == 0:
+        return -1
+    for i,x in enumerate(curPose):
+        if angleWeights[i] == 0:
+            continue
+        if x == 0:
+            # Check if peekingDuck missed out any useful 
+            # keypoints, i.e no value but still have weight
+            if angleWeights[i] != 0:
+                # Declare the frame invalid
+                return -1
+            continue
+        # explanation of formula:
+            # abs(x-evalPose[i])/np.pi: diff betwn 2 angles on a scale of 0 to 1, 1 being 180 degrees
+            # angleWeights[i]/angleWeightSum: weighted value of the current angle difference
+        score += (abs(x-evalPose[i])/np.pi) * (angleWeights[i]/angleWeightSum)
+    return score
