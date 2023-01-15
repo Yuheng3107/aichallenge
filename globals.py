@@ -13,7 +13,7 @@ def initialise():
     
     global emotion
 
-    img = np.zeros((720, 1280, 3))
+    img = np.zeros((720, 1280, 3),dtype=np.float32)
     repCount = 0
     mainFeedback = ["Press Start"]
     repFeedback = []
