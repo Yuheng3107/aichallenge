@@ -25,7 +25,6 @@ class Node(AbstractNode):
     def __init__(self, config: Dict[str, Any] = None, **kwargs: Any) -> None:
         super().__init__(config, node_path=__name__, **kwargs)
         self.frameCount = 0
-        self.thread = threading.Thread(target=detect_emotion, name='thread')
         # initialize/load any configs and models here
         # configs can be called by self.<config_name> e.g. self.filepath
         # self.logger.info(f"model loaded with configs: config")
@@ -44,10 +43,11 @@ class Node(AbstractNode):
         
         self.frameCount += 1
         if self.frameCount == 10:
+            thread = threading.Thread(target=detect_emotion, name='thread')
             self.frameCount = 0
-            self.thread.start()
+            thread.start()
 
-              
+        
 
         # result = do_something(inputs["in1"], inputs["in2"])
         # outputs = {"out1": result}
