@@ -51,7 +51,8 @@ def send_feedback():
     on the front end"""
     data = {
         "repCount": globals.repCount,
-        "feedback": globals.feedback
+        "summary": globals.mainFeedback,
+        "repFeedback": globals.repFeedback
     }
     emit('feedback', json.dumps(data))
 

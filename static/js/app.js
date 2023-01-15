@@ -9,6 +9,7 @@ const repCount = document.querySelector('#rep-count');
 const feedback = document.querySelector('#feedback');
 const form = document.querySelector('#changeExercise');
 const feedbackList = document.querySelector('#feedback-list');
+const summary = document.querySelector('#summary');
 
 let started = false;
 let socket = io();
@@ -42,11 +43,13 @@ socket.on('feedback', (stringData) => {
     let data = JSON.parse(stringData);
     console.log(data);
     repCount.textContent = "Reps: " + data["repCount"];
-    data.feedback.forEach((item) => {
+    data.repFeedback.forEach((item) => {
         let li = document.createElement("li");
         li.innerText = item;
         feedbackList.insertBefore(li, feedbackList.firstChild);
-    })
+    });
+    summary.innerText = data.summary;
+
 })
 
 
