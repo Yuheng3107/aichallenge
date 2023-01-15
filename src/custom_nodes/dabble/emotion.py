@@ -18,6 +18,7 @@ class Node(AbstractNode):
 
     def __init__(self, config: Dict[str, Any] = None, **kwargs: Any) -> None:
         super().__init__(config, node_path=__name__, **kwargs)
+        self.frameCount = 0
 
         # initialize/load any configs and models here
         # configs can be called by self.<config_name> e.g. self.filepath
@@ -33,8 +34,12 @@ class Node(AbstractNode):
         Returns:
             outputs (dict): Empty Dictionary.
         """
-        globals.emotion = DeepFace.analyze(globals.img, actions= ['emotion'], enforce_detection=False)
-        print(globals.emotion)
+        self.frameCount += 1
+        if self.frameCount == 10:
+            self.frameCount = 0
+            globals.emotion = DeepFace.analyze(globals.img, actions= ['emotion'], enforce_detection=False)
+            print(globals.emotion)
+
         # result = do_something(inputs["in1"], inputs["in2"])
         # outputs = {"out1": result}
         # return outputs
