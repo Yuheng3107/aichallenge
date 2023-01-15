@@ -115,7 +115,7 @@ class Node(AbstractNode):
         Called when the current exercise ends.
         Blacks out image, stops running rep detection, and calls for a feedback summary
         """   
-        globals.img = np.zeros((720, 1280, 3))
+        globals.img = np.zeros((720, 1280, 3),dtype=np.float32)
         # turn off run
         globals.runSwitch = False
         # no reps detected
@@ -348,6 +348,7 @@ class Node(AbstractNode):
 
             # switching from in key pose to rest pose
             if self.inPose == True:
+                
                 # if currently in key pose but person in a rest pose
                 if frameStatus == 0:
                     self.switchPoseCount += 1
@@ -374,6 +375,9 @@ class Node(AbstractNode):
                 if frameStatus == 0:
                     self.switchPoseCount = 0
 
+            #default message
+            globals.mainFeedback = ["Exercise in progress"]
+
             if frameStatus == 2:
                 globals.mainFeedback = ["Frames filled up"]
             
@@ -381,7 +385,7 @@ class Node(AbstractNode):
             if frameStatus == -1:
                 self.invalidFrameCount += 1
                 if self.invalidFrameCount > 10:
-                    globals.mainFeedback = ["PUT UR ASS IN THE IMAGE"]
+                    globals.mainFeedback = ["Please position yourself in the image"]
             else:
                 self.invalidFrameCount = 0
             
