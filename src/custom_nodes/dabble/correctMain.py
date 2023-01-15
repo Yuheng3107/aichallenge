@@ -81,11 +81,12 @@ class Node(AbstractNode):
         Gets the feedback for the rep and passes it to front-end, then deletes all frame data of previous rep.
         """
         globals.repCount += 1
-        self.selectedFrames = np.zeros((100,19))
-        self.selectedFrameCount = 0
         angleDifferences = self.compareAngles(self.evalPoses[globals.currentExercise], self.angleThresholds[globals.currentExercise])
         # repFeedback is an array that contains the feedback for each rep
         globals.repFeedback.append(self.giveFeedback(angleDifferences))
+        # reset frames
+        self.selectedFrames = np.zeros((100,19))
+        self.selectedFrameCount = 0
         return None
     
     def changeExercise(self):
@@ -98,8 +99,8 @@ class Node(AbstractNode):
         self.selectedFrameCount = 0
         self.frameCount = 0
         # reset feedback-related variables
-        self.smallErrorCount = np.zeros((100,19))
-        self.largeErrorCount = np.zeros((100,19))
+        self.smallErrorCount = np.zeros(19)
+        self.largeErrorCount = np.zeros(19)
         self.perfectReps = 0
 
         globals.repCount = 0
@@ -247,13 +248,13 @@ class Node(AbstractNode):
             if (difference > 0):
                 # angle needs to be smaller, as it is larger than ideal pose
                 # 0 - 18 is angle needs to be smaller
-                self.smallErrorCount[globals.repCount-1,i] += 1
-                feedback += f"Angle between {self.glossary[i]} needs to be smaller, "
+                self.smallErrorCount[i] += 1
+                feedback += f"Angle between {self.glossary[i]} needs to be smaller. "
             else:
                 # angle needs to be greater, as it is smaller than ideal pose
                 # 19 to 37 is angle needs to be larger
-                self.largeErrorCount[globals.repCount-1,i] += 1
-                feedback += f"Angle between {self.glossary[i]} needs to be larger, "
+                self.largeErrorCount[i] += 1
+                feedback += f"Angle between {self.glossary[i]} needs to be larger. "
         if hasError == False:
             # 38 is perfect rep
             self.perfectReps += 1
@@ -277,13 +278,13 @@ class Node(AbstractNode):
             #none of that error
             if count == 0:
                 continue
-            feedback.append(f"Angle between {self.glossary[i]} needed to be smaller {count} times")
+            feedback.append(f"Angle between {self.glossary[i]} needed to be smaller {count} times. ")
         for i,count in enumerate(largeErrorCount):
             #none of that error
             if count == 0:
                 continue
-            feedback.append(f"Angle between {self.glossary[i]} needed to be larger {count} times")
-        feedback.append(f"You did {perfectReps} reps perferctly")
+            feedback.append(f"Angle between {self.glossary[i]} needed to be larger {count} times. ")
+        feedback.append(f"You did {perfectReps} reps perferctly. ")
         return feedback
 
 
