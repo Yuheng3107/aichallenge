@@ -37,13 +37,12 @@ class Node(AbstractNode):
             ,0.69353555,0.79577159,1.29639967,1.43138966,1.08154013,2.01970992
             ,1.40446568,1.58925297,1.59451015,1.76834851,1.11609221,0.56014418
             ,0.71423062],
-            [2.7894555,1.55518634,1.13709183,2.00450083,2.25913271,2.0032857
-            ,2.01955177,3.14037752,1.1105168,1.36875052,1.65533408,1.48625858
-            ,2.5723909,2.010037,2.56000905,2.10432299,1.71209149,0.13861991
-            ,1.57347157]])
-        self.angleWeights = np.array([[0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,1.,0.,1.,0.,1.,0.],[0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,1.,0.,1.,0.,1.,0.]])
-        self.scoreThresholds = np.array([0.2,0.075])
-        self.angleThresholds = np.array([[0,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.1,0.,0.1,0.,0.1,0],[0,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.1,0.,0.1,0.,0.1,0]])
+            [2.5574466622039997, 1.8661907690389496, 1.3149490161808073, 1.8266436374089856, 2.1722788406298035, 2.0339065691491407, 2.2842628291407974, 2.92033539970031, 1.226967402579817, 1.2524005387400583, 1.665556051578816, 1.4760366020109768
+            , 2.643750164055984, 2.336654437631127, 2.483721273539079, 2.3878065214081823
+            , 1.6315575674173972, 0.09473719614213628, 1.5368203712752608]])
+        self.angleWeights = np.array([[0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,1.,0.,1.,0.,1.,0.],[0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,1.,1.,1.,1.,0.,0.,0.]])
+        self.scoreThresholds = np.array([0.2,0.1])
+        self.angleThresholds = np.array([[0,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.1,0.,0.1,0.,0.1,0],[0,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.1,0.1,0.1,0.1,0.,0.,0.]])
         self.evalRepTime = np.array([2,2])
         # Probably will read glossary from csv in the end
         # Glossary will map angle_id to corresponding angle
@@ -59,10 +58,10 @@ class Node(AbstractNode):
             'rightShoulder-rightElbow-rightWrist',
             'midShoulder-midHip-leftHip',
             'midShoulder-midHip-rightHip',
-            'leftShoulder-leftHip-leftKnee',
-            'Chest - Thigh',
-            'leftHip-leftKnee-leftAnkle',
-            'Thigh - Leg',
+            'Chest - Left Thigh',
+            'Chest - Right Thigh',
+            'Left Thigh - Calf',
+            'Right Thigh - Calf',
             'nose-midShoulder-midHip',
             'Vertical - Back',
             'vertical(nose)-nose-midShoulder'])
@@ -231,7 +230,8 @@ class Node(AbstractNode):
         """
         CREATING NEW EXERCISES
         """
-        print(np.average(filledselectedFrames,axis=0))
+        x = np.average(filledselectedFrames,axis=0)
+        print(f"curPose: {', '.join(str(angle) for angle in x)}")
         print(differences)
 
         for i, x in enumerate(differences):
@@ -386,7 +386,7 @@ class Node(AbstractNode):
                 if frameStatus == 1:
                     self.switchPoseCount += 1
                     # if 5 pose frames in a row
-                    if self.switchPoseCount > 5:
+                    if self.switchPoseCount > 6:
                         # transition into key pose
                         self.middleOfRep()
 
@@ -403,17 +403,15 @@ class Node(AbstractNode):
             # check for not in frame
             if frameStatus == -1:
                 self.invalidFrameCount += 1
-                if self.invalidFrameCount > 10:
+                if self.invalidFrameCount > 6:
                     globals.mainFeedback = ["Please position yourself in the image"]
             else:
                 self.invalidFrameCount = 0
             
           
             """DEBUG"""
-            ## print(f"curPose: {curPose}")
-            ## if score != -1:
-                ## print(f"score: {score}")
-                ## pass
+            ## print(f"curPose: {', '.join(str(angle) for angle in curPose)}")
+            print(f"score: {score}")
             ## print(f"angleDifferences: {angleDifferences}")   
             ## print(self.selectedFrameCount)
         
