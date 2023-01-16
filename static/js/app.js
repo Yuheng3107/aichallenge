@@ -53,6 +53,7 @@ socket.on('feedback', (stringData) => {
     let data = JSON.parse(stringData);
 // if repCount changes, update text
     if (Number(repCount.textContent) != data["repCount"]) {
+        //append list items to <ul>
     feedbackList.textContent = "";
     data.repFeedback.forEach((item) => {
         let li = document.createElement('li');
