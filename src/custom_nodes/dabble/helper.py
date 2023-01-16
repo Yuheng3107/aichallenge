@@ -66,7 +66,7 @@ def processData(keypoints: np.float64, height: int, width: int):
 
     #midShoulder-midHip
     lines[10] = makeLine(midShoulder,midHip)
-    #midHip-leftKnee
+    #midHip-leftHip
     lines[11] = makeLine(midHip,data[11])
     #midHip-rightHip
     lines[12] = makeLine(midHip,data[12])
@@ -75,8 +75,8 @@ def processData(keypoints: np.float64, height: int, width: int):
     #rightShoulder-rightHip
     lines[14] = makeLine(data[6],data[12])
 
-    #midHip-rightKnee
-    lines[15] = makeLine(midHip,data[14])
+    #leftHip-leftKnee
+    lines[15] = makeLine(data[11],data[13])
     #rightHip-rightKnee
     lines[16] = makeLine(data[12],data[14])
     #leftKnee-leftAnkle
@@ -102,32 +102,32 @@ def processData(keypoints: np.float64, height: int, width: int):
     curPose[0] = calcAngle(lines[0],lines[2])
     #rightEar-nose-midShoulder
     curPose[1] = calcAngle(lines[1],lines[2])
+    #UNNECESSARY nose-midShoulder-leftShoulder
+    curPose[2] = calcAngle(lines[2],lines[3])
     #nose-midShoulder-rightShoulder 
-    curPose[2] = calcAngle(lines[2],lines[4])
+    curPose[3] = calcAngle(lines[2],lines[4])
     #midShoulder-leftShoulder-leftElbow
-    curPose[3] = calcAngle(lines[3],lines[5])
+    curPose[4] = calcAngle(lines[3],lines[5])
     #midShoulder-rightShoulder-rightElbow
-    curPose[4] = calcAngle(lines[4],lines[6])
-    #leftElbow-leftShoulder-leftHip
-    curPose[5] = calcAngle(np.negative(lines[5]),lines[13])
-    #rightElbow-rightShoulder-rightHip
-    curPose[6] = calcAngle(np.negative(lines[6]),lines[14])
+    curPose[5] = calcAngle(lines[4],lines[6])
+    #nose-midShoulder-leftElbow
+    curPose[6] = calcAngle(lines[2],lines[5])
+    #nose-midShoulder-rightElbow
+    curPose[7] = calcAngle(lines[2],lines[6])
     #leftShoulder-leftElbow-leftWrist
-    curPose[7] = calcAngle(lines[5],lines[7])
+    curPose[8] = calcAngle(lines[5],lines[7])
     #rightShoulder-rightElbow-rightWrist
-    curPose[8] = calcAngle(lines[6],lines[8])
-    #midShoulder-midHip-rightHip
-    curPose[9] = calcAngle(lines[10],lines[12])
-    #midShoulder-midHip-leftKnee
+    curPose[9] = calcAngle(lines[6],lines[8])
+    #UNNECESSARY midShoulder-midHip-leftHip
     curPose[10] = calcAngle(lines[10],lines[11])
-    #midShoulder-midHip-rightKnee
-    curPose[11] = calcAngle(lines[10],lines[15])
+    #midShoulder-midHip-rightHip
+    curPose[11] = calcAngle(lines[10],lines[12])
+    #leftShoulder-leftHip-leftKnee
+    curPose[12] = calcAngle(lines[13],lines[15])
     #rightShoulder-rightHip-rightKnee
-    curPose[12] = calcAngle(lines[14],lines[16])
-    #midHip-leftKnee-leftAnkle
-    curPose[13] = calcAngle(lines[11],lines[17])
-    #midHip-rightKnee-rightAnkle
-    curPose[14] = calcAngle(lines[15],lines[18])
+    curPose[13] = calcAngle(lines[14],lines[16])
+    #leftHip-leftKnee-leftAnkle
+    curPose[14] = calcAngle(lines[15],lines[17])
     #rightHip-rightKnee-rightAnkle
     curPose[15] = calcAngle(lines[16],lines[18])
     #nose-midShoulder-midHip
