@@ -10,15 +10,16 @@ const feedback = document.querySelector('#feedback');
 const form = document.querySelector('#changeExercise');
 const feedbackList = document.querySelector('#feedback-list');
 const summary = document.querySelector('#summary');
-
+let synth;
+let textToSpeech = false;
 if ('speechSynthesis' in window) {
-    const synth = window.speechSynthesis;
-    let textToSpeech = true;
+    synth = window.speechSynthesis;
+    textToSpeech = true;
 }
 else {
     // replace with overlay and div pop-up in the future
     alert('text to speech not available');
-    let textToSpeech = false;
+
 }
 let started = false;
 let socket = io();
@@ -50,7 +51,6 @@ form.addEventListener('submit', (e) => {
 // front end 
 socket.on('feedback', (stringData) => {
     let data = JSON.parse(stringData);
-    console.log(data);
 // if repCount changes, update text
     if (Number(repCount.textContent) != data["repCount"]) {
     feedbackList.textContent = "";
@@ -60,8 +60,9 @@ socket.on('feedback', (stringData) => {
         feedbackList.insertBefore(li, feedbackList.firstChild);
     });
     if (textToSpeech) {
-        // if text to speech available, speak most recent rep
-        let speech = new SpeechSynthesisUtterance(feedbackList.firstChild.textContent);
+        // if text to speech available, speak most recent rep 
+        console.log(feedbackList.firstChild.textContent);
+        let speech = new SpeechSynthesisUtterance(feedbackList.firstChild.innerText);
         synth.speak(speech);
     }
     }
