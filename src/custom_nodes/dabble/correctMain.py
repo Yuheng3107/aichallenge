@@ -33,14 +33,18 @@ class Node(AbstractNode):
         self.switchPoseCount = 0
 
         """TO BE IMPORTED FROM NUMPY ARRAYS"""
-        self.evalPoses = np.array([[0.,0.98390493,1.51094115,1.6306515,0.26590253,2.81373512
-            ,0.26590253,0.32785753,1.02067892,1.59934942,1.35720082,1.78439183
-            ,0.79900877,1.33113154,1.22965078,1.52982444,0.90668716,0.64
-            ,0.26101294]])
-        self.angleWeights = np.array([[0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,1.,0.,1.,0.,1.,0.]])
+        self.evalPoses = np.array([[0.,0.96929341,1.48335124,1.27821004,0.69353555,2.34582106
+            ,0.69353555,0.79577159,1.29639967,1.43138966,1.08154013,2.01970992
+            ,1.40446568,1.58925297,1.59451015,1.76834851,1.11609221,0.56014418
+            ,0.71423062],
+            [2.52443828,1.88649592,1.33577948,1.80581317,2.16384158,2.02700298
+            ,2.16384158,1.11458967,1.23069065,1.2539069,1.66242216,1.47917049
+            ,2.65622281,2.36077644,2.5004578,2.41741307,1.63131787,0.09349776
+            ,1.53782011]])
+        self.angleWeights = np.array([[0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,1.,0.,1.,0.,1.,0.],[0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,1.,0.,1.,0.,1.,0.]])
         self.scoreThreshold = 0.2
-        self.angleThresholds = np.array([[0,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.1,0.,0.1,0.,0.1,0]])
-        self.evalRepTime = np.array([[2]])
+        self.angleThresholds = np.array([[0,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.1,0.,0.1,0.,0.1,0],[0,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.1,0.,0.1,0.,0.1,0]])
+        self.evalRepTime = np.array([2,2])
         # Probably will read glossary from csv in the end
         # Glossary will map angle_id to corresponding angle
         self.glossary = np.array(['leftEar-nose-midShoulder',
@@ -223,6 +227,13 @@ class Node(AbstractNode):
         filledselectedFrames = self.selectedFrames[0:self.selectedFrameCount]
         # positive is too large, negative is too small 
         differences = np.average(filledselectedFrames, axis=0) - evalPose
+
+        """
+        CREATING NEW EXERCISES
+        """
+        print(np.average(filledselectedFrames,axis=0))
+        print(differences)
+
         for i, x in enumerate(differences):
             if angleThresholds[i] == 0.:
                 continue
@@ -256,7 +267,6 @@ class Node(AbstractNode):
         if angleDifferences[0] == -99:
             feedback += "No Frames Detected"
             return feedback
-
         angleDifferences /= np.pi
         # hasError tracks if there is any feedback
         hasError = False
