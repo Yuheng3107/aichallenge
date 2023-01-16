@@ -24,28 +24,13 @@ class Node(AbstractNode):
         super().__init__(config, node_path=__name__, **kwargs)
         globals.mainFeedback = ["Please Select Exercise"]
 
-        """FRAME SELECTION"""
-        self.selectedFrames = np.zeros((100,19))
-        self.selectedFrameCount = 0
+        self.resetAll()
 
         """REP COUNTER"""
-        globals.repCount = 0
         # inPose tracks if you are currently in evalPose
         self.inPose = False
         # switchPoseCount counts how many frames you have switched pose for in order to account for anomalies
         self.switchPoseCount = 0
-        self.invalidFrameCount = 0
-
-        """ERROR TRACKING"""
-        # angle needs to be smaller
-        self.smallErrorCount = np.zeros((100,19))
-        # angle needs to be larger
-        self.largeErrorCount = np.zeros((100,19))
-        # rep time too short
-        self.repTimeError = 0
-        self.repStartTime = 0
-        # perfect rep counter
-        self.perfectReps = 0    
 
         """TO BE IMPORTED FROM NUMPY ARRAYS"""
         self.evalPoses = np.array([[0.,0.98390493,1.51094115,1.6306515,0.26590253,2.81373512
@@ -76,8 +61,43 @@ class Node(AbstractNode):
             'Thigh - Leg',
             'nose-midShoulder-midHip',
             'Vertical - Back',
-            'vertical(nose)-nose-midShoulder'])  
+            'vertical(nose)-nose-midShoulder'])
+
+    """
+    RESET METHODS
+    These methods reset variables
+    """  
     
+    def resetFrames(self):
+        """
+        Called when a rep is finished.
+        Resets the stored angle data for that rep.
+        """
+        #frame stuff
+        self.selectedFrames = np.zeros((200,19))
+        self.selectedFrameCount = 0
+
+    def resetAll(self):
+        """
+        Called when the a new exercise begins.
+        Resets all exercise-related variables.
+        """
+        self.resetFrames
+
+        # reset angle-related variables
+        self.smallErrorCount = np.zeros(19)
+        self.largeErrorCount = np.zeros(19)
+        # reset timer-related variables
+        self.repTimeError = 0
+        self.repStartTime = 0
+        # reset perfect reps
+        self.perfectReps = 0
+
+        # reset user out of frame count
+        self.invalidFrameCount = 0
+        globals.repCount = 0
+
+        
     """
     EXERCISE METHODS
     These methods are called once per exercise.
@@ -88,20 +108,10 @@ class Node(AbstractNode):
         Called when a new exercise begins.
         Resets all exercise-related variables and then resumes running rep detection.
         """    
-        # reset frame-related variables
-        self.selectedFrames = np.zeros((100,19))
-        self.selectedFrameCount = 0
-        self.frameCount = 0
-        # reset angle-related variables
-        self.smallErrorCount = np.zeros(19)
-        self.largeErrorCount = np.zeros(19)
-        # reset timer-related variables
-        self.repTimeError = 0
-        self.repStartTime = 0
-        # reset perfect reps
-        self.perfectReps = 0
-
-        globals.repCount = 0
+        self.resetAll()
+        # change pose state
+        self.inPose = False
+        self.switchPoseCount = 0
         # check for invalid exercise
         if globals.currentExercise >= self.angleWeights.shape[0]:
             globals.currentExercise = 0
@@ -112,7 +122,7 @@ class Node(AbstractNode):
     
     def endExercise(self):
         """
-        Called when the current exercise ends.
+        Called when the exercise is finished.
         Blacks out image, stops running rep detection, and calls for a feedback summary
         """   
         globals.img = np.zeros((720, 1280, 3),dtype=np.float32)
@@ -174,11 +184,11 @@ class Node(AbstractNode):
         # repFeedback is an array that contains the feedback for each rep
         globals.repFeedback.append(self.giveFeedback(angleDifferences, timeDifference))
         # reset frames
-        self.selectedFrames = np.zeros((100,19))
-        self.selectedFrameCount = 0
+        self.resetFrames()
         # change pose state
         self.inPose = False
         self.switchPoseCount = 0
+
         return None
 
     def middleOfRep(self):
@@ -337,7 +347,6 @@ class Node(AbstractNode):
             globals.img = inputs["img"]
             # Keypoints has a shape of (1, 17, 2)
             keypoints = inputs["keypoints"]
-            # add 1 to frameCount
             
             # Calculates angles in radians of live feed
             curPose = processData(keypoints, globals.img.shape[0], globals.img.shape[1])
@@ -367,7 +376,7 @@ class Node(AbstractNode):
                 if frameStatus == 1:
                     self.switchPoseCount += 1
                     # if 5 pose frames in a row
-                    if self.switchPoseCount > 3:
+                    if self.switchPoseCount > 5:
                         # transition into key pose
                         self.middleOfRep()
 
