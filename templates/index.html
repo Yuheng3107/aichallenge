@@ -20,18 +20,21 @@
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">AI Challenge 2023</a>
+
+            <button class="text-to-speech btn btn-danger mt-3">Turn Off Text-To-Speech</button>
         </div>
     </nav>
     <main class="d-flex flex-column align-items-lg-center container">
         <img draggable="false" class="video-feed" src="{{url_for('video_feed')}}" alt="Video">
-        <div>
+        <div id="rep-info-group">
             <span id="rep-count"></span>
-            <span id="curr-feedback"></span>
+            <p id="rep-feedback"></p>
         </div>
-        <ul id="feedback-list"></ul>
         <p id="summary"></p>
+        <button id="show-log-button"><span>Show Feedback Log</span><img
+                src="{{url_for('static', filename='svg/expand-icon.svg')}}" alt="expand icon" /></button>
+        <ul id="feedback-list"></ul>
         <button class="start-button btn btn-success mt-3" data-url="{{url_for('start')}}">Start Camera</button>
-        <button class="text-to-speech btn btn-danger mt-3">Turn Off Text-To-Speech</button>
         <form class="d-flex flex-row mt-3" id="changeExercise">
             <select class="form-select" name="exerciseId" id="changeExercise">
                 <option selected value="0">Squat (Side)</option>

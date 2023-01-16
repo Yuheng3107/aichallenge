@@ -1,6 +1,5 @@
 from fileinput import filename
 from pathlib import Path
-from turtle import pos
 
 from peekingduck.pipeline.nodes.input import visual
 from peekingduck.pipeline.nodes.model import posenet
