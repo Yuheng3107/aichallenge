@@ -3,15 +3,15 @@ Node template for creating custom nodes.
 """
 
 from typing import Any, Dict
-import numpy as np
 import globals
 from deepface import DeepFace
 from peekingduck.pipeline.nodes.abstract_node import AbstractNode
 import threading
 
 def detect_emotion():
-    globals.emotion = DeepFace.analyze(globals.img, actions= ['emotion'], enforce_detection=False)
-    print(globals.emotion)
+    dominant_emotion = DeepFace.analyze(globals.img, actions= ['emotion'], enforce_detection=False)['dominant_emotion']
+    globals.emotionsFreq[globals.emotions[dominant_emotion]] = globals.emotionsFreq.get(globals.emotions[dominant_emotion], 0) + 1
+    print(globals.emotionsFreq)
 
 
 
@@ -42,7 +42,7 @@ class Node(AbstractNode):
         
         
         self.frameCount += 1
-        if self.frameCount == 10:
+        if self.frameCount == 5:
             thread = threading.Thread(target=detect_emotion, name='thread')
             self.frameCount = 0
             thread.start()
