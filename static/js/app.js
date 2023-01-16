@@ -6,13 +6,19 @@ function getFeedback() {
 const startButton = document.querySelector('.start-button');
 const endButton = document.querySelector('.end-button');
 const repCount = document.querySelector('#rep-count');
+const repFeedback = document.querySelector("#rep-feedback");
 const feedback = document.querySelector('#feedback');
 const form = document.querySelector('#changeExercise');
+const showLogButton = document.querySelector("#show-log-button");
 const feedbackList = document.querySelector('#feedback-list');
 const summary = document.querySelector('#summary');
 const textToSpeechButton = document.querySelector('.text-to-speech');
+
+
+
 let synth;
 let textToSpeech = false;
+
 
 if ('speechSynthesis' in window) {
     synth = window.speechSynthesis;
@@ -53,25 +59,32 @@ form.addEventListener('submit', (e) => {
 // front end 
 socket.on('feedback', (stringData) => {
     let data = JSON.parse(stringData);
-// if repCount changes, update text
+    // if repCount changes, update text display on screen
     if (Number(repCount.textContent) != data["repCount"]) {
-        //append list items to <ul>
-    feedbackList.textContent = "";
-    data.repFeedback.forEach((item) => {
+        repFeedback.textContent = data.repFeedback.slice(-1);
+        //append list items to the feedback log
+        console.log(data);
         let li = document.createElement('li');
-        li.innerText = item;
+        li.innerText = data.repFeedback.slice(-1);
         feedbackList.insertBefore(li, feedbackList.firstChild);
-    });
-    if (textToSpeech) {
-        // if text to speech available, speak most recent rep 
-        let speech = new SpeechSynthesisUtterance(feedbackList.firstChild.innerText);
-        synth.speak(speech);
-    }
+
+        if (textToSpeech) {
+            // if text to speech available, speak most recent rep 
+            let speech = new SpeechSynthesisUtterance(feedbackList.firstChild.innerText);
+            synth.speak(speech);
+        }
     }
     repCount.textContent = data["repCount"];
     summary.innerText = data.summary;
 
 })
+
+showLogButton.addEventListener('click', (event) => {
+    showLogButton.classList.toggle('active');
+    feedbacklist.classList.toggle('active');
+})
+
+
 
 textToSpeechButton.addEventListener('click', () => {
     if (textToSpeech) {
