@@ -27,26 +27,58 @@ class Node(AbstractNode):
         self.resetAll()
 
         """REP COUNTER"""
-        # inPose tracks if you are currently in evalPose
         self.inPose = False
-        # switchPoseCount counts how many frames you have switched pose for in order to account for anomalies
+        """tracks if user is currently in key pose"""
         self.switchPoseCount = 0
+        """counts how many frames you have switched pose for in order to account for anomalies"""
 
-        """TO BE IMPORTED FROM NUMPY ARRAYS"""
-        self.evalPoses = np.array([[0.,0.96929341,1.48335124,1.27821004,0.69353555,2.34582106
+        # TO BE IMPORTED FROM NUMPY ARRAYS
+        self.evalPoses = np.array([
+            [0.,0.96929341,1.48335124,1.27821004,0.69353555,2.34582106
             ,0.69353555,0.79577159,1.29639967,1.43138966,1.08154013,2.01970992
             ,1.40446568,1.58925297,1.59451015,1.76834851,1.11609221,0.56014418
             ,0.71423062],
-            [2.52443828,1.88649592,1.33577948,1.80581317,2.16384158,2.02700298
-            ,2.16384158,1.11458967,1.23069065,1.2539069,1.66242216,1.47917049
-            ,2.65622281,2.36077644,2.5004578,2.41741307,1.63131787,0.09349776
-            ,1.53782011]])
-        self.angleWeights = np.array([[0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,1.,0.,1.,0.,1.,0.],[0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,1.,0.,1.,0.,1.,0.]])
-        self.scoreThreshold = 0.2
-        self.angleThresholds = np.array([[0,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.1,0.,0.1,0.,0.1,0],[0,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.1,0.,0.1,0.,0.1,0]])
+            [2.5574466622039997, 1.8661907690389496, 1.3149490161808073, 1.8266436374089856, 2.1722788406298035, 2.0339065691491407, 2.2842628291407974, 2.92033539970031, 1.226967402579817, 1.2524005387400583, 1.665556051578816, 1.4760366020109768
+            , 2.643750164055984, 2.336654437631127, 2.483721273539079, 2.3878065214081823
+            , 1.6315575674173972, 0.09473719614213628, 1.5368203712752608]])
+        """
+        Array(N,K) containing the correct poses
+            N: number of exercises
+            K: key angles (19)
+        """
+
+        self.angleWeights = np.array([
+            [0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,1.,0.,1.,0.,1.,0.],
+            [0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,1.,1.,1.,1.,0.,0.,0.]])
+        """
+        Array(N,K) containing the weights that each angle should have in evaluation
+            N: number of exercises
+            K: key angles (19)
+        """
+
+        self.scoreThresholds = np.array([0.2,0.1])
+        """
+        Array(N) containing the Score Thresholds.
+            N: number of exercises
+            Score refers to the similarity of the user's pose to the correct pose.
+                0 is completely similar, 1 is completely different.
+        """
+
+        self.angleThresholds = np.array([
+            [0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.1,0.,0.1,0.,0.1,0],
+            [0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.1,0.1,0.1,0.1,0.,0.,0.]])
+        """
+        Array(N,K) containing the differences in angle required for feedback to be given
+            N: number of exercises
+            K: key angles (19)
+        """
+
         self.evalRepTime = np.array([2,2])
-        # Probably will read glossary from csv in the end
-        # Glossary will map angle_id to corresponding angle
+        """
+        Array(N) containing the minimum ideal rep times
+            N: number of exercises
+        """
+
         self.glossary = np.array(['leftEar-nose-midShoulder',
             'rightEar-nose-midShoulder',
             'nose-midShoulder-leftShoulder',
@@ -59,18 +91,21 @@ class Node(AbstractNode):
             'rightShoulder-rightElbow-rightWrist',
             'midShoulder-midHip-leftHip',
             'midShoulder-midHip-rightHip',
-            'leftShoulder-leftHip-leftKnee',
-            'Chest - Thigh',
-            'leftHip-leftKnee-leftAnkle',
-            'Thigh - Leg',
+            'Chest - Left Thigh',
+            'Chest - Right Thigh',
+            'Left Thigh - Calf',
+            'Right Thigh - Calf',
             'nose-midShoulder-midHip',
             'Vertical - Back',
             'vertical(nose)-nose-midShoulder'])
+        """
+        Array(N) containing the text descriptions of each angle
+            N: number of exercises
+        """
 
-    """
-    RESET METHODS
-    These methods reset variables
-    """  
+
+### RESET METHODS
+### These methods reset variables 
     
     def resetFrames(self):
         """
@@ -79,7 +114,15 @@ class Node(AbstractNode):
         """
         #frame stuff
         self.selectedFrames = np.zeros((200,19))
+        """
+        Array(X,K) containing the store of frames to be evaluated
+            X: Number of frames (selectedFrameCount)
+            K: key angles (19)
+        """
         self.selectedFrameCount = 0
+        """
+        Number of frames in selectedFrames 
+        """
 
     def resetAll(self):
         """
@@ -90,22 +133,42 @@ class Node(AbstractNode):
 
         # reset angle-related variables
         self.smallErrorCount = np.zeros(19)
-        self.largeErrorCount = np.zeros(19)
-        # reset timer-related variables
-        self.repTimeError = 0
-        self.repStartTime = 0
-        # reset perfect reps
-        self.perfectReps = 0
+        """
+        Array(K) containing the count of reps where angle K is too small
+            K: key angles (19)
+        """
 
-        # reset user out of frame count
+        self.largeErrorCount = np.zeros(19)
+        """
+        Array(K) containing the count of reps where angle K is too large
+            K: key angles (19)
+        """
+
+        self.repTimeError = 0
+        """
+        Count of reps where rep time is too short
+        """
+
+        self.repStartTime = 0
+        """
+        Timer to keep track of when the current rep started
+        """
+
+        self.perfectReps = 0
+        """
+        Count of perfect reps
+        """
+ 
         self.invalidFrameCount = 0
+        """
+        Count of frames where user is not fully visible and key angles are missing
+        """
         globals.repCount = 0
 
 
-    """
-    EXERCISE METHODS
-    These methods are called once per exercise.
-    """
+
+### EXERCISE METHODS
+### These methods are called once per exercise.
 
     def changeExercise(self):
         """
@@ -167,17 +230,15 @@ class Node(AbstractNode):
         feedback.append(f" {perfectReps} perferct reps.")
         return feedback
 
-    
-    """
-    REP METHODS
-    These methods are called once per rep.
-    """
+### REP METHODS
+### These methods are called once per rep.
 
     def finishRep(self):
         """
         Called when a rep is finished.
-        Changes inPose to being in rest pose
-        Gets the feedback for the rep and passes it to front-end, then deletes all frame data of previous rep.
+            Changes inPose to being in rest pose,
+            gets the feedback for the rep and passes it to front-end,
+            deletes all frame data of previous rep.
         """
         globals.repCount += 1
         # timer
@@ -231,7 +292,8 @@ class Node(AbstractNode):
         """
         CREATING NEW EXERCISES
         """
-        print(np.average(filledselectedFrames,axis=0))
+        x = np.average(filledselectedFrames,axis=0)
+        print(f"curPose: {', '.join(str(angle) for angle in x)}")
         print(differences)
 
         for i, x in enumerate(differences):
@@ -295,10 +357,8 @@ class Node(AbstractNode):
             feedback += "Perfect!"
         return feedback
 
-    """
-    FRAME METHODS
-    These methods are called every frame
-    """
+### FRAME METHODS
+### These methods are called every frame
 
     def selectFrames(self, score, curPose: np.float64, scoreThreshold):
         """
@@ -363,7 +423,7 @@ class Node(AbstractNode):
             score = comparePoses(self.evalPoses[globals.currentExercise],curPose, self.angleWeights[globals.currentExercise]) 
             
             """FRAME STATUS"""
-            frameStatus = self.selectFrames(score, curPose, self.scoreThreshold)
+            frameStatus = self.selectFrames(score, curPose, self.scoreThresholds[globals.currentExercise])
 
             # switching from in key pose to rest pose
             if self.inPose == True:
@@ -386,7 +446,7 @@ class Node(AbstractNode):
                 if frameStatus == 1:
                     self.switchPoseCount += 1
                     # if 5 pose frames in a row
-                    if self.switchPoseCount > 5:
+                    if self.switchPoseCount > 6:
                         # transition into key pose
                         self.middleOfRep()
 
@@ -403,17 +463,15 @@ class Node(AbstractNode):
             # check for not in frame
             if frameStatus == -1:
                 self.invalidFrameCount += 1
-                if self.invalidFrameCount > 10:
+                if self.invalidFrameCount > 6:
                     globals.mainFeedback = ["Please position yourself in the image"]
             else:
                 self.invalidFrameCount = 0
             
           
             """DEBUG"""
-            ## print(f"curPose: {curPose}")
-            ## if score != -1:
-                ## print(f"score: {score}")
-                ## pass
+            ## print(f"curPose: {', '.join(str(angle) for angle in curPose)}")
+            print(f"score: {score}")
             ## print(f"angleDifferences: {angleDifferences}")   
             ## print(self.selectedFrameCount)
         
