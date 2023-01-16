@@ -20,6 +20,7 @@ def initialise():
     global emotionsFreq
     global emotions
     global isStressed
+    global stressFeedback
 
     img = np.zeros((720, 1280, 3),dtype=np.float32)
     repCount = 0
@@ -33,3 +34,4 @@ def initialise():
     emotions = {'angry': 0, 'disgust': 1, 'fear': 2, 'happy': 3, 'sad': 4, 'surprise': 5, 'neutral': 6}
     emotionsFreq = np.zeros(7)
     isStressed = False
+    stressFeedback = ""

@@ -13,7 +13,7 @@ const showLogButton = document.querySelector("#show-log-button");
 const feedbackList = document.querySelector('#feedback-list');
 const summary = document.querySelector('#summary');
 const textToSpeechButton = document.querySelector('.text-to-speech');
-
+const stressFeedback = document.querySelector('#stress-feedback');
 
 
 let synth;
@@ -76,6 +76,7 @@ socket.on('feedback', (stringData) => {
     }
     repCount.textContent = data["repCount"];
     summary.innerText = data.summary;
+    stressFeedback.innerText = data.stressFeedback;
 
 })
 

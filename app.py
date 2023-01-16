@@ -53,8 +53,8 @@ def send_feedback():
     data = {
         "repCount": globals.repCount,
         "summary": globals.mainFeedback,
-        "repFeedback": globals.repFeedback
-        
+        "repFeedback": globals.repFeedback,
+        "stressFeedback": globals.stressFeedback,
     }
     emit('feedback', json.dumps(data))
 
