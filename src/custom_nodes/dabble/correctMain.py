@@ -33,14 +33,18 @@ class Node(AbstractNode):
         self.switchPoseCount = 0
 
         """TO BE IMPORTED FROM NUMPY ARRAYS"""
-        self.evalPoses = np.array([[0.,0.98390493,1.51094115,1.6306515,0.26590253,2.81373512
-            ,0.26590253,0.32785753,1.02067892,1.59934942,1.35720082,1.78439183
-            ,0.79900877,1.33113154,1.22965078,1.52982444,0.90668716,0.64
-            ,0.26101294]])
-        self.angleWeights = np.array([[0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,1.,0.,1.,0.,1.,0.]])
-        self.scoreThreshold = 0.2
-        self.angleThresholds = np.array([[0,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.1,0.,0.1,0.,0.1,0]])
-        self.evalRepTime = np.array([[2]])
+        self.evalPoses = np.array([[0.,0.97758846,1.29457385,0.69776272,2.34189554,0.53291666
+            ,0.41126802,1.30916096,1.43501846,2.0414656,1.10012705,1.63351656
+            ,1.59583319,0.97556597,0.,1.8165275,1.08770129,0.53107237
+            ,0.71953291],
+            [2.60624252,1.85682613,1.85174129,2.18443126,2.04166497,0.70646575
+            ,0.69706771,1.21146002,1.26237227,1.45134487,1.69024778,2.21142086
+            ,2.29314475,1.36090297,2.10783731,2.34847681,1.63807976,0.10311005
+            ,1.53496971]])
+        self.angleWeights = np.array([[0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,1.,0.,0.,1.,0.,1.,0.],[0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,1.,1.,0.,1.,1.,0.,0.,0.,0.]])
+        self.scoreThresholds = np.array([0.2,0.08])
+        self.angleThresholds = np.array([[0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.1,0.,0.,0.1,0.,0.1,0],[0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.05,0.05,0.,0.08,0.08,0.,0.,0.,0.]])
+        self.evalRepTime = np.array([2,2])
         # Probably will read glossary from csv in the end
         # Glossary will map angle_id to corresponding angle
         self.glossary = np.array(['leftEar-nose-midShoulder',
@@ -53,11 +57,11 @@ class Node(AbstractNode):
             'nose-midShoulder-rightElbow',
             'leftShoulder-leftElbow-leftWrist',
             'rightShoulder-rightElbow-rightWrist',
-            'midShoulder-midHip-leftHip',
-            'midShoulder-midHip-rightHip',
-            'leftShoulder-leftHip-leftKnee',
+            'Chest - Left Thigh',
+            'Chest - Right Thigh',
             'Chest - Thigh',
-            'leftHip-leftKnee-leftAnkle',
+            'Left Thigh - Leg',
+            'Right Thigh - Leg',
             'Thigh - Leg',
             'nose-midShoulder-midHip',
             'Vertical - Back',
@@ -223,6 +227,13 @@ class Node(AbstractNode):
         filledselectedFrames = self.selectedFrames[0:self.selectedFrameCount]
         # positive is too large, negative is too small 
         differences = np.average(filledselectedFrames, axis=0) - evalPose
+
+        """
+        CREATING NEW EXERCISES
+        """
+        print(np.average(filledselectedFrames,axis=0))
+        print(differences)
+
         for i, x in enumerate(differences):
             if angleThresholds[i] == 0.:
                 continue
@@ -256,7 +267,6 @@ class Node(AbstractNode):
         if angleDifferences[0] == -99:
             feedback += "No Frames Detected"
             return feedback
-
         angleDifferences /= np.pi
         # hasError tracks if there is any feedback
         hasError = False
@@ -353,7 +363,7 @@ class Node(AbstractNode):
             score = comparePoses(self.evalPoses[globals.currentExercise],curPose, self.angleWeights[globals.currentExercise]) 
             
             """FRAME STATUS"""
-            frameStatus = self.selectFrames(score, curPose, self.scoreThreshold)
+            frameStatus = self.selectFrames(score, curPose, self.scoreThresholds[globals.currentExercise])
 
             # switching from in key pose to rest pose
             if self.inPose == True:
@@ -362,7 +372,7 @@ class Node(AbstractNode):
                 if frameStatus == 0:
                     self.switchPoseCount += 1
                     # if 5 rest frames in a row
-                    if self.switchPoseCount > 5:
+                    if self.switchPoseCount > 10:
                         # transition into rest pose
                         self.finishRep()
                         
@@ -376,7 +386,7 @@ class Node(AbstractNode):
                 if frameStatus == 1:
                     self.switchPoseCount += 1
                     # if 5 pose frames in a row
-                    if self.switchPoseCount > 5:
+                    if self.switchPoseCount > 6:
                         # transition into key pose
                         self.middleOfRep()
 
@@ -393,7 +403,7 @@ class Node(AbstractNode):
             # check for not in frame
             if frameStatus == -1:
                 self.invalidFrameCount += 1
-                if self.invalidFrameCount > 10:
+                if self.invalidFrameCount > 6:
                     globals.mainFeedback = ["Please position yourself in the image"]
             else:
                 self.invalidFrameCount = 0
@@ -401,9 +411,7 @@ class Node(AbstractNode):
           
             """DEBUG"""
             ## print(f"curPose: {curPose}")
-            ## if score != -1:
-                ## print(f"score: {score}")
-                ## pass
+            ## print(f"score: {score}")
             ## print(f"angleDifferences: {angleDifferences}")   
             ## print(self.selectedFrameCount)
         

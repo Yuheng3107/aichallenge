@@ -14,7 +14,15 @@ def main():
     processing_node = correctMain.Node(pkd_base_dir=Path.cwd() / "src" / "custom_nodes")
     emotion_node = emotion.Node(pkd_base_dir=Path.cwd() / "src" / "custom_nodes")
     # Change source to file name to parse file
-    visual_node = visual.Node(source=0)
+    """
+    0
+    "Training_Data\Good_Pose\Side_View.mp4"
+    "Training_Data\Bad_Pose\Butt\Side_View.mp4"
+    "Training_Data\Good_Pose\Front_View.mp4"
+    "Training_Data\Bad_Pose\Knee\Front_View1.mp4"
+
+    """
+    visual_node = visual.Node(source="Training_Data\Bad_Pose\Knee\Front_View1.mp4")
     posenet_node = posenet.Node(max_pose_detection=1)
     poses_node = poses.Node()
     
