@@ -1,6 +1,5 @@
 from fileinput import filename
 from pathlib import Path
-from turtle import pos
 
 from peekingduck.pipeline.nodes.input import visual
 from peekingduck.pipeline.nodes.model import posenet
@@ -22,7 +21,7 @@ def main():
     "Training_Data\Bad_Pose\Knee\Front_View1.mp4"
 
     """
-    visual_node = visual.Node(source="Training_Data\Bad_Pose\Knee\Side_View1.mp4")
+    visual_node = visual.Node(source=0)
     posenet_node = posenet.Node(max_pose_detection=1)
     poses_node = poses.Node()
     
