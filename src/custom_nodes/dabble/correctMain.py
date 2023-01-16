@@ -82,7 +82,7 @@ class Node(AbstractNode):
         Called when the a new exercise begins.
         Resets all exercise-related variables.
         """
-        self.resetFrames
+        self.resetFrames()
 
         # reset angle-related variables
         self.smallErrorCount = np.zeros(19)
@@ -97,7 +97,7 @@ class Node(AbstractNode):
         self.invalidFrameCount = 0
         globals.repCount = 0
 
-        
+
     """
     EXERCISE METHODS
     These methods are called once per exercise.
