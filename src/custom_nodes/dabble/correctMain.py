@@ -37,12 +37,12 @@ class Node(AbstractNode):
             ,0.69353555,0.79577159,1.29639967,1.43138966,1.08154013,2.01970992
             ,1.40446568,1.58925297,1.59451015,1.76834851,1.11609221,0.56014418
             ,0.71423062],
-            [2.52443828,1.88649592,1.33577948,1.80581317,2.16384158,2.02700298
-            ,2.16384158,1.11458967,1.23069065,1.2539069,1.66242216,1.47917049
-            ,2.65622281,2.36077644,2.5004578,2.41741307,1.63131787,0.09349776
-            ,1.53782011]])
+            [2.7894555,1.55518634,1.13709183,2.00450083,2.25913271,2.0032857
+            ,2.01955177,3.14037752,1.1105168,1.36875052,1.65533408,1.48625858
+            ,2.5723909,2.010037,2.56000905,2.10432299,1.71209149,0.13861991
+            ,1.57347157]])
         self.angleWeights = np.array([[0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,1.,0.,1.,0.,1.,0.],[0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,1.,0.,1.,0.,1.,0.]])
-        self.scoreThreshold = 0.2
+        self.scoreThresholds = np.array([0.2,0.075])
         self.angleThresholds = np.array([[0,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.1,0.,0.1,0.,0.1,0],[0,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.1,0.,0.1,0.,0.1,0]])
         self.evalRepTime = np.array([2,2])
         # Probably will read glossary from csv in the end
@@ -363,7 +363,7 @@ class Node(AbstractNode):
             score = comparePoses(self.evalPoses[globals.currentExercise],curPose, self.angleWeights[globals.currentExercise]) 
             
             """FRAME STATUS"""
-            frameStatus = self.selectFrames(score, curPose, self.scoreThreshold)
+            frameStatus = self.selectFrames(score, curPose, self.scoreThresholds[globals.currentExercise])
 
             # switching from in key pose to rest pose
             if self.inPose == True:
