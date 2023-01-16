@@ -10,6 +10,7 @@ const feedback = document.querySelector('#feedback');
 const form = document.querySelector('#changeExercise');
 const feedbackList = document.querySelector('#feedback-list');
 const summary = document.querySelector('#summary');
+const textToSpeechButton = document.querySelector('.text-to-speech');
 let synth;
 let textToSpeech = false;
 if ('speechSynthesis' in window) {
@@ -62,7 +63,6 @@ socket.on('feedback', (stringData) => {
     });
     if (textToSpeech) {
         // if text to speech available, speak most recent rep 
-        console.log(feedbackList.firstChild.textContent);
         let speech = new SpeechSynthesisUtterance(feedbackList.firstChild.innerText);
         synth.speak(speech);
     }
@@ -72,5 +72,19 @@ socket.on('feedback', (stringData) => {
 
 })
 
+textToSpeechButton.addEventListener('click', () => {
+    if (textToSpeech) {
+        textToSpeech = false;
+        textToSpeechButton.classList.remove('btn-danger');
+        textToSpeechButton.classList.add('btn-success');
+        textToSpeechButton.innerText = "Turn On Text-To-Speech";
+    }
+    else {
+        textToSpeech = true;
+        textToSpeechButton.classList.remove('btn-success');
+        textToSpeechButton.classList.add('btn-danger');
+        textToSpeechButton.innerText = "Turn Off Text-To-Speech";
+    }
+})
 
 

@@ -33,6 +33,7 @@ def start():
     is sent to this route to get the peekingduck pipeline
     running"""
     main()
+    return ""
 
 @app.route('/video_feed')
 def video_feed():
