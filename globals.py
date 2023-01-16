@@ -19,7 +19,7 @@ def initialise():
     """True when button to end exercise is pressed"""
     global emotionsFreq
     global emotions
-    
+    global isStressed
 
     img = np.zeros((720, 1280, 3),dtype=np.float32)
     repCount = 0
@@ -32,3 +32,4 @@ def initialise():
     exerciseEnded = False
     emotions = {'angry': 0, 'disgust': 1, 'fear': 2, 'happy': 3, 'sad': 4, 'surprise': 5, 'neutral': 6}
     emotionsFreq = np.zeros(7)
+    isStressed = False
