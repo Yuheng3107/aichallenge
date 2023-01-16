@@ -23,8 +23,11 @@
         </div>
     </nav>
     <main class="d-flex flex-column align-items-lg-center container">
-        <img class="video-feed" src="{{url_for('video_feed')}}" alt="Video">
-        <p><span>Reps: </span><span id="rep-count"></span></p>
+        <img draggable="false" class="video-feed" src="{{url_for('video_feed')}}" alt="Video">
+        <div>
+            <span id="rep-count"></span>
+            <span id="curr-feedback"></span>
+        </div>
         <ul id="feedback-list"></ul>
         <p id="summary"></p>
         <button class="start-button btn btn-success mt-3" data-url="{{url_for('start')}}">Start Camera</button>
