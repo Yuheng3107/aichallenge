@@ -11,9 +11,11 @@ import threading
 def detect_emotion():
     # Gets dominant emotion
     dominant_emotion = DeepFace.analyze(globals.img, actions= ['emotion'], enforce_detection=False)['dominant_emotion']
+    """
     globals.emotionsFreq[globals.emotions[dominant_emotion]] = globals.emotionsFreq.get(globals.emotions[dominant_emotion], 0) + 1
     print(globals.emotionsFreq)
     print(globals.emotionsFreq.sum())
+    """
 
 def stress_detection():  
     if ((globals.emotionsFreq[2] + globals.emotionsFreq[4]) / globals.emotionsFreq.sum() > 0.5):
