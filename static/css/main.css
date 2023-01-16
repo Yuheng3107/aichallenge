@@ -50,11 +50,16 @@
     max-width:2rem;
 }
 
+#show-log-button.active img {
+    transform:rotate(180deg);
+    transition: transform 0.3s ease-in-out;
+}
+
 #feedback-list {
     max-height: 0rem;
     width: 50vw;
     background-color: rgb(0, 0, 0);
-    overflow: hide;
+    overflow: hidden;
 }
 
 #feedback-list.active {

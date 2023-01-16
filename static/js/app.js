@@ -81,7 +81,13 @@ socket.on('feedback', (stringData) => {
 
 showLogButton.addEventListener('click', (event) => {
     showLogButton.classList.toggle('active');
-    feedbacklist.classList.toggle('active');
+    feedbackList.classList.toggle('active');
+    if (showLogButton.classList.contains("active")) {
+        showLogButton.children.childNodes[0].textContent = "Hide Feedback Log";
+    } else {
+        showLogButton.children.childNodes[0].textContent = "Show Feedback Log";
+    }
+    
 })
 
 
