@@ -10,15 +10,17 @@ const feedback = document.querySelector('#feedback');
 const form = document.querySelector('#changeExercise');
 const feedbackList = document.querySelector('#feedback-list');
 const summary = document.querySelector('#summary');
-
+const textToSpeechButton = document.querySelector('.text-to-speech');
+let synth;
+let textToSpeech = false;
 if ('speechSynthesis' in window) {
-    const synth = window.speechSynthesis;
-    let textToSpeech = true;
+    synth = window.speechSynthesis;
+    textToSpeech = true;
 }
 else {
     // replace with overlay and div pop-up in the future
     alert('text to speech not available');
-    let textToSpeech = false;
+
 }
 let started = false;
 let socket = io();
@@ -50,7 +52,6 @@ form.addEventListener('submit', (e) => {
 // front end 
 socket.on('feedback', (stringData) => {
     let data = JSON.parse(stringData);
-    console.log(data);
 // if repCount changes, update text
     if (Number(repCount.textContent) != data["repCount"]) {
     feedbackList.textContent = "";
@@ -60,8 +61,8 @@ socket.on('feedback', (stringData) => {
         feedbackList.insertBefore(li, feedbackList.firstChild);
     });
     if (textToSpeech) {
-        // if text to speech available, speak most recent rep
-        let speech = new SpeechSynthesisUtterance(feedbackList.firstChild.textContent);
+        // if text to speech available, speak most recent rep 
+        let speech = new SpeechSynthesisUtterance(feedbackList.firstChild.innerText);
         synth.speak(speech);
     }
     }
@@ -70,5 +71,19 @@ socket.on('feedback', (stringData) => {
 
 })
 
+textToSpeechButton.addEventListener('click', () => {
+    if (textToSpeech) {
+        textToSpeech = false;
+        textToSpeechButton.classList.remove('btn-danger');
+        textToSpeechButton.classList.add('btn-success');
+        textToSpeechButton.innerText = "Turn On Text-To-Speech";
+    }
+    else {
+        textToSpeech = true;
+        textToSpeechButton.classList.remove('btn-success');
+        textToSpeechButton.classList.add('btn-danger');
+        textToSpeechButton.innerText = "Turn Off Text-To-Speech";
+    }
+})
 
 
