@@ -13,6 +13,7 @@ const summary = document.querySelector('#summary');
 const textToSpeechButton = document.querySelector('.text-to-speech');
 let synth;
 let textToSpeech = false;
+
 if ('speechSynthesis' in window) {
     synth = window.speechSynthesis;
     textToSpeech = true;
@@ -37,7 +38,7 @@ startButton.addEventListener('click', (e) => {
     }
 });
 endButton.addEventListener('click', () => {
-    fetch(endButton.getAttribute('data-url'));
+    socket.emit('endExercise');
 });
 
 form.addEventListener('submit', (e) => {

@@ -54,15 +54,18 @@ def send_feedback():
         "repCount": globals.repCount,
         "summary": globals.mainFeedback,
         "repFeedback": globals.repFeedback
+        
     }
     emit('feedback', json.dumps(data))
 
 
-@app.route('/endExercise')
+@socketio.on('endExercise')
 def end_exercise():
+    """Updates globals that exercise has ended so
+    that the peekingduck backend knows to create a summary
+    which can be retrieved by front end"""
     if not globals.exerciseEnded:
         globals.exerciseEnded = True
-    return ""
 
 @socketio.on('changeExercise')
 def change_exercise(exerciseId):
