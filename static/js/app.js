@@ -14,7 +14,7 @@ const feedbackList = document.querySelector('#feedback-list');
 const summary = document.querySelector('#summary');
 const textToSpeechButton = document.querySelector('.text-to-speech');
 const stressFeedback = document.querySelector('#stress-feedback');
-
+const difficultyButton = document.querySelector('#difficulty');
 
 let synth;
 let textToSpeech = false;
@@ -109,3 +109,14 @@ textToSpeechButton.addEventListener('click', () => {
 })
 
 
+difficultyButton.addEventListener('click', () => {
+    console.log('Test');
+    if (difficultyButton.classList.contains('btn-danger')) {
+        difficultyButton.innerText = 'Beginner';
+    }
+    else {
+        difficultyButton.innerText = 'Expert';
+    }
+    difficultyButton.classList.toggle('btn-danger');
+    difficultyButton.classList.toggle('btn-success');
+})
