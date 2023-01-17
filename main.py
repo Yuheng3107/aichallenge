@@ -17,7 +17,7 @@ def main():
     0
     "Training_Data\Good_Pose\Side_View.mp4"
     "Training_Data\Bad_Pose\Butt\Side_View.mp4"
-    "Training_Data\Good_Pose\Front_View.mp4"
+    "Training_Data\Good_Pose\Front_View1.mp4"
     "Training_Data\Bad_Pose\Knee\Front_View1.mp4"
 
     """
