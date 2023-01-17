@@ -18,10 +18,15 @@ def initialise():
     global exerciseEnded
     """True when button to end exercise is pressed"""
     global emotionsFreq
+    """np array of (7,) that contains frequency of each
+    possible emotion"""
     global emotions
+    """Contains name of the 7 possible emotions and their index
+    in emotionsFreq"""
     global isStressed
+    """Global bool that reflects whether user is stressed"""
     global stressFeedback
-
+    """Feedback to send to front end if user is stressed"""
     global difficulty
     """Experience level of person exercising, either 
     Beginner or Expert, default is Beginner"""
