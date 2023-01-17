@@ -113,9 +113,11 @@ difficultyButton.addEventListener('click', () => {
     console.log('Test');
     if (difficultyButton.classList.contains('btn-danger')) {
         difficultyButton.innerText = 'Beginner';
+        socket.emit('changeDifficulty', 'Beginner');
     }
     else {
         difficultyButton.innerText = 'Expert';
+        socket.emit('changeDifficulty', 'Expert');
     }
     difficultyButton.classList.toggle('btn-danger');
     difficultyButton.classList.toggle('btn-success');
