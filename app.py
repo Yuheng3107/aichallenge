@@ -72,7 +72,12 @@ def change_exercise(exerciseId):
     globals.currentExercise = int(exerciseId)
     globals.exerciseSelected = True
 
-
+@socketio.on('changeDifficulty')
+def change_difficulty(difficulty):
+    """Function that updates global variable
+    for backend to receive when user changes difficulty
+     in front end"""
+    globals.difficulty = difficulty
 
 if __name__ == '__main__':
     socketio.run(app, debug=True)

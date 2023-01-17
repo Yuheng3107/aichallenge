@@ -22,6 +22,9 @@ def initialise():
     global isStressed
     global stressFeedback
 
+    global difficulty
+    """Experience level of person exercising, either 
+    Beginner or Expert, default is Beginner"""
     img = np.zeros((720, 1280, 3),dtype=np.float32)
     repCount = 0
     mainFeedback = ["Press Start"]
@@ -35,3 +38,4 @@ def initialise():
     emotionsFreq = np.zeros(7)
     isStressed = False
     stressFeedback = ""
+    difficulty = "Beginner"
