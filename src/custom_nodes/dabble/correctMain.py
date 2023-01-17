@@ -219,12 +219,12 @@ class Node(AbstractNode):
             #none of that error
             if count == 0:
                 continue
-            feedback.append(f" {self.glossary[i]} angle needed to be smaller {count} times")
+            feedback.append(f" {self.glossary[i]} angle too large {count} times")
         for i,count in enumerate(largeErrorCount):
             #none of that error
             if count == 0:
                 continue
-            feedback.append(f" {self.glossary[i]} angle needed to be larger {count} times")
+            feedback.append(f" {self.glossary[i]} angle too small {count} times")
         if self.repTimeError != 0:
             feedback.append(f" Rep times were too short {self.repTimeError} times")
         feedback.append(f" {perfectReps} perferct reps.")
@@ -339,11 +339,11 @@ class Node(AbstractNode):
             if (difference > 0):
                 # angle needs to be smaller, as it is larger than ideal pose
                 self.smallErrorCount[i] += 1
-                feedback += f"{self.glossary[i]} angle needs to be smaller. "
+                feedback += f"{self.glossary[i]} angle too large. "
             else:
                 # angle needs to be greater, as it is smaller than ideal pose
                 self.largeErrorCount[i] += 1
-                feedback += f"{self.glossary[i]} angle needs to be larger. "
+                feedback += f"{self.glossary[i]} angle too small. "
 
         if timeDifference == 1:
             # time error
