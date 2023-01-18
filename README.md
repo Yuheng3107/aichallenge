@@ -5,6 +5,7 @@ Please make sure your whole body is in view while doing the exercise
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 ### To use virtual environment, there are 2 steps:
 
 1. Creating a virtual environment:
@@ -17,5 +18,7 @@ macOS/Linux: . venv/bin/activate
 
 After this, run:
 pip3 install -r requirements.txt to install dependencies
+=======
+>>>>>>> parent of aba5ead3 (Added venv)
 =======
 >>>>>>> parent of aba5ead3 (Added venv)
