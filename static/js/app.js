@@ -33,9 +33,13 @@ else {
 let started = false;
 let socket = io();
 
-repCount.addEventListener('load', (event) => {
+document.addEventListener('DOMContentLoaded', (event) => {
+    console.log('this shit is loaded')
     if (!repCount.textContent) {
         repCount.style.display = 'none';
+    }
+    if (!repFeedback.textContent) {
+        repFeedback.style.display = 'none';
     }
 })
 
@@ -49,6 +53,7 @@ startButton.addEventListener('click', (e) => {
         // updates feedback every second
         setInterval(getFeedback, 200);
     }
+
 });
 endButton.addEventListener('click', () => {
     socket.emit('endExercise');
@@ -60,6 +65,9 @@ form.addEventListener('submit', (e) => {
     let exerciseId = form.elements["exerciseId"].value;
     // calls python function to update exercise id
     socket.emit('changeExercise', exerciseId);
+    // Make repCount and repFeedback visible
+    repCount.style.display = 'flex';
+    repFeedback.style.display = 'flex';
 });
 
 // Listens for feedback event from server which updates
