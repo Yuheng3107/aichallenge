@@ -15,3 +15,7 @@ macOS/Linux: . venv/bin/activate
 
 After this, run:
 pip3 install -r requirements.txt to install dependencies
+
+### Run using Docker Containers
+
+To build the docker image
