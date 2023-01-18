@@ -5,6 +5,7 @@ function getFeedback() {
 
 const startButton = document.querySelector('.start-button');
 const endButton = document.querySelector('.end-button');
+const repInfo = document.querySelector('rep-info-group');
 const repCount = document.querySelector('#rep-count');
 const repFeedback = document.querySelector("#rep-feedback");
 const feedback = document.querySelector('#feedback');
@@ -32,6 +33,16 @@ else {
 let started = false;
 let socket = io();
 
+document.addEventListener('DOMContentLoaded', (event) => {
+    console.log('this shit is loaded')
+    if (!repCount.textContent) {
+        repCount.style.display = 'none';
+    }
+    if (!repFeedback.textContent) {
+        repFeedback.style.display = 'none';
+    }
+})
+
 startButton.addEventListener('click', (e) => {
     // runs python script that starts Peekingduck
     if (!started) {
@@ -53,6 +64,9 @@ form.addEventListener('submit', (e) => {
     let exerciseId = form.elements["exerciseId"].value;
     // calls python function to update exercise id
     socket.emit('changeExercise', exerciseId);
+    // Make repCount and repFeedback visible
+    repCount.style.display = 'flex';
+    repFeedback.style.display = 'flex';
 });
 
 // Listens for feedback event from server which updates
@@ -88,7 +102,6 @@ showLogButton.addEventListener('click', (event) => {
     } else {
         showLogButton.children.childNodes[0].textContent = "Show Feedback Log";
     }
-    
 })
 
 

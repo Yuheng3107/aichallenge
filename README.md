@@ -3,7 +3,6 @@ GitHub Repo for National AI Student Challenge 2022
 
 Please make sure your whole body is in view while doing the exercise
 
-
 ### To use virtual environment, there are 2 steps:
 
 1. Creating a virtual environment:
