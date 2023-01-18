@@ -53,7 +53,6 @@ startButton.addEventListener('click', (e) => {
         // updates feedback every second
         setInterval(getFeedback, 200);
     }
-
 });
 endButton.addEventListener('click', () => {
     socket.emit('endExercise');
@@ -103,7 +102,6 @@ showLogButton.addEventListener('click', (event) => {
     } else {
         showLogButton.children.childNodes[0].textContent = "Show Feedback Log";
     }
-
 })
 
 
