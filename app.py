@@ -80,4 +80,5 @@ def change_difficulty(difficulty):
     globals.difficulty = difficulty
 
 if __name__ == '__main__':
-    socketio.run(app, debug=True)
+    print("Test")
+    socketio.run(app, debug=True, host="0.0.0.0", allow_unsafe_werkzeug=True)
