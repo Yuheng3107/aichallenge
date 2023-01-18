@@ -34,7 +34,8 @@ let started = false;
 let socket = io();
 
 document.addEventListener('DOMContentLoaded', (event) => {
-    console.log('this shit is loaded')
+
+    // is this even
     if (!repCount.textContent) {
         repCount.style.display = 'none';
     }
@@ -135,3 +136,24 @@ difficultyButton.addEventListener('click', () => {
     difficultyButton.classList.toggle('btn-danger');
     difficultyButton.classList.toggle('btn-success');
 })
+
+navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+    .then(function(stream) {
+        let mediaRecorder = new MediaRecorder(stream, {mimeType: "video/webm"});
+        mediaRecorder.start();
+        let chunks = [];
+        mediaRecorder.ondataavailable = function(e) {
+            chunks.push(e.data);
+            console.log("Video data" + e.data);
+        }
+        mediaRecorder.onstop = function(e) {
+            let blob = new Blob(chunks, { 'type' : 'video/mp4; codecs=vp9' });
+            chunks = [];
+            let videoURL = window.URL.createObjectURL(blob);
+            socket.emit('video', { 'video': true, 'buffer': videoURL });
+        }
+    })
+    .catch(function(err) {
+        console.log("An error occurred: " + err);
+    });
+

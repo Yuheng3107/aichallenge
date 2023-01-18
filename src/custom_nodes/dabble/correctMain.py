@@ -471,7 +471,7 @@ class Node(AbstractNode):
           
             """DEBUG"""
             ## print(f"curPose: {', '.join(str(angle) for angle in curPose)}")
-            print(f"score: {score}")
+            ## print(f"score: {score}")
             ## print(f"angleDifferences: {angleDifferences}")   
             ## print(self.selectedFrameCount)
         

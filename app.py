@@ -79,6 +79,18 @@ def change_difficulty(difficulty):
      in front end"""
     globals.difficulty = difficulty
 
+
+@socketio.on('video')
+def handle_video(data):
+    video = cv2.VideoCapture(data['buffer'])
+    while True:
+        ret, frame = video.read()
+        print(ret)
+        if not ret:
+            break
+        # process the frame using OpenCV
+
+
 if __name__ == '__main__':
     print("Test")
-    socketio.run(app, debug=True, host="0.0.0.0", allow_unsafe_werkzeug=True)
+    socketio.run(app, debug=True, host="0.0.0.0", allow_unsafe_werkzeug=True, ssl_context=('cert.pem', 'key.pem'))
