@@ -1,2 +1,4 @@
 venv/
 Training_Data/
+.ipynb
+.npy
