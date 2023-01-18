@@ -5,6 +5,7 @@ function getFeedback() {
 
 const startButton = document.querySelector('.start-button');
 const endButton = document.querySelector('.end-button');
+const repInfo = document.querySelector('rep-info-group');
 const repCount = document.querySelector('#rep-count');
 const repFeedback = document.querySelector("#rep-feedback");
 const feedback = document.querySelector('#feedback');
@@ -31,6 +32,12 @@ else {
 }
 let started = false;
 let socket = io();
+
+repCount.addEventListener('load', (event) => {
+    if (!repCount.textContent) {
+        repCount.style.display = 'none';
+    }
+})
 
 startButton.addEventListener('click', (e) => {
     // runs python script that starts Peekingduck
@@ -88,7 +95,7 @@ showLogButton.addEventListener('click', (event) => {
     } else {
         showLogButton.children.childNodes[0].textContent = "Show Feedback Log";
     }
-    
+
 })
 
 

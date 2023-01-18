@@ -14,14 +14,12 @@
     flex-direction: row;
     justify-content: center;
     width: calc(50vw - 0.3rem);
-    height: 5rem;
 }
 
-#rep-info-group span, #rep-info-group p {
+#rep-info-group > * {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%;
     background-color: var(--rep-feedback-color);
 }
 
@@ -34,6 +32,7 @@
 #rep-feedback {
     display: inline-block;
     border-radius: 0 0.5rem 0.5rem 0;
+    padding: 1rem 0.5rem;
     font-size: 1.5rem;
     width: 45vw;
     margin-left: 0.3rem;
@@ -47,11 +46,11 @@
 }
 
 #show-log-button img {
-    max-width:2rem;
+    max-width: 2rem;
 }
 
 #show-log-button.active img {
-    transform:rotate(180deg);
+    transform: rotate(180deg);
     transition: transform 0.3s ease-in-out;
 }
 
@@ -64,5 +63,5 @@
 
 #feedback-list.active {
     max-height: 10rem;
-    overflow:auto;
+    overflow: auto;
 }
