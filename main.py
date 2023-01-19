@@ -21,7 +21,7 @@ def main():
     "Training_Data\Bad_Pose\Knee\Front_View1.mp4"
 
     """
-    visual_node = visual.Node(source=0)
+    visual_node = visual.Node(source="http://127.0.0.1:5000")
     posenet_node = posenet.Node(max_pose_detection=1)
     poses_node = poses.Node()
     

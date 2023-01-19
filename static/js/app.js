@@ -137,6 +137,7 @@ difficultyButton.addEventListener('click', () => {
     difficultyButton.classList.toggle('btn-success');
 })
 
+/* WIP
 navigator.mediaDevices.getUserMedia({ video: true, audio: false })
     .then(function(stream) {
         let mediaRecorder = new MediaRecorder(stream, {mimeType: "video/webm"});
@@ -156,4 +157,4 @@ navigator.mediaDevices.getUserMedia({ video: true, audio: false })
     .catch(function(err) {
         console.log("An error occurred: " + err);
     });
-
+*/

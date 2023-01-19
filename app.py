@@ -93,4 +93,6 @@ def handle_video(data):
 
 if __name__ == '__main__':
     print("Test")
-    socketio.run(app, debug=True, host="0.0.0.0", allow_unsafe_werkzeug=True, ssl_context=('cert.pem', 'key.pem'))
+     # ssl_context=('cert.pem', 'key.pem')
+     # debug=True,
+    socketio.run(app,  host="0.0.0.0", allow_unsafe_werkzeug=True)

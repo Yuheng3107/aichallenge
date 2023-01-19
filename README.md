@@ -17,5 +17,8 @@ After this, run:
 pip3 install -r requirements.txt to install dependencies
 
 ### Run using Docker Containers
+Pull the image from Docker Hub:
+docker pull yuheng3107/aichallenge:latest
 
-To build the docker image
+Run the Docker Container using:
+docker run -p 5000:5000 yuheng3107/aichallenge
