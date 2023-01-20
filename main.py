@@ -21,15 +21,11 @@ def main():
     
 
     """
-<<<<<<< HEAD
-    visual_node = visual.Node(source=0)
-=======
     sources = [[0],
-        ["Training_Data\Squats\Good_Pose\Side_View.mp4","Training_Data\Squats\Bad_Pose\Butt\Side_View.mp4"],
-        ["Training_Data\Squats\Good_Pose\Front_View1.mp4","Training_Data\Squats\Bad_Pose\Knee\Front_View1.mp4"],
-        ["Training_Data\Push_Up\Good_Pose\Side_View.mp4","Training_Data\Push_Up\Bad_Pose1\Side_View.mp4","Training_Data\Push_Up\Bad_Pose2\Side_View.mp4"]]
+        [Path("Training_Data\Squats\Good_Pose\Side_View.mp4"),Path("Training_Data\Squats\Bad_Pose\Butt\Side_View.mp4")],
+        [Path("Training_Data\Squats\Good_Pose\Front_View1.mp4"),Path("Training_Data\Squats\Bad_Pose\Knee\Front_View1.mp4")],
+        [Path("Training_Data\Push_Up\Good_Pose\Side_View.mp4"),Path("Training_Data\Push_Up\Bad_Pose1\Side_View.mp4"),Path("Training_Data\Push_Up\Bad_Pose2\Side_View.mp4")]]
     visual_node = visual.Node(source=sources[3][2])
->>>>>>> 229fddc19dbf2f727480e131bee118b9749dc4c4
     posenet_node = posenet.Node(max_pose_detection=1)
     poses_node = poses.Node()
     
