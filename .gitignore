@@ -1,9 +1,5 @@
 *.pyc
 *.mp4
-<<<<<<< HEAD
-*.zip
-=======
 *.zip
 venv/*
 
->>>>>>> 9993cf338b624c1bfebc97a6b9efb4e0b2478542

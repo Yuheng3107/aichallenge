@@ -15,13 +15,17 @@ def main():
     # Change source to file name to parse file
     """
     0
-    "Training_Data\Good_Pose\Side_View.mp4"
-    "Training_Data\Bad_Pose\Butt\Side_View.mp4"
-    "Training_Data\Good_Pose\Front_View1.mp4"
-    "Training_Data\Bad_Pose\Knee\Front_View1.mp4"
+    
+    
+    
+    
 
     """
-    visual_node = visual.Node(source="http://127.0.0.1:5000")
+    sources = [[0],
+        ["Training_Data\Squats\Good_Pose\Side_View.mp4","Training_Data\Squats\Bad_Pose\Butt\Side_View.mp4"],
+        ["Training_Data\Squats\Good_Pose\Front_View1.mp4","Training_Data\Squats\Bad_Pose\Knee\Front_View1.mp4"],
+        ["Training_Data\Push_Up\Good_Pose\Side_View.mp4","Training_Data\Push_Up\Bad_Pose1\Side_View.mp4","Training_Data\Push_Up\Bad_Pose2\Side_View.mp4"]]
+    visual_node = visual.Node(source=sources[3][2])
     posenet_node = posenet.Node(max_pose_detection=1)
     poses_node = poses.Node()
     
