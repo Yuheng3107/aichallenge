@@ -22,3 +22,8 @@ docker pull yuheng3107/aichallenge:latest
 
 Run the Docker Container using:
 docker run -p 5000:5000 yuheng3107/aichallenge
+
+Note: Docker container is unable to get camera from source=0,
+it has to get from front end but doing so requires HTTPS connection.
+
+Currently, the docker container is unable to connect when HTTPS is enabled.
