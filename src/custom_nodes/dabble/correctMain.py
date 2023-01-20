@@ -34,13 +34,16 @@ class Node(AbstractNode):
 
         # TO BE IMPORTED FROM NUMPY ARRAYS
         self.evalPoses = np.array([
-            [0.,0.96929341,1.48335124,1.27821004,0.69353555,2.34582106
-            ,0.69353555,0.79577159,1.29639967,1.43138966,1.08154013,2.01970992
-            ,1.40446568,1.4,1.59451015,1.5,1.11609221,0.56014418
-            ,0.71423062],
-            [1.731011519231953, 1.4196749940770308, 1.4716706278177774, 1.669922025772017, 2.6433754368454765, 2.581970607819863, 1.9698878445620938, 2.2295440715419472, 0.6467415932974836, 0.7347980971333945, 1.663558435394787, 1.4780342181950064
-            , 2, 2, 1.85, 1.85
-            , 1.6189955851981361, 0.1024401465768296, 1.5169504602970523]])
+            [0.,0.96929341,1.48335124,1.27821004,0.69353555,2.34582106,
+            0.69353555,0.79577159,1.29639967,1.43138966,1.08154013,2.01970992,
+            1.40446568,1.4,1.59451015,1.5,1.11609221,0.56014418,
+            0.71423062],
+            [1.731011519231953, 1.4196749940770308, 1.4716706278177774, 1.669922025772017, 
+            2.6433754368454765, 2.581970607819863, 1.9698878445620938, 2.2295440715419472, 
+            0.6467415932974836, 0.7347980971333945, 1.663558435394787, 1.4780342181950064,
+            2, 2, 1.85, 1.85
+            , 1.6189955851981361, 0.1024401465768296, 1.5169504602970523],
+            [0.6058237024724928, 0.8123420743245175, 1.829549427133411, 2.0250307847777487, 1.3227682033775756, 1.7756211818839254, 1.489401843315995, 1.8554985864833229, 1.6837441947257807, 2.0342313248855284, 1.1849714674830139, 1.9566211861067795, 2.6026996590121736, 2.9722683357046935, 2.1003751559196173, 3.0103488009021446, 1.0330164821889676, 1.4256641627881548, 1.690139665954699]])
         """
         Array(N,K) containing the correct poses
             N: number of exercises
@@ -49,14 +52,15 @@ class Node(AbstractNode):
 
         self.angleWeights = np.array([
             [0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,1.,0.,1.,0.,1.,0.],
-            [0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,1.,1.,1.,1.,0.,0.,0.]])
+            [0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,1.,1.,1.,1.,0.,0.,0.],
+            [0.,0.,10.,0.,0.,1.,0.,0.,0.,1.,0.,0.,0.,1,0.,1.,0.,1.,0.]])
         """
         Array(N,K) containing the weights that each angle should have in evaluation
             N: number of exercises
             K: key angles (19)
         """
 
-        self.scoreThresholds = np.array([0.2,0.3])
+        self.scoreThresholds = np.array([0.2,0.3,0.1])
         """
         Array(N) containing the Score Thresholds.
             N: number of exercises
@@ -66,14 +70,15 @@ class Node(AbstractNode):
 
         self.angleThresholds = np.array([
             [0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.12,0.,0.12,0.,0.12,0],
-            [0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.2,0.2,0.2,0.2,0.,0.,0.]])
+            [0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.2,0.2,0.2,0.2,0.,0.,0.],
+            [0.,0.,0.,0.,0.,0.1,0.,0.,0.,0.1,0.,0.,0.,0.1,0.,0.1,0.,0.1,0.]])
         """
         Array(N,K) containing the differences in angle required for feedback to be given
             N: number of exercises
             K: key angles (19)
         """
 
-        self.evalRepTime = np.array([2,2])
+        self.evalRepTime = np.array([2,2,2])
         """
         Array(N) containing the minimum ideal rep times
             N: number of exercises
@@ -84,11 +89,11 @@ class Node(AbstractNode):
             'nose-midShoulder-leftShoulder',
             'nose-midShoulder-rightShoulder',
             'midShoulder-leftShoulder-leftElbow',
-            'midShoulder-rightShoulder-rightElbow',
+            'Right Shoulder - Arm',
             'nose-midShoulder-leftElbow',
             'nose-midShoulder-rightElbow',
             'leftShoulder-leftElbow-leftWrist',
-            'rightShoulder-rightElbow-rightWrist',
+            'Right Arm - Forearm',
             'midShoulder-midHip-leftHip',
             'midShoulder-midHip-rightHip',
             'Chest - Left Thigh',
@@ -471,7 +476,7 @@ class Node(AbstractNode):
           
             """DEBUG"""
             ## print(f"curPose: {', '.join(str(angle) for angle in curPose)}")
-            ## print(f"score: {score}")
+            print(f"score: {score}")
             ## print(f"angleDifferences: {angleDifferences}")   
             ## print(self.selectedFrameCount)
         
