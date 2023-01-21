@@ -34,15 +34,10 @@ class Node(AbstractNode):
 
         # TO BE IMPORTED FROM NUMPY ARRAYS
         self.evalPoses = np.array([
-            [0.,0.96929341,1.48335124,1.27821004,0.69353555,2.34582106,
-            0.69353555,0.79577159,1.29639967,1.43138966,1.08154013,2.01970992,
-            1.40446568,1.4,1.59451015,1.5,1.11609221,0.56014418,
-            0.71423062],
-            [1.731011519231953, 1.4196749940770308, 1.4716706278177774, 1.669922025772017, 
-            2.6433754368454765, 2.581970607819863, 1.9698878445620938, 2.2295440715419472, 
-            0.6467415932974836, 0.7347980971333945, 1.663558435394787, 1.4780342181950064,
-            2, 2, 1.85, 1.85
-            , 1.6189955851981361, 0.1024401465768296, 1.5169504602970523],
+            [0.0, 0.952426511314597, 2.0818875347174255, 1.3261204168307046, 0.6510736076524215, 2.399780721413044, 1.7346640543047198, 1.8333375840614206, 1.2664824256986646, 1.4384466286939788, 2.0818875347174255, 2.0276985464000967, 1.3271852367315855, 1.5392637179332127, 1.5331312146560117, 1.7207831542430525, 1.1049912979851086, 0.6039362393981718, 0.6735110882987303],
+            [0.8334788287216585, 0.8329121004864121, 2.6238186548003744, 1.7955992943832724, 2.7837564294698547, 2.8104897880637982, 1.1570675859069883, 1.7602495274132577, 2.342429783867427, 1.6203743040026384, 2.626934103373849, 1.619022159869291, 
+            2.58, 2.58, 2.55, 2.55, 
+            1.6289927162507163, 0.04868708794174172, 1.6755387686585748],
             [0.6058237024724928, 0.8123420743245175, 1.829549427133411, 2.0250307847777487, 1.3227682033775756, 1.7756211818839254, 1.489401843315995, 1.8554985864833229, 1.6837441947257807, 2.0342313248855284, 1.1849714674830139, 1.9566211861067795, 2.6026996590121736, 2.9722683357046935, 2.1003751559196173, 3.0103488009021446, 1.0330164821889676, 1.4256641627881548, 1.690139665954699]])
         """
         Array(N,K) containing the correct poses
@@ -60,7 +55,7 @@ class Node(AbstractNode):
             K: key angles (19)
         """
 
-        self.scoreThresholds = np.array([0.2,0.3,0.1])
+        self.scoreThresholds = np.array([0.2,0.09,0.1])
         """
         Array(N) containing the Score Thresholds.
             N: number of exercises
@@ -70,7 +65,7 @@ class Node(AbstractNode):
 
         self.angleThresholds = np.array([
             [0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.12,0.,0.12,0.,0.12,0],
-            [0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.2,0.2,0.2,0.2,0.,0.,0.],
+            [0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.06,0.06,0.1,0.1,0.,0.,0.],
             [0.,0.,0.,0.,0.,0.1,0.,0.,0.,0.1,0.,0.,0.,0.1,0.,0.1,0.,0.1,0.]])
         """
         Array(N,K) containing the differences in angle required for feedback to be given
@@ -207,7 +202,7 @@ class Node(AbstractNode):
         globals.mainFeedback = self.summariseFeedback(self.smallErrorCount,self.largeErrorCount,self.perfectReps)
         return None
 
-    def summariseFeedback(self,smallErrorCount: np.float64, largeErrorCount: np.float64, perfectReps):
+    def summariseFeedback(self,smallErrorCount: np.ndarray[np.float64], largeErrorCount: np.float64, perfectReps):
         """
         Called when the exercise is finished.
         Used to convert the rep feedback into a feedback summary for the user.
@@ -273,7 +268,7 @@ class Node(AbstractNode):
         self.switchPoseCount = 0
         return None
 
-    def compareAngles(self, evalPose: np.float64, angleThresholds: np.float64):
+    def compareAngles(self, evalPose: np.ndarray[np.float64], angleThresholds: np.ndarray[np.float64]):
         """
         Called when a rep is finished.
         Used to compare between ideal and observed angles in user's pose
@@ -319,7 +314,7 @@ class Node(AbstractNode):
             return 1
         return 0
 
-    def giveFeedback(self, angleDifferences: np.float64, timeDifference):
+    def giveFeedback(self, angleDifferences: np.ndarray[np.float64], timeDifference):
         """
         Called when a rep is finished.
         Used to convert angle data into text feedback to feed to front-end
@@ -365,13 +360,12 @@ class Node(AbstractNode):
 ### FRAME METHODS
 ### These methods are called every frame
 
-    def selectFrames(self, score, curPose: np.float64, scoreThreshold):
+    def shouldSelectFrames(self, score, scoreThreshold):
         """
         Called every frame while rep detection is active.
-        Used to determine whether to select a frame to be used for evaluation of errors. If selected, frame is added to selectedFrames array.
+        Used to determine whether to select a frame to be used for evaluation of errors.
         Args:
             score (float): score returned by comparePoses, 0 being completely similar and 1 being completely different.
-            curPose (np array(19 float)): the current pose detected by the camera.
             scoreThreshold (float): the threshold within which score has to be for the frame to be selected.
 
         Returns:
@@ -387,10 +381,51 @@ class Node(AbstractNode):
             return 2
         # test if score is lesser than threshold
         if score < scoreThreshold:
-            self.selectedFrames[self.selectedFrameCount] = curPose
-            self.selectedFrameCount += 1
             return 1
         return 0
+
+    def checkPose(self, curPose:np.ndarray[np.float64], frameStatus:int):
+        """
+        Called every frame while rep detection is active.
+        Used to change between user being in a key pose and rest pose. If user is in key pose, add valid frames to selectedFrames.
+            Args:
+                curPose (np array(19 float)): the current pose detected by the camera.
+                frameStatus (int):  
+        """
+        if frameStatus == -1:
+            return -1
+        # switching from in key pose to rest pose
+        if self.inPose == True:
+            # add frame if not invalid
+            self.selectedFrames[self.selectedFrameCount] = curPose
+            self.selectedFrameCount += 1
+
+            # if currently in key pose but person in a rest pose
+            if frameStatus == 0:
+                self.switchPoseCount += 1
+                # if 5 rest frames in a row
+                if self.switchPoseCount > 5:
+                    # transition into rest pose
+                    self.finishRep()
+                    
+            # reset switchPoseCount
+            if frameStatus == 1:
+                self.switchPoseCount = 0
+
+        # switching from rest pose to in key pose
+        if self.inPose == False:
+            # if currently in rest pose but person in a key pose
+            if frameStatus == 1:
+                self.switchPoseCount += 1
+                # if 5 pose frames in a row
+                if self.switchPoseCount > 6:
+                    # transition into key pose
+                    self.middleOfRep()
+
+            # reset switchPoseCount
+            if frameStatus == 0:
+                self.switchPoseCount = 0
+        return None
 
     def run(self, inputs: Dict[str, Any]) -> Dict[str, Any]:  # type: ignore
         """
@@ -428,36 +463,9 @@ class Node(AbstractNode):
             score = comparePoses(self.evalPoses[globals.currentExercise],curPose, self.angleWeights[globals.currentExercise]) 
             
             """FRAME STATUS"""
-            frameStatus = self.selectFrames(score, curPose, self.scoreThresholds[globals.currentExercise])
+            frameStatus = self.shouldSelectFrames(score, self.scoreThresholds[globals.currentExercise])
 
-            # switching from in key pose to rest pose
-            if self.inPose == True:
-                
-                # if currently in key pose but person in a rest pose
-                if frameStatus == 0:
-                    self.switchPoseCount += 1
-                    # if 5 rest frames in a row
-                    if self.switchPoseCount > 5:
-                        # transition into rest pose
-                        self.finishRep()
-                        
-                # reset switchPoseCount
-                if frameStatus == 1:
-                    self.switchPoseCount = 0
 
-            # switching from rest pose to in key pose
-            if self.inPose == False:
-                # if currently in rest pose but person in a key pose
-                if frameStatus == 1:
-                    self.switchPoseCount += 1
-                    # if 5 pose frames in a row
-                    if self.switchPoseCount > 6:
-                        # transition into key pose
-                        self.middleOfRep()
-
-                # reset switchPoseCount
-                if frameStatus == 0:
-                    self.switchPoseCount = 0
 
             #default message
             globals.mainFeedback = ["Exercise in progress"]
@@ -472,6 +480,7 @@ class Node(AbstractNode):
                     globals.mainFeedback = ["Please position yourself in the image"]
             else:
                 self.invalidFrameCount = 0
+                self.checkPose(curPose,frameStatus)
             
           
             """DEBUG"""
