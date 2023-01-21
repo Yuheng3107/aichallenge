@@ -21,11 +21,11 @@ Microsoft Edge can be downloaded via [this link](https://www.microsoft.com/en-us
 
 This can be done by doing the following:
 
-Windows: Go to File Explorer and type cmd, and enter,
-         then paste ```git clone https://github.com/Yuheng3107/aichallenge```
-         into the command line  
-macOS/Linux: Paste ```git clone https://github.com/Yuheng3107/aichallenge```
-            into the command line  
+For Windows:  
+Go to File Explorer and type cmd, and press Enter.  
+
+Then paste ```git clone https://github.com/Yuheng3107/aichallenge``` into the command line (black screen that pops up).   
+For macOS/Linux: Paste ```git clone https://github.com/Yuheng3107/aichallenge``` into the command line.
 
 After cloning the git repository, there will be a new directory
 called aichallenge created. 
@@ -33,7 +33,7 @@ called aichallenge created.
 You can move into that directory by typing ```cd aichallenge``` into the terminal.
 
 In order to run our app, we highly recommend setting up a virtual environment, in order to prevent conflicts in package dependencies. We shall be using [venv](https://docs.python.org/3/library/venv.html) for our app.
-### To use the virtual environment (venv), there are 2 steps:
+### To use the virtual environment (venv), there are 2 steps required:
 
 1. Creating a virtual environment:  
 Windows: ```py -3 -m venv venv```  
