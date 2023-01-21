@@ -118,8 +118,8 @@ def processData(keypoints: np.float64, height: int, width: int):
     curPose[8] = calcAngle(lines[5],lines[7])
     #rightShoulder-rightElbow-rightWrist
     curPose[9] = calcAngle(lines[6],lines[8])
-    #UNNECESSARY midShoulder-midHip-leftHip
-    curPose[10] = calcAngle(lines[10],lines[11])
+    #vertical-rightHip-rightKnee
+    curPose[10] = calcAngle(lines[9],lines[16])
     #midShoulder-midHip-rightHip
     curPose[11] = calcAngle(lines[10],lines[12])
     #leftShoulder-leftHip-leftKnee
