@@ -37,11 +37,11 @@ You can move into that directory by typing cd aichallenge into the terminal.
 
 ### To use virtual environment, there are 2 steps:
 
-1. Creating a virtual environment:
+1. Creating a virtual environment:  
 Windows: ```py -3 -m venv venv```  
 macOS/Linux: ```python3 -m venv venv```
 
-2. Activating the virtual environment
+2. Activating the virtual environment:  
 Windows: ```venv\Scripts\activate```  
 macOS/Linux: ```. venv/bin/activate```
 
