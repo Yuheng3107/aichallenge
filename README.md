@@ -37,23 +37,24 @@ You can move into that directory by typing cd aichallenge into the terminal.
 
 ### To use virtual environment, there are 2 steps:
 
-1. Creating a virtual environment:
-Windows: py -3 -m venv venv
-macOS/Linux: python3 -m venv venv
+1. Creating a virtual environment:  
+Windows: ```py -3 -m venv venv```  
+macOS/Linux: ```python3 -m venv venv```
 
-2. Activating the virtual environment
-Windows: venv\Scripts\activate
-macOS/Linux: . venv/bin/activate
+2. Activating the virtual environment:  
+Windows: ```venv\Scripts\activate```  
+macOS/Linux: ```. venv/bin/activate```
 
 After this, run:
-pip3 install -r requirements.txt to install dependencies
+```pip3 install -r requirements.txt```
+ to install dependencies
 
 ### Run using Docker Containers (WIP as HTTPS is not working on Docker Containers because of self-signed SSL Certificate)
 Pull the image from Docker Hub:
-docker pull yuheng3107/aichallenge:latest
+```docker pull yuheng3107/aichallenge:latest```
 
 Run the Docker Container using:
-docker run -p 5000:5000 yuheng3107/aichallenge
+```docker run -p 5000:5000 yuheng3107/aichallenge```
 
 Note: Docker container is unable to get camera from source=0,
 it has to get from front end but doing so requires HTTPS connection.
