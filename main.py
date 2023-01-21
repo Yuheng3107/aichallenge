@@ -1,5 +1,6 @@
 from fileinput import filename
 from pathlib import Path
+import threading
 
 from peekingduck.pipeline.nodes.input import visual
 from peekingduck.pipeline.nodes.model import posenet
@@ -25,7 +26,7 @@ def main():
         [Path("Training_Data\Squats\Good_Pose\Side_View.mp4"),Path("Training_Data\Squats\Bad_Pose\Butt\Side_View.mp4")],
         [Path("Training_Data\Squats\Good_Pose\Front_View1.mp4"),Path("Training_Data\Squats\Bad_Pose\Knee\Front_View1.mp4")],
         [Path("Training_Data\Push_Up\Good_Pose\Side_View.mp4"),Path("Training_Data\Push_Up\Bad_Pose1\Side_View.mp4"),Path("Training_Data\Push_Up\Bad_Pose2\Side_View.mp4")]]
-    visual_node = visual.Node(source=sources[3][2])
+    visual_node = visual.Node(source=sources[3][2], threading=True)
     posenet_node = posenet.Node(max_pose_detection=1)
     poses_node = poses.Node()
     
