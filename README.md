@@ -4,7 +4,8 @@ This is the GitHub Repo for the National AI Student Challenge 2022
 Please make sure your whole body is in view while doing the exercise
 
 ### Prerequisites
-Running our app requires the installation of git (to clone the repo), as well as Python to run the code, as well as a Chromium-based browser such as Google Chrome, or Microsoft Edge so you can use the web app.
+Running our app requires the installation of git (to clone the repo), as well as Python to run the code, as well as a Chromium-based browser such as Google Chrome, or Microsoft Edge as they support multi-part responses which are used to stream
+the PeekingDuck images onto the web application.
 
 Git can be installed by visiting this link:
 https://git-scm.com/downloads
