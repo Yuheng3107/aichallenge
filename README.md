@@ -7,15 +7,15 @@ Please make sure your whole body is in view while doing the exercise
 Running our app requires the installation of git, a Version Control Software (to clone the repository), as well as Python3 to run the code, and finally, a browser such as Google Chrome or Microsoft Edge which supports multi-part responses which are required to stream the PeekingDuck image data onto the web application.
 
 ### Installing Git  
-Git can be installed by visiting [this link](https://git-scm.com/downloads)
+Git can be installed by visiting [this link](https://git-scm.com/downloads).
 
 ### Installing Python
-Python (Version 3.9) can be downloaded via [this link](https://www.python.org/downloads/)
+Python (Version 3.9) can be downloaded via [this link](https://www.python.org/downloads/).
 
 ### Installing a web browser that supports multi-part responses
-Google Chrome can be downloaded via [this link](https://www.google.com/intl/en_sg/chrome/)
+Google Chrome can be downloaded via [this link](https://www.google.com/intl/en_sg/chrome/).
 
-Microsoft Edge can be downloaded via [this link](https://www.microsoft.com/en-us/edge)
+Microsoft Edge can be downloaded via [this link](https://www.microsoft.com/en-us/edge).
 
 ## To try out our app, please clone this git repository
 
@@ -52,14 +52,14 @@ After this, run:
 Once the installation is successful, you can proceed to running our app using the terminal.
 
 ### Running the web server on your terminal (localhost)
-To run the web server locally, either type
-
+To run the web server locally, either type  
 ```python3 app.py```  
 or
 ```flask run```  
 in the terminal.
 
-```werkzeug  INFO:   * Running on http://127.0.0.1:5000 (Press CTRL+C to quit)``` should appear on your terminal, and you can simply paste http://127.0.0.1:5000 in your web browser (either Google Chrome or Microsoft Edge) to access the application.
+If the server is successfully running, the prompt
+```werkzeug  INFO:   * Running on http://127.0.0.1:5000 (Press CTRL+C to quit)``` should appear on your terminal, and you can paste http://127.0.0.1:5000 in your web browser (either Google Chrome or Microsoft Edge) to access the application web page.
 
 ### Run using Docker Containers (WIP as HTTPS is not working on Docker Containers because of self-signed SSL Certificate)
 Pull the image from Docker Hub:
