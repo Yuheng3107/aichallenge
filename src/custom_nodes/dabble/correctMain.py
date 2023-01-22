@@ -217,8 +217,8 @@ class Node(AbstractNode):
         Called when the exercise is finished.
         Used to convert the rep feedback into a feedback summary for the user.
             Args:
-                smallErrorCount (np array(19 int)): number of times angle was too small
-                largeErrorCount (np array(19 int)): number of times angle was too large
+                smallErrorCount (ndarray(19,dtype=int)): number of times angle was too small
+                largeErrorCount (ndarray(19,dtype=int)): number of times angle was too large
                 perfectReps (int): number of perfect reps (no errors)
                     
             Returns:
@@ -283,12 +283,12 @@ class Node(AbstractNode):
         Called when a rep is finished.
         Used to compare between ideal and observed angles in user's pose
             Args:
-                evalPose (np array(19 float)): the ideal pose to be compared against.
-                curPose (np array(19 float)): the current pose detected by the camera.
-                angleThresholds (np array(19 float)): the threshold of angle differences
+                evalPose (ndarray(19,dtype=float)): the ideal pose to be compared against.
+                curPose (ndarray(19,dtype=float)): the current pose detected by the camera.
+                angleThresholds (ndarray(19,dtype=float)): the threshold of angle differences
 
             Returns:
-                angleDifferences (np array(19 float)): angle differences, positive is too large, negative is too small, 0 is no significant difference    
+                angleDifferences (ndarray(19,dtype=float)): angle differences, positive is too large, negative is too small, 0 is no significant difference    
         """
         angleDifferences = np.zeros(evalPose.shape) 
         # check for 0 frames
@@ -314,7 +314,7 @@ class Node(AbstractNode):
                 angleDifferences[i] = differences[i]
         return angleDifferences
     
-    def compareTime(self, evalTime, repTime):
+    def compareTime(self, evalTime:np.float64, repTime:np.float64):
         """
         Called when a rep is finished
         Evaluates if rep time is too short
@@ -324,12 +324,13 @@ class Node(AbstractNode):
             return 1
         return 0
 
-    def giveFeedback(self, angleDifferences: np.ndarray, timeDifference):
+    def giveFeedback(self, angleDifferences: np.ndarray, timeDifference:bool):
         """
         Called when a rep is finished.
         Used to convert angle data into text feedback to feed to front-end
             Args:
-                angleDifferences (np array(19 float)): angle differences, positive is too large, negative is too small, 0 is no significant difference
+                angleDifferences (ndarray(19,dtype=float)): angle differences, positive is too large, negative is too small, 0 is no significant difference
+                timeDifference (bool): time difference, 1 is too short, 0 is no errors
                     
             Returns:
                 feedback (string): errors made in rep
@@ -378,7 +379,7 @@ class Node(AbstractNode):
             score (float): score returned by comparePoses, 0 being completely similar and 1 being completely different.
             scoreThreshold (float): the threshold within which score has to be for the frame to be selected.
 
-        Returns:
+        Returns:()
             output (int): 1 if frame is selected, 0 if frame is not selected 
                 2 if selectedFrames is full, -1 if frame is invalid
         """
@@ -399,7 +400,7 @@ class Node(AbstractNode):
         Called every frame while rep detection is active.
         Used to change between user being in a key pose and rest pose. If user is in key pose, add valid frames to selectedFrames.
             Args:
-                curPose (np array(19 float)): the current pose detected by the camera.
+                curPose (ndarray(19,dtype=float)): the current pose detected by the camera.
                 frameStatus (int):  
         """
         if frameStatus == -1:
