@@ -212,7 +212,7 @@ class Node(AbstractNode):
         globals.mainFeedback = self.summariseFeedback(self.smallErrorCount,self.largeErrorCount,self.perfectReps)
         return None
 
-    def summariseFeedback(self,smallErrorCount: np.ndarray[np.float64], largeErrorCount: np.float64, perfectReps):
+    def summariseFeedback(self,smallErrorCount: np.float64, largeErrorCount: np.float64, perfectReps: int):
         """
         Called when the exercise is finished.
         Used to convert the rep feedback into a feedback summary for the user.

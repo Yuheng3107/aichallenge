@@ -1,8 +1,6 @@
 # National AI Student Challenge 2022
 This is the GitHub Repo for the National AI Student Challenge 2022. We have used [PeekingDuck](https://github.com/aisingapore/PeekingDuck) as our core tool for Computer Vision.
 
-Please make sure your whole body is in view while doing the exercise
-
 ## Prerequisites
 Running our app requires the installation of git, a Version Control Software (to clone the repository), as well as Python3 to run the code, and finally, a browser such as Google Chrome or Microsoft Edge which supports multi-part responses which are required to stream the PeekingDuck image data onto the web application.
 
@@ -72,3 +70,4 @@ Note: Docker container is unable to get camera from source=0,
 it has to get from front end but doing so requires HTTPS connection.
 
 Currently, the docker container is unable to connect when HTTPS is enabled.
+
