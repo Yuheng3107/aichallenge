@@ -79,25 +79,35 @@ class Node(AbstractNode):
             N: number of exercises
         """
 
-        self.glossary = np.array(['leftEar-nose-midShoulder',
-            'rightEar-nose-midShoulder',
-            'nose-midShoulder-leftShoulder',
-            'nose-midShoulder-rightShoulder',
-            'midShoulder-leftShoulder-leftElbow',
-            'Right Shoulder - Arm',
-            'nose-midShoulder-leftElbow',
-            'nose-midShoulder-rightElbow',
-            'leftShoulder-leftElbow-leftWrist',
-            'Right Arm - Forearm',
-            'midShoulder-midHip-leftHip',
-            'midShoulder-midHip-rightHip',
-            'Chest - Left Thigh',
-            'Chest - Right Thigh',
-            'Left Thigh - Calf',
-            'Right Thigh - Calf',
-            'nose-midShoulder-midHip',
-            'Vertical - Back',
-            'vertical(nose)-nose-midShoulder'])
+        self.glossary = np.array(
+            #Side Sqats
+            [[['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],
+            ['Butt not low enough ','Butt too low '],
+            ['',''],
+            ['Butt not low enough ','Butt too low '],
+            ['',''],
+            ['Back not straight enough ','Back too straight '],
+            ['','']],
+            #Front Squats
+            [['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],
+            ['Bending down too little ','Bending down too much '],
+            ['Bending down too little ','Bending down too much '],
+            ['Knees collapse inwards ','Bending down too much. Feet may be too wide apart. '],
+            ['Knees collapse inwards ','Bending down too much. Feet may be too wide apart. '],
+            ['',''],['',''],['','']],
+            #Side Push-ups
+            [['',''],['',''],['',''],['',''],['',''],
+            ['Arms not wide enough ','Arms too wide '],
+            ['',''],['',''],['',''],
+            ['Arms not wide enough ','Arms too wide '],
+            ['',''],['',''],['',''],
+            ['Back too straight ','Back not straight enough '],
+            ['',''],
+            ['Knees too straightened ','Knees not straightened enough '],
+            ['',''],
+            ['Back too parllel with ground ','Back not parallel with ground '],
+            ['','']]]
+            )
         """
         Array(N) containing the text descriptions of each angle
             N: number of exercises
@@ -219,12 +229,12 @@ class Node(AbstractNode):
             #none of that error
             if count == 0:
                 continue
-            feedback.append(f" {self.glossary[i]} angle too large {count} times")
+            feedback.append(f" {self.glossary[globals.currentExercise,i,0]} {count} times")
         for i,count in enumerate(largeErrorCount):
             #none of that error
             if count == 0:
                 continue
-            feedback.append(f" {self.glossary[i]} angle too small {count} times")
+            feedback.append(f" {self.glossary[globals.currentExercise,i,0]} {count} times")
         if self.repTimeError != 0:
             feedback.append(f" Rep times were too short {self.repTimeError} times")
         feedback.append(f" {perfectReps} perferct reps.")
@@ -339,11 +349,11 @@ class Node(AbstractNode):
             if (difference > 0):
                 # angle needs to be smaller, as it is larger than ideal pose
                 self.smallErrorCount[i] += 1
-                feedback += f"{self.glossary[i]} angle too large. "
+                feedback += self.glossary[globals.currentExercise,i,0]
             else:
                 # angle needs to be greater, as it is smaller than ideal pose
                 self.largeErrorCount[i] += 1
-                feedback += f"{self.glossary[i]} angle too small. "
+                feedback += self.glossary[globals.currentExercise,i,1]
 
         if timeDifference == 1:
             # time error
