@@ -3,6 +3,26 @@ function getFeedback() {
     socket.emit('feedback');
 }
 
+function getVideoFrames() {
+    navigator.mediaDevices.getUserMedia({ video: true}).then(function(stream) {
+        let mediaRecorder = new MediaRecorder(stream, {mimeType: "video/webm"});
+        mediaRecorder.start();
+        let chunks = [];
+        console.log(mediaRecorder);
+        mediaRecorder.ondataavailable = function(e) {
+            console.log("Data Available");
+            chunks.push(e.data);
+            let blob = new Blob(chunks, { 'type' : 'video/webm; codecs=vp9' });
+            chunks = [];
+            let videoURL = window.URL.createObjectURL(blob);
+            socket.emit('video', { 'video': true, 'buffer': videoURL });
+        }
+        mediaRecorder.requestData();
+    }).catch(function(err) {
+        console.log("An error occurred: " + err);
+    });
+
+}
 const startButton = document.querySelector('.start-button');
 const endButton = document.querySelector('.end-button');
 const repInfo = document.querySelector('rep-info-group');
@@ -49,29 +69,18 @@ startButton.addEventListener('click', (e) => {
     if (!started) {
         // runs python script that starts Peekingduck if PeekingDuck is not already running
         socket.emit('start');
+        /* Put back after finish debugging
         startButton.style.display = "none";
-        started = true;
-
-        navigator.mediaDevices.getUserMedia({ video: true, audio: false }).then(function(stream) {
-        let mediaRecorder = new MediaRecorder(stream, {mimeType: "video/webm"});
-        mediaRecorder.start();
-        let chunks = [];
-        mediaRecorder.ondataavailable = function(e) {
-            chunks.push(e.data);
-            console.log("Video data" + e.data);
-        }
-        mediaRecorder.onstop = function(e) {
-            let blob = new Blob(chunks, { 'type' : 'video/webm; codecs=vp9' });
-            chunks = [];
-            let videoURL = window.URL.createObjectURL(blob);
-            socket.emit('video', { 'video': true, 'buffer': videoURL });
-        }
-    }).catch(function(err) {
-        console.log("An error occurred: " + err);
-    });
+        started = true; 
+        */
+        if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
+            // checks that browser supports getting camera feed from user
+            getVideoFrames();
+          }
+        
 
         // updates feedback every second
-        setInterval(getFeedback, 200);
+        // setInterval(getFeedback, 200);
     }
 });
 endButton.addEventListener('click', () => {
