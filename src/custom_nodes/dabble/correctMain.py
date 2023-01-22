@@ -212,7 +212,7 @@ class Node(AbstractNode):
         globals.mainFeedback = self.summariseFeedback(self.smallErrorCount,self.largeErrorCount,self.perfectReps)
         return None
 
-    def summariseFeedback(self,smallErrorCount: np.float64, largeErrorCount: np.float64, perfectReps: int):
+    def summariseFeedback(self,smallErrorCount: np.ndarray, largeErrorCount: np.ndarray, perfectReps: int):
         """
         Called when the exercise is finished.
         Used to convert the rep feedback into a feedback summary for the user.
@@ -278,7 +278,7 @@ class Node(AbstractNode):
         self.switchPoseCount = 0
         return None
 
-    def compareAngles(self, evalPose: np.ndarray[np.float64], angleThresholds: np.ndarray[np.float64]):
+    def compareAngles(self, evalPose: np.ndarray, angleThresholds: np.ndarray):
         """
         Called when a rep is finished.
         Used to compare between ideal and observed angles in user's pose
@@ -324,7 +324,7 @@ class Node(AbstractNode):
             return 1
         return 0
 
-    def giveFeedback(self, angleDifferences: np.ndarray[np.float64], timeDifference):
+    def giveFeedback(self, angleDifferences: np.ndarray, timeDifference):
         """
         Called when a rep is finished.
         Used to convert angle data into text feedback to feed to front-end
@@ -394,7 +394,7 @@ class Node(AbstractNode):
             return 1
         return 0
 
-    def checkPose(self, curPose:np.ndarray[np.float64], frameStatus:int):
+    def checkPose(self, curPose:np.ndarray, frameStatus:int):
         """
         Called every frame while rep detection is active.
         Used to change between user being in a key pose and rest pose. If user is in key pose, add valid frames to selectedFrames.
