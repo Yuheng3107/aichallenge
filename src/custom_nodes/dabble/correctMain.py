@@ -212,7 +212,7 @@ class Node(AbstractNode):
         globals.mainFeedback = self.summariseFeedback(self.smallErrorCount,self.largeErrorCount,self.perfectReps)
         return None
 
-    def summariseFeedback(self,smallErrorCount: np.float64, largeErrorCount: np.float64, perfectReps: int):
+    def summariseFeedback(self,smallErrorCount: np.ndarray, largeErrorCount: np.ndarray, perfectReps: int):
         """
         Called when the exercise is finished.
         Used to convert the rep feedback into a feedback summary for the user.
@@ -464,7 +464,8 @@ class Node(AbstractNode):
 
         """COMPUTATIONAL METHODS"""
         if globals.runSwitch:
-            globals.img = inputs["img"]
+            # Image data will be passed directly to globals.img
+            # globals.img = inputs["img"]
             # Keypoints has a shape of (1, 17, 2)
             keypoints = inputs["keypoints"]
             

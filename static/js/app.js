@@ -45,11 +45,30 @@ document.addEventListener('DOMContentLoaded', (event) => {
 })
 
 startButton.addEventListener('click', (e) => {
-    // runs python script that starts Peekingduck
+    
     if (!started) {
-        fetch(startButton.getAttribute('data-url'));
+        // runs python script that starts Peekingduck if PeekingDuck is not already running
+        socket.emit('start');
         startButton.style.display = "none";
         started = true;
+
+        navigator.mediaDevices.getUserMedia({ video: true, audio: false }).then(function(stream) {
+        let mediaRecorder = new MediaRecorder(stream, {mimeType: "video/webm"});
+        mediaRecorder.start();
+        let chunks = [];
+        mediaRecorder.ondataavailable = function(e) {
+            chunks.push(e.data);
+            console.log("Video data" + e.data);
+        }
+        mediaRecorder.onstop = function(e) {
+            let blob = new Blob(chunks, { 'type' : 'video/webm; codecs=vp9' });
+            chunks = [];
+            let videoURL = window.URL.createObjectURL(blob);
+            socket.emit('video', { 'video': true, 'buffer': videoURL });
+        }
+    }).catch(function(err) {
+        console.log("An error occurred: " + err);
+    });
 
         // updates feedback every second
         setInterval(getFeedback, 200);
@@ -138,23 +157,5 @@ difficultyButton.addEventListener('click', () => {
 })
 
 
-navigator.mediaDevices.getUserMedia({ video: true, audio: false })
-    .then(function(stream) {
-        let mediaRecorder = new MediaRecorder(stream, {mimeType: "video/webm"});
-        mediaRecorder.start();
-        let chunks = [];
-        mediaRecorder.ondataavailable = function(e) {
-            chunks.push(e.data);
-            console.log("Video data" + e.data);
-        }
-        mediaRecorder.onstop = function(e) {
-            let blob = new Blob(chunks, { 'type' : 'video/webm; codecs=vp9' });
-            chunks = [];
-            let videoURL = window.URL.createObjectURL(blob);
-            socket.emit('video', { 'video': true, 'buffer': videoURL });
-        }
-    })
-    .catch(function(err) {
-        console.log("An error occurred: " + err);
-    });
+
 

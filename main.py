@@ -22,7 +22,7 @@ def main():
 
     # Add threading=True to arguments in visual.Node constructor to
     # enable threading
-    visual_node = visual.Node(source=0)
+    # visual_node = visual.Node(source=0)
     posenet_node = posenet.Node(max_pose_detection=1)
     poses_node = poses.Node()
     # screen_node = screen.Node()
@@ -30,7 +30,7 @@ def main():
 
     runner = Runner(
         nodes=[
-            visual_node,
+            # visual_node,
             posenet_node,
             processing_node,
             emotion_node,

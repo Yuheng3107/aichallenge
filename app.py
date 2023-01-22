@@ -27,13 +27,11 @@ def index():
     globals.initialise()
     return render_template('./index.html')
 
-@app.route('/start')
+@socketio.on('/start')
 def start():
-    """When start button is clicked, GET request (AJAX)
-    is sent to this route to get the peekingduck pipeline
-    running"""
+    """When start button is clicked, WebSocket event is triggered
+    which starts the main programme"""
     main()
-    return ""
 
 @app.route('/video_feed')
 def video_feed():
@@ -85,7 +83,7 @@ def handle_video(data):
     video = cv2.VideoCapture(data['buffer'])
     while True:
         ret, frame = video.read()
-        print(ret)
+        print(frame)
         if not ret:
             break
         # process the frame using OpenCV
