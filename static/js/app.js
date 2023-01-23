@@ -77,7 +77,7 @@ startButton.addEventListener('click', (e) => {
         
 
         // updates feedback every second
-        // setInterval(getFeedback, 200);
+        setInterval(getFeedback, 200);
     }
 });
 endButton.addEventListener('click', () => {
