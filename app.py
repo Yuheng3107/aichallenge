@@ -1,4 +1,4 @@
-
+import numpy as np
 import cv2
 import json
 from flask import Flask, render_template, Response, request
@@ -80,13 +80,16 @@ def change_difficulty(difficulty):
 
 @socketio.on('video')
 def handle_video(data):
-    video = cv2.VideoCapture(data['buffer'])
-    while True:
-        ret, frame = video.read()
-        print(frame)
-        if not ret:
-            break
-        # process the frame using OpenCV
+    byte_data = np.frombuffer(data['buffer'], np.uint8)
+    print(byte_data)
+    print(byte_data.shape)
+    # process the byte_data with OpenCV
+    image = cv2.imdecode(byte_data, cv2.IMREAD_COLOR)
+    # convert the image to BGR
+    print(image)
+    #bgr_image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+    #print(bgr_image)
+
 
 
 if __name__ == '__main__':

@@ -4,23 +4,7 @@ function getFeedback() {
 }
 
 function getVideoFrames() {
-    navigator.mediaDevices.getUserMedia({ video: true}).then(function(stream) {
-        let mediaRecorder = new MediaRecorder(stream, {mimeType: "video/webm"});
-        mediaRecorder.start();
-        let chunks = [];
-        console.log(mediaRecorder);
-        mediaRecorder.ondataavailable = function(e) {
-            console.log("Data Available");
-            chunks.push(e.data);
-            let blob = new Blob(chunks, { 'type' : 'video/webm; codecs=vp9' });
-            chunks = [];
-            let videoURL = window.URL.createObjectURL(blob);
-            socket.emit('video', { 'video': true, 'buffer': videoURL });
-        }
-        mediaRecorder.requestData();
-    }).catch(function(err) {
-        console.log("An error occurred: " + err);
-    });
+    
 
 }
 const startButton = document.querySelector('.start-button');
@@ -75,7 +59,28 @@ startButton.addEventListener('click', (e) => {
         */
         if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
             // checks that browser supports getting camera feed from user
-            getVideoFrames();
+            // if so use the getUserMedia API to get video from the user, after
+            // asking for permission from the user
+
+
+            navigator.mediaDevices.getUserMedia({ video: true}).then(function(stream) {
+                let mediaRecorder = new MediaRecorder(stream, {mimeType: "video/webm;codecs=vp8"});
+                // every time data is available (more than 50ms of data), it will trigger
+                // a BlobEvent
+                let url;
+                let buffer = []
+                mediaRecorder.ondataavailable = function(e) {
+                    buffer.push(e.data);
+                    let blob = new Blob(buffer, {type: "video/webm;codecs=vp8"})
+                    url = (window.URL ? URL : webkitURL).createObjectURL(blob);
+                    // url can work if u add blob in front
+                    socket.emit('video', {'url': url});
+                }
+                // each blob has 50ms of video data
+                mediaRecorder.start(5000);
+            }).catch(function(err) {
+                console.log("An error occurred: " + err);
+            });
           }
         
 
