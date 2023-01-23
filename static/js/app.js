@@ -68,13 +68,11 @@ startButton.addEventListener('click', (e) => {
                 // every time data is available (more than 50ms of data), it will trigger
                 // a BlobEvent
                 let url;
-                let buffer = []
                 mediaRecorder.ondataavailable = function(e) {
-                    buffer.push(e.data);
+                    let buffer = [e.data]
                     let blob = new Blob(buffer, {type: "video/webm;codecs=vp8"})
-                    url = (window.URL ? URL : webkitURL).createObjectURL(blob);
                     // url can work if u add blob in front
-                    socket.emit('video', {'url': url});
+                    socket.emit('video', {'blob': blob});
                 }
                 // each blob has 50ms of video data
                 mediaRecorder.start(5000);

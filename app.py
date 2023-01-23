@@ -1,4 +1,5 @@
 import numpy as np
+import urllib
 import cv2
 import json
 from flask import Flask, render_template, Response, request
@@ -80,9 +81,11 @@ def change_difficulty(difficulty):
 
 @socketio.on('video')
 def handle_video(data):
-    stream = cv2.VideoCapture(data['url'])
+    with urllib.request.urlopen(data['url']) as url:
+        s = url.read()
+    cap = cv2.VideoCapture(s)
     while True:
-        ret, frame = stream.read()
+        ret, frame = cap.read()
         print(frame)
         if not ret:
             break
