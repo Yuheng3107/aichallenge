@@ -464,8 +464,7 @@ class Node(AbstractNode):
 
         """COMPUTATIONAL METHODS"""
         if globals.runSwitch:
-            # Image data will be passed directly to globals.img
-            # globals.img = inputs["img"]
+            # Image data will be passed directly to globals.img in app.py
             # Keypoints has a shape of (1, 17, 2)
             keypoints = inputs["keypoints"]
             
