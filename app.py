@@ -80,15 +80,12 @@ def change_difficulty(difficulty):
 
 @socketio.on('video')
 def handle_video(data):
-    byte_data = np.frombuffer(data['buffer'], np.uint8)
-    print(byte_data)
-    print(byte_data.shape)
-    # process the byte_data with OpenCV
-    image = cv2.imdecode(byte_data, cv2.IMREAD_COLOR)
-    # convert the image to BGR
-    print(image)
-    #bgr_image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-    #print(bgr_image)
+    stream = cv2.VideoCapture(data['url'])
+    while True:
+        ret, frame = stream.read()
+        print(frame)
+        if not ret:
+            break
 
 
 
