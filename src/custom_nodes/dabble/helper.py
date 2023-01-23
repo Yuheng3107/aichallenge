@@ -9,11 +9,11 @@ def processData(keypoints: np.float64, height: int, width: int):
     Called every frame while rep detection is active.
     Used to convert keypoint data into angle data
         Args:
-            keypoints (np array(1,17,2 int)): keypoints detected by PeekingDuck
+            keypoints (ndarray(19,dtype=float)): keypoints detected by PeekingDuck
             height (int): height of img
 
         Returns:
-            curPose(np array(19 float)): angle data of the pose
+            curPose(ndarray(19,dtype=float)): angle data of the pose
     """
     
     if (keypoints.shape != (1, 17, 2)):
@@ -84,17 +84,26 @@ def processData(keypoints: np.float64, height: int, width: int):
     #rightKnee-rightAnkle
     lines[18] = makeLine(data[14],data[16])
     
-    def calcAngle(line1: np.float64, line2: np.float64):
+    def calcAngle(line1: np.ndarray, line2: np.ndarray):
         """
         returns: 
             angle (float): angle between line1 and line2
-                0 if the points cannot be calculated due to missing line
+                0 if the angle cannot be calculated due to missing line
         """
         if (line1[0] == 0. and line1[1] == 0.) or (line2[0] == 0. and line2[1] == 0.):
             return 0.
         cosine_angle = np.dot(-line1, line2) / (np.linalg.norm(-line1) * np.linalg.norm(line2))
         return np.arccos(cosine_angle)
     
+    def calcLine(line1:np.ndarray, line2: np.ndarray):
+        """
+        returns: 
+            ratio (float): ratio of line1 to line2
+                0 if the points cannot be calculated due to missing line
+        """
+        if (line1[0] == 0. and line1[1] == 0.) or (line2[0] == 0. and line2[1] == 0.):
+            return 0.
+        return np.linalg.norm(line1)/np.linalg.norm(line2)
     
     #curPose, 0 is invalid data
     curPose = np.zeros(19)
@@ -115,8 +124,8 @@ def processData(keypoints: np.float64, height: int, width: int):
     curPose[8] = calcAngle(lines[5],lines[7])
     #rightShoulder-rightElbow-rightWrist
     curPose[9] = calcAngle(lines[6],lines[8])
-    #UNNECESSARY vertical-rightHip-rightKnee
-    curPose[10] = calcAngle(lines[9],lines[16])
+    #arm-forearm ratio
+    curPose[10] = calcLine(lines[6],lines[8])
     #midShoulder-midHip-rightHip
     curPose[11] = calcAngle(lines[10],lines[12])
     #leftShoulder-leftHip-leftKnee
@@ -140,13 +149,13 @@ def processData(keypoints: np.float64, height: int, width: int):
     curPose[1] = (curPose[14]+curPose[15])/2
     return curPose
 
-def comparePoses(evalPose: np.float64, curPose: np.float64, angleWeights: np.float64):
+def comparePoses(evalPose: np.ndarray, curPose: np.ndarray, angleWeights: np.ndarray):
     """
     Called every frame while rep detection is active.
     Used to determine if user is currently in a certain pose.
     Args:
-        evalPose (np array(19 float)): the ideal pose to be compared against.
-        curPose (np array(19 float)): the current pose detected by the camera.
+        evalPose (ndarray(19,dtype=float)): the ideal pose to be compared against.
+        curPose (ndarray(19,dtype=float)): the current pose detected by the camera.
 
     Returns:
         score (float): a score between 0 and 1, 0 being completely similar and 1 being completely different.
