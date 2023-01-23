@@ -296,7 +296,7 @@ class Node(AbstractNode):
         """
         x = np.average(filledselectedFrames,axis=0)
         print(f"curPose: {', '.join(str(angle) for angle in x)}")
-        print(differences)
+        print(f"test: {x[10]}")
 
         for i, x in enumerate(differences):
             if angleThresholds[i] == 0.:
@@ -490,7 +490,7 @@ class Node(AbstractNode):
           
             """DEBUG"""
             # print(f"curPose: {', '.join(str(angle) for angle in curPose)}")
-            print(f"score: {score}")
+            # print(f"score: {score}")
             # print(f"test: {curPose[10]}")
             ## print(f"angleDifferences: {angleDifferences}")   
             ## print(self.selectedFrameCount)
