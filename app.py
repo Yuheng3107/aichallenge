@@ -1,11 +1,11 @@
 import numpy as np
-import urllib
 import cv2
 import json
 from flask import Flask, render_template, Response, request
 from flask_socketio import SocketIO, emit
 import globals
 from main import main
+import requests
 
 app = Flask(__name__)
 socketio = SocketIO(app)
@@ -81,14 +81,16 @@ def change_difficulty(difficulty):
 
 @socketio.on('video')
 def handle_video(data):
-    with urllib.request.urlopen(data['url']) as url:
-        s = url.read()
-    cap = cv2.VideoCapture(s)
+    url = data['url']
+    cap = cv2.VideoCapture(url)
     while True:
         ret, frame = cap.read()
-        print(frame)
         if not ret:
             break
+        else:
+            globals.img = frame
+    #img_arr = np.array(bytearray(img_resp.content), dtype=np.uint8)
+    #img = cv2.imdecode(img_arr, cv2.IMREAD_COLOR)
 
 
 

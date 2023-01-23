@@ -30,8 +30,8 @@
         </div>
     </nav>
     <main class="d-flex flex-column align-items-lg-center container">
-        <video width="50vw" height="60vh" autoplay></video>
-        <canvas style="display: none;" width="50vw" height="60vh"></canvas>
+        <video id="video" width="1280" height="720" autoplay></video>
+        <canvas id="canvas" style="display: none;" width="1280" height="720"></canvas>
         <img draggable="false" class="video-feed" src="{{url_for('video_feed')}}" alt="Video">
         <div id="rep-info-group">
             <span id="rep-count"></span>

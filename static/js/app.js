@@ -4,8 +4,10 @@ function getFeedback() {
 }
 
 function getVideoFrames() {
-    
-
+    canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+    let dataURL = canvas.toDataURL('image/jpeg');
+    console.log(dataURL);
+    socket.emit('video', {'url': dataURL});
 }
 const startButton = document.querySelector('.start-button');
 const endButton = document.querySelector('.end-button');
@@ -20,6 +22,8 @@ const summary = document.querySelector('#summary');
 const textToSpeechButton = document.querySelector('.text-to-speech');
 const stressFeedback = document.querySelector('#stress-feedback');
 const difficultyButton = document.querySelector('#difficulty');
+const video = document.querySelector("#video");
+const canvas = document.querySelector("#canvas");
 
 let synth;
 let textToSpeech = false;
@@ -53,10 +57,10 @@ startButton.addEventListener('click', (e) => {
     if (!started) {
         // runs python script that starts Peekingduck if PeekingDuck is not already running
         socket.emit('start');
-        /* Put back after finish debugging
+
         startButton.style.display = "none";
         started = true; 
-        */
+
         if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
             // checks that browser supports getting camera feed from user
             // if so use the getUserMedia API to get video from the user, after
@@ -64,18 +68,8 @@ startButton.addEventListener('click', (e) => {
 
 
             navigator.mediaDevices.getUserMedia({ video: true}).then(function(stream) {
-                let mediaRecorder = new MediaRecorder(stream, {mimeType: "video/webm;codecs=vp8"});
-                // every time data is available (more than 50ms of data), it will trigger
-                // a BlobEvent
-                let url;
-                mediaRecorder.ondataavailable = function(e) {
-                    let buffer = [e.data]
-                    let blob = new Blob(buffer, {type: "video/webm;codecs=vp8"})
-                    // url can work if u add blob in front
-                    socket.emit('video', {'blob': blob});
-                }
-                // each blob has 50ms of video data
-                mediaRecorder.start(5000);
+                video.srcObject = stream;
+                setInterval(getVideoFrames, 50);
             }).catch(function(err) {
                 console.log("An error occurred: " + err);
             });
