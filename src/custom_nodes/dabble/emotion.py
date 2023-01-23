@@ -50,7 +50,7 @@ class Node(AbstractNode):
         
         self.frameCount += 1
         if self.frameCount == 10:
-            thread = threading.Thread(target=detect_emotion, name='thread')
+            thread = threading.Thread(target=detect_emotion, name='thread', daemon=True)
             self.frameCount = 0
             thread.start()
 
