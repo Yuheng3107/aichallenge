@@ -98,10 +98,7 @@ def processData(keypoints: np.float64, height: int, width: int):
     
     #curPose, 0 is invalid data
     curPose = np.zeros(19)
-    #leftEar-nose-midShoulder
-    curPose[0] = calcAngle(lines[0],lines[2])
-    #rightEar-nose-midShoulder
-    curPose[1] = calcAngle(lines[1],lines[2])
+    
     #vertical-rightHip-rightAnkle
     curPose[2] = calcAngle(lines[9],lines[11])
     #nose-midShoulder-rightShoulder 
@@ -137,6 +134,10 @@ def processData(keypoints: np.float64, height: int, width: int):
     #vertical(nose)-nose-midShoulder
     curPose[18] = calcAngle(lines[9],lines[3])
 
+    #Avg(shoulder-hip-knee)
+    curPose[0] = (curPose[12]+curPose[13])/2
+    #Avg(hip-knee-ankle)
+    curPose[1] = (curPose[14]+curPose[15])/2
     return curPose
 
 def comparePoses(evalPose: np.float64, curPose: np.float64, angleWeights: np.float64):
