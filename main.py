@@ -1,4 +1,5 @@
 from pathlib import Path
+import threading
 from peekingduck.pipeline.nodes.input import visual
 from peekingduck.pipeline.nodes.model import posenet
 from src.custom_nodes.dabble import correctMain
@@ -22,7 +23,7 @@ def main():
 
     # Add threading=True to arguments in visual.Node constructor to
     # enable threading
-    visual_node = visual.Node(source=0)
+    visual_node = visual.Node(source=0, threading=True)
     posenet_node = posenet.Node(max_pose_detection=1)
     poses_node = poses.Node()
     # screen_node = screen.Node()
