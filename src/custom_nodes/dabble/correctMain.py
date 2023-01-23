@@ -38,7 +38,7 @@ class Node(AbstractNode):
             [0.8334788287216585, 0.8329121004864121, 2.6238186548003744, 1.7955992943832724, 2.7837564294698547, 2.8104897880637982, 1.1570675859069883, 1.7602495274132577, 2.342429783867427, 1.6203743040026384, 2.626934103373849, 1.619022159869291, 
             2.58, 2.58, 2.55, 2.55, 
             1.6289927162507163, 0.04868708794174172, 1.6755387686585748],
-            [0.6058237024724928, 0.8123420743245175, 1.829549427133411, 2.0250307847777487, 1.3227682033775756, 1.7756211818839254, 1.489401843315995, 1.8554985864833229, 1.6837441947257807, 2.0342313248855284, 1.1849714674830139, 1.9566211861067795, 2.6026996590121736, 2.9722683357046935, 2.1003751559196173, 3.0103488009021446, 1.0330164821889676, 1.4256641627881548, 1.690139665954699]])
+            [0.21767780038645262, 0.6919961585571482, 1.6839704162412432, 1.8539293248147957, 0.7079075377200521, 2.538111518193272, 1.8733032890931085, 1.983687965530557, 1.7986515332534698, 1.6412894658311044, 1.8598794860142835, 2.2558652786473097, 2.9200727069178956, 2.82527497539771, 2.6791168732640616, 2.8319761199989966, 0.9351479597160647, 1.5825368441775987, 1.0007917106164417]])
         """
         Array(N,K) containing the correct poses
             N: number of exercises
@@ -48,14 +48,14 @@ class Node(AbstractNode):
         self.angleWeights = np.array([
             [0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,1.,0.,1.,0.,1.,0.],
             [0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,1.,1.,1.,1.,0.,0.,0.],
-            [0.,0.,10.,0.,0.,1.,0.,0.,0.,1.,0.,0.,0.,1,0.,1.,0.,1.,0.]])
+            [0.,0.,5.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,1.,0.,1.,0.,1.,0.]])
         """
         Array(N,K) containing the weights that each angle should have in evaluation
             N: number of exercises
             K: key angles (19)
         """
 
-        self.scoreThresholds = np.array([0.2,0.09,0.1])
+        self.scoreThresholds = np.array([0.2,0.09,0.06])
         """
         Array(N) containing the Score Thresholds.
             N: number of exercises
@@ -65,8 +65,8 @@ class Node(AbstractNode):
 
         self.angleThresholds = np.array([
             [0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.12,0.,0.12,0.,0.12,0],
-            [0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.06,0.06,0.1,0.1,0.,0.,0.],
-            [0.,0.,0.,0.,0.,0.1,0.,0.,0.,0.1,0.,0.,0.,0.1,0.,0.1,0.,0.1,0.]])
+            [0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.06,0.06,0.15,0.15,0.,0.,0.],
+            [0.,0.,0.1,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.18,0.,0.2,0.,0.16,0.]])
         """
         Array(N,K) containing the differences in angle required for feedback to be given
             N: number of exercises
@@ -96,16 +96,18 @@ class Node(AbstractNode):
             ['Knees collapse inwards ','Bending down too much. Feet may be too wide apart. '],
             ['',''],['',''],['','']],
             #Side Push-ups
-            [['',''],['',''],['',''],['',''],['',''],
-            ['Arms not wide enough ','Arms too wide '],
+            [['',''],['',''],
+            ['Legs too parallel with ground','legs not parallel with ground'],
+            ['',''],['',''],
+            ['',''],
             ['',''],['',''],['',''],
-            ['Arms not wide enough ','Arms too wide '],
+            ['',''],
             ['',''],['',''],['',''],
             ['Back too straight ','Back not straight enough '],
             ['',''],
-            ['Knees too straightened ','Knees not straightened enough '],
+            ['Knees too straightened ','Knees too bent '],
             ['',''],
-            ['Back too parllel with ground ','Back not parallel with ground '],
+            ['Back too straightened ','Back sagging '],
             ['','']]]
             )
         """
@@ -405,6 +407,8 @@ class Node(AbstractNode):
         """
         if frameStatus == -1:
             return -1
+        if frameStatus == 2:
+            return 2
         # switching from in key pose to rest pose
         if self.inPose == True:
             # add frame if not invalid
@@ -429,7 +433,7 @@ class Node(AbstractNode):
             if frameStatus == 1:
                 self.switchPoseCount += 1
                 # if 5 pose frames in a row
-                if self.switchPoseCount > 6:
+                if self.switchPoseCount > 5:
                     # transition into key pose
                     self.middleOfRep()
 
