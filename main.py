@@ -1,5 +1,6 @@
 from pathlib import Path
 from peekingduck.pipeline.nodes.model import posenet
+from src.custom_nodes.input import webcam
 from src.custom_nodes.dabble import correctMain
 from src.custom_nodes.dabble import emotion
 from peekingduck.pipeline.nodes.draw import poses
@@ -8,6 +9,8 @@ from peekingduck.runner import Runner
 
 
 def main():
+    # Custom Nodes
+    webcam_node = webcam.Node(pkd_base_dir=Path.cwd() / "src" / "custom_nodes")
     processing_node = correctMain.Node(pkd_base_dir=Path.cwd() / "src" / "custom_nodes")
     emotion_node = emotion.Node(pkd_base_dir=Path.cwd() / "src" / "custom_nodes")
     
@@ -28,6 +31,7 @@ def main():
 
     runner = Runner(
         nodes=[
+            webcam_node,
             posenet_node,
             processing_node,
             emotion_node,
