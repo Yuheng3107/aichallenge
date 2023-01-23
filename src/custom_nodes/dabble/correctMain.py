@@ -494,5 +494,6 @@ class Node(AbstractNode):
             # print(f"test: {curPose[10]}")
             ## print(f"angleDifferences: {angleDifferences}")   
             ## print(self.selectedFrameCount)
+            # print(f"shape:{globals.img.shape}")
         
         return {}
