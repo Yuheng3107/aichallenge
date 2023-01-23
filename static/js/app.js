@@ -57,6 +57,7 @@ startButton.addEventListener('click', (e) => {
     if (!started) {
         // runs python script that starts Peekingduck if PeekingDuck is not already running
         socket.emit('start');
+        console.log("PeekingDuck running");
 
         startButton.style.display = "none";
         started = true; 

@@ -1,11 +1,10 @@
-import numpy as np
 import cv2
 import json
 from flask import Flask, render_template, Response, request
 from flask_socketio import SocketIO, emit
 import globals
 from main import main
-import requests
+
 
 app = Flask(__name__)
 socketio = SocketIO(app)
@@ -28,7 +27,7 @@ def index():
     globals.initialise()
     return render_template('./index.html')
 
-@socketio.on('/start')
+@socketio.on('start')
 def start():
     """When start button is clicked, WebSocket event is triggered
     which starts the main programme"""
@@ -81,17 +80,16 @@ def change_difficulty(difficulty):
 
 @socketio.on('video')
 def handle_video(data):
+    
     url = data['url']
     cap = cv2.VideoCapture(url)
-    while True:
-        ret, frame = cap.read()
-        if not ret:
-            break
-        else:
-            globals.img = frame
-    #img_arr = np.array(bytearray(img_resp.content), dtype=np.uint8)
-    #img = cv2.imdecode(img_arr, cv2.IMREAD_COLOR)
-
+    ret, frame = cap.read()
+    if ret:
+        globals.img = frame
+    else:
+        print("No frame")
+    
+    
 
 
 if __name__ == '__main__':
