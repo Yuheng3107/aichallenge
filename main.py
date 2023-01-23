@@ -1,5 +1,4 @@
 from pathlib import Path
-from peekingduck.pipeline.nodes.input import visual
 from peekingduck.pipeline.nodes.model import posenet
 from src.custom_nodes.dabble import correctMain
 from src.custom_nodes.dabble import emotion
@@ -22,7 +21,6 @@ def main():
 
     # Add threading=True to arguments in visual.Node constructor to
     # enable threading
-    # visual_node = visual.Node(source=0)
     posenet_node = posenet.Node(max_pose_detection=1)
     poses_node = poses.Node()
     # screen_node = screen.Node()
@@ -30,7 +28,6 @@ def main():
 
     runner = Runner(
         nodes=[
-            # visual_node,
             posenet_node,
             processing_node,
             emotion_node,
