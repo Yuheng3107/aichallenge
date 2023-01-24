@@ -6,7 +6,6 @@ function getFeedback() {
 function getVideoFrames() {
     canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
     let dataURL = canvas.toDataURL('image/jpeg');
-    console.log(dataURL);
     socket.emit('video', {'url': dataURL});
 }
 const startButton = document.querySelector('.start-button');
@@ -24,6 +23,8 @@ const stressFeedback = document.querySelector('#stress-feedback');
 const difficultyButton = document.querySelector('#difficulty');
 const video = document.querySelector("#video");
 const canvas = document.querySelector("#canvas");
+const msPerFrame = (1000/30);
+// to get 30fps video
 
 let synth;
 let textToSpeech = false;
@@ -70,7 +71,7 @@ startButton.addEventListener('click', (e) => {
 
             navigator.mediaDevices.getUserMedia({ video: true}).then(function(stream) {
                 video.srcObject = stream;
-                setInterval(getVideoFrames, 25);
+                setInterval(getVideoFrames, 50);
             }).catch(function(err) {
                 console.log("An error occurred: " + err);
             });
@@ -78,7 +79,7 @@ startButton.addEventListener('click', (e) => {
         
 
         // updates feedback every second
-        setInterval(getFeedback, 50);
+        setInterval(getFeedback, msPerFrame);
     }
 });
 endButton.addEventListener('click', () => {

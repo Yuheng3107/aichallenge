@@ -36,8 +36,10 @@ class Node(AbstractNode):
         if globals.url is not None:
             # Gets a VideoThread
             cap = VideoNoThread(globals.url, False)
-            if cap:
+            while True:
                 success, img = cap.read_frame()
+                if not success:
+                    break
                 if success:
                     globals.img = img
             
