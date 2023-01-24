@@ -78,17 +78,7 @@ def change_difficulty(difficulty):
     for backend to receive when user changes difficulty
      in front end"""
     globals.difficulty = difficulty
-
-
-@socketio.on('video')
-def handle_video(data):
-    video = cv2.VideoCapture(data['buffer'])
-    while True:
-        ret, frame = video.read()
-        print(ret)
-        if not ret:
-            break
-        # process the frame using OpenCV
+    print(globals.difficulty)
 
 
 if __name__ == '__main__':
