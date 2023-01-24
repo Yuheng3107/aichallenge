@@ -5,7 +5,7 @@ function getFeedback() {
 
 const startButton = document.querySelector('.start-button');
 const endButton = document.querySelector('.end-button');
-const repInfo = document.querySelector('rep-info-group');
+const repInfo = document.querySelector('#rep-info-group');
 const repCount = document.querySelector('#rep-count');
 const repFeedback = document.querySelector("#rep-feedback");
 const feedback = document.querySelector('#feedback');
@@ -16,6 +16,7 @@ const summary = document.querySelector('#summary');
 const textToSpeechButton = document.querySelector('.text-to-speech');
 const stressFeedback = document.querySelector('#stress-feedback');
 const difficultyButton = document.querySelector('#difficulty');
+const camPosition = document.querySelector("#cam-position");
 
 let synth;
 let textToSpeech = false;
@@ -34,8 +35,8 @@ let started = false;
 let socket = io();
 
 document.addEventListener('DOMContentLoaded', (event) => {
-
-    // is this even
+    //hide the repcount and repfeedback on page load since there's no content
+    
     if (!repCount.textContent) {
         repCount.style.display = 'none';
     }
@@ -45,29 +46,71 @@ document.addEventListener('DOMContentLoaded', (event) => {
 })
 
 startButton.addEventListener('click', (e) => {
+    console.log('start button clicked');
     // runs python script that starts Peekingduck
     if (!started) {
         fetch(startButton.getAttribute('data-url'));
         startButton.style.display = "none";
         started = true;
-
+        
         // updates feedback every second
         setInterval(getFeedback, 200);
     }
 });
 endButton.addEventListener('click', () => {
     socket.emit('endExercise');
+    summary.classList.add("w-50", "fs-4", "card", "p-3", "mt-3");
+    repInfo.style.display='none';
+    console.log('end button clicked');
 });
+
+const alert = (message, type) => {
+    const wrapper = document.createElement('div')
+    wrapper.innerHTML = [
+      `<div class="alert alert-${type} alert-dismissible mt-3" role="alert">`,
+      `   <div>${message}</div>`,
+      '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+      '</div>'
+    ].join('')
+  
+    camPosition.append(wrapper)
+  }
 
 form.addEventListener('submit', (e) => {
     // prevents default form submission 
     e.preventDefault();
     let exerciseId = form.elements["exerciseId"].value;
+    console.log(typeof exerciseId);
     // calls python function to update exercise id
     socket.emit('changeExercise', exerciseId);
     // Make repCount and repFeedback visible
+
     repCount.style.display = 'flex';
     repFeedback.style.display = 'flex';
+    
+    summary.classList.remove("w-50", "fs-4", "card", "p-3", "mt-3");
+    repInfo.style.display='flex';
+    // Display camera position requirement as alert box
+    // 0:Squat (Side)
+    // 1:Squat (Front)
+    // 2:Push-Up (Side)
+    // 3:Push-Up (Front)
+    let camPosReq = {};
+    switch (exerciseId) {
+        case '0':
+            camPosReq = {exercise: "Squat (Side)", position:"table"};
+            break;
+        case '1':
+            camPosReq = {exercise: "Squat (Front)", position:"table"};
+            break;
+        case '2':
+            camPosReq = {exercise: "Push-Up (Side)", position:"ground"};
+            break;
+        case '3':
+            camPosReq = {exercise: "Push-Up (Front)", position:"ground"};
+            break;
+    }
+    alert(`Please place camera at ${camPosReq.exercise} height for ${camPosReq.position}`, 'warning');
 });
 
 // Listens for feedback event from server which updates
@@ -126,11 +169,11 @@ textToSpeechButton.addEventListener('click', () => {
 difficultyButton.addEventListener('click', () => {
     console.log('Test');
     if (difficultyButton.classList.contains('btn-danger')) {
-        difficultyButton.innerText = 'Beginner';
+        difficultyButton.innerText = 'Beginner Mode';
         socket.emit('changeDifficulty', 'Beginner');
     }
     else {
-        difficultyButton.innerText = 'Expert';
+        difficultyButton.innerText = 'Expert Mode';
         socket.emit('changeDifficulty', 'Expert');
     }
     difficultyButton.classList.toggle('btn-danger');
