@@ -17,6 +17,7 @@ def initialise():
     """True when button to select exercise is pressed"""
     global exerciseEnded
     """True when button to end exercise is pressed"""
+    
     global emotionsFreq
     """np array of (7,) that contains frequency of each
     possible emotion"""

@@ -1,26 +1,14 @@
 """
-Node template for creating custom nodes.
+TO BE DELETED
 """
 
 from typing import Any, Dict
+import numpy as np
 import globals
 from deepface import DeepFace
 from peekingduck.pipeline.nodes.abstract_node import AbstractNode
 import threading
-
-def detect_emotion():
-    # Gets dominant emotion
-    dominant_emotion = DeepFace.analyze(globals.img, actions= ['emotion'], enforce_detection=False)['dominant_emotion']
-    globals.emotionsFreq[globals.emotions[dominant_emotion]] = globals.emotionsFreq[globals.emotions[dominant_emotion]] + 1
     
-
-def stress_detection():  
-    if ((globals.emotionsFreq[2] + globals.emotionsFreq[4]) / globals.emotionsFreq.sum() > 0.5):
-        globals.stressFeedback = "Shag bro, here's some yoga and breathing exercises"
-        # If more than half the emotions are sadness and fear
-        # Determine that person doing exercise is stressed
-
-
 
 class Node(AbstractNode):
     """This is a template class of how to write a node for PeekingDuck.
@@ -30,11 +18,37 @@ class Node(AbstractNode):
     """
 
     def __init__(self, config: Dict[str, Any] = None, **kwargs: Any) -> None:
-        super().__init__(config, node_path=__name__, **kwargs)
-        self.frameCount = 0
         # initialize/load any configs and models here
         # configs can be called by self.<config_name> e.g. self.filepath
         # self.logger.info(f"model loaded with configs: config")
+
+        super().__init__(config, node_path=__name__, **kwargs)
+        self.frameCount = 0
+        """
+        Number of frames that have passed. Emotions are detected every 10 frames.
+        """
+        self.selectedFrames = np.zeros((100,7))
+        """
+        Array(X,K) containing the store of frames to be evaluated
+            X: Number of frames (selectedFrameCount)
+            K: emotions (7)
+        """
+        #angry, disgust, fear, happy, sad, surprise, neutral
+        self.selectedFrameCount = 0
+        """
+        Number of frames in selectedFrames 
+        """
+
+    def detect_emotion(self,):
+        # Gets dominant emotion
+        try:
+            emotions = DeepFace.analyze(globals.img, actions= ['emotion'], enforce_detection=True)['emotion']
+            print(emotions)
+            self.selectedFrames[self.selectedFrameCount] = list(emotions.values())
+            self.selectedFrameCount += 1
+            
+        except:
+            print("No Face")
 
     def run(self, inputs: Dict[str, Any]) -> Dict[str, Any]:  # type: ignore
         """This node takes img data and processes it to detect emotions
@@ -50,7 +64,7 @@ class Node(AbstractNode):
         
         self.frameCount += 1
         if self.frameCount == 10:
-            thread = threading.Thread(target=detect_emotion, name='thread', daemon=True)
+            thread = threading.Thread(target=self.detect_emotion, name='thread', daemon=True)
             self.frameCount = 0
             thread.start()
 

@@ -7,7 +7,9 @@ import time
 import numpy as np
 from peekingduck.pipeline.nodes.abstract_node import AbstractNode
 from .helper import processData, comparePoses
+from deepface import DeepFace
 import globals
+import threading
 
 class Node(AbstractNode):
     """This is a template class of how to write a node for PeekingDuck.
@@ -114,7 +116,7 @@ class Node(AbstractNode):
         Called when a rep is finished.
         Resets the stored angle data for that rep.
         """
-        #frame stuff
+    ### EXERCISE VARIABLES
         self.selectedFrames = np.zeros((200,19))
         """
         Array(X,K) containing the store of frames to be evaluated
@@ -122,6 +124,24 @@ class Node(AbstractNode):
             K: key angles (19)
         """
         self.selectedFrameCount = 0
+        """
+        Number of frames in selectedFrames 
+        """
+    ### EMOTION VARIABLES
+        self.frameCount = 0
+        """
+        Frame Count for Emotions
+        """
+
+        self.selectedEmotionFrames = np.zeros((100,7))
+        """
+        Array(X,K) containing the store of frames to be evaluated
+            X: Number of frames (selectedFrameCount)
+            K: emotions (7)
+        """
+
+        #angry, disgust, fear, happy, sad, surprise, neutral
+        self.selectedEmotionFrameCount = 0
         """
         Number of frames in selectedFrames 
         """
@@ -166,8 +186,6 @@ class Node(AbstractNode):
         Count of frames where user is not fully visible and key angles are missing
         """
         globals.repCount = 0
-
-
 
 ### EXERCISE METHODS
 ### These methods are called once per exercise.
@@ -243,15 +261,19 @@ class Node(AbstractNode):
             deletes all frame data of previous rep.
         """
         globals.repCount += 1
-        # timer
         repTime = time.time() - self.repStartTime
+        """timer"""
+
         timeDifference = self.compareTime(self.evalRepTime[globals.currentExercise],repTime)
-        # angles
         angleDifferences = self.compareAngles(self.evalPoses[globals.currentExercise], self.angleThresholds[globals.currentExercise])
-        # repFeedback is an array that contains the feedback for each rep
+
         globals.repFeedback.append(self.giveFeedback(angleDifferences, timeDifference))
-        # reset frames
+        """array that contains the feedback for each rep"""
+
+        print(self.evaluateEmotions)
+
         self.resetFrames()
+
         # change pose state
         self.inPose = False
         self.switchPoseCount = 0
@@ -361,6 +383,16 @@ class Node(AbstractNode):
             feedback += "Perfect!"
         return feedback
 
+    def evaluateEmotions(self):
+        # check for 0 frames
+        if self.selectedEmotionFrameCount == 0:
+            return np.array([-99])
+        # remove empty data
+        filledselectedFrames = self.selectedEmotionFrames[0:self.selectedEmotionFrameCount]
+        # positive is too large, negative is too small 
+        emotionAverage = np.average(filledselectedFrames, axis=0)
+        return emotionAverage
+
 ### FRAME METHODS
 ### These methods are called every frame
 
@@ -433,6 +465,22 @@ class Node(AbstractNode):
                 self.switchPoseCount = 0
         return None
 
+### EMOTIONS METHODS
+### These methods are for emotion detection
+
+    def detectEmotion(self):
+        # Gets dominant emotion
+        try:
+            emotions = DeepFace.analyze(globals.img, actions= ['emotion'], enforce_detection=True)['emotion']
+            print(emotions)
+            self.selectedEmotionFrames[self.selectedEmotionFrameCount] = list(emotions.values())
+            self.selectedEmotionFrameCount += 1
+            
+        except:
+            print("No Face")
+
+### RUN
+
     def run(self, inputs: Dict[str, Any]) -> Dict[str, Any]:  # type: ignore
         """
         This node evaluates the similarity between the current pose (curPose)
@@ -449,7 +497,7 @@ class Node(AbstractNode):
         """
 
 
-        """UI METHODS"""
+        ### UI METHODS
         if globals.exerciseSelected:
             self.changeExercise()
             globals.exerciseSelected = False
@@ -458,7 +506,7 @@ class Node(AbstractNode):
             self.endExercise()
             globals.exerciseEnded = False
 
-        """COMPUTATIONAL METHODS"""
+        ### COMPUTATIONAL METHODS
         if globals.runSwitch:
             globals.img = inputs["img"]
             # Keypoints has a shape of (1, 17, 2)
@@ -468,7 +516,7 @@ class Node(AbstractNode):
             curPose = processData(keypoints, globals.img.shape[0], globals.img.shape[1])
             score = comparePoses(self.evalPoses[globals.currentExercise],curPose, self.angleWeights[globals.currentExercise]) 
             
-            """FRAME STATUS"""
+            # FRAME STATUS
             frameStatus = self.shouldSelectFrames(score, self.scoreThresholds[globals.currentExercise])
 
 
@@ -488,7 +536,14 @@ class Node(AbstractNode):
                 self.invalidFrameCount = 0
                 self.checkPose(curPose,frameStatus)
             
-          
+        ### EMOTION METHODS
+            self.frameCount += 1
+            if self.frameCount == 10:
+                thread = threading.Thread(target=self.detectEmotion, name='thread', daemon=True)
+                self.frameCount = 0
+                thread.start()
+
+
             """DEBUG"""
             # print(f"curPose: {', '.join(str(angle) for angle in curPose)}")
             # print(f"score: {score}")
