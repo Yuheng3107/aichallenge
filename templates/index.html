@@ -22,10 +22,10 @@
             <a class="navbar-brand" href="#">AI Challenge 2023</a>
 
             <div>
-            <button id="difficulty" class="btn btn-danger mt-2">Expert</button>
-            <button class="text-to-speech btn btn-danger mt-2">Turn Off Text-To-Speech</button>
+                <button id="difficulty" class="btn btn-danger mt-2">Expert Mode</button>
+                <button class="text-to-speech btn btn-danger mt-2">Turn Off Text-To-Speech</button>
             </div>
-            
+
 
         </div>
     </nav>
@@ -35,7 +35,7 @@
             <span id="rep-count"></span>
             <p id="rep-feedback"></p>
         </div>
-        <p id="summary"></p>
+        <p id="summary" class="text-center"></p>
         <p id="stress-feedback"></p>
         <button id="show-log-button"><span>Show Feedback Log</span><img
                 src="{{url_for('static', filename='svg/expand-icon.svg')}}" alt="expand icon" /></button>
@@ -50,10 +50,13 @@
             </select>
             <input class="ms-2 btn btn-outline-info d-inline" type="submit" value="Start Exercise">
         </form>
+        <div id="cam-position"></div>
         <button class="end-button btn btn-secondary mt-3">End Exercise</button>
     </main>
 
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+        crossorigin="anonymous"></script>
 </body>
 
 </html>
