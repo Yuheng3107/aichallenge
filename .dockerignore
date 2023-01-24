@@ -4,3 +4,7 @@ Training_Data/
 .npy
 .git
 .gitignore
+.ipynb_checkpoints
+__pycache__/
+.pyc
+/root/.deepface

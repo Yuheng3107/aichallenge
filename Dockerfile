@@ -18,7 +18,7 @@ COPY . /aichallenge/
 
 VOLUME ["/aichallenge/"]
 
-CMD gunicorn -w 2 --threads 100 --certfile cert.pem --keyfile key.pem app:app
+CMD gunicorn -w 1 --threads 100 --certfile cert.pem --keyfile key.pem app:app
 
 
 

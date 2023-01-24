@@ -1,12 +1,29 @@
 """
-Node template for creating custom nodes.
+correctMain.py
+    - Rep Counting
+    - Detect & Give Feedback for:
+        - Key Poses
+        - Rep Time
+        - Emotions
+helper.py
+    - Calculating Key Angles
+    - Comparing: 
+        - Key Poses
+        - Rep Time
+        - Emotions
 """
 
 from typing import Any, Dict, List
 import time
+
 import numpy as np
+
 from peekingduck.pipeline.nodes.abstract_node import AbstractNode
-from .helper import processData, comparePoses
+from deepface import DeepFace
+
+import threading
+
+from .helper import processData, comparePoses, compareAngles, compareTime, compareEmotions
 import globals
 
 class Node(AbstractNode):
@@ -35,7 +52,7 @@ class Node(AbstractNode):
         # TO BE IMPORTED FROM NUMPY ARRAYS
         self.evalPoses = np.array([
             [1.5101271591974472, 1.4980141223917764, 2.9744070804606664, 0.6972723789351448, 0.4837195830264868, 2.2550842191658105, 0.4871277398325121, 0.48601296839902186, 0.9368117346906317, 1.5589928996090603, 2.1477453057967852, 1.7910356640090987, 1.336984596535936, 1.6832697218589587, 1.383993753712914, 1.6120344910706403, 1.9967021465554933, 0.4398586657270065, 1.6390865609852177],
-            [2.5,2.4, 2.883816780362668, 1.8643469259111198, 2.997754635400291, 2.855449311474785, 1.1334077094891724, 1.578203583796112, 0.7839790321590494, 0.7821727442271517, 2.3850600370725807, 1.5656631300702746, 
+            [2.374580135824015, 2.263713950425495, 2.883816780362668, 1.8643469259111198, 2.997754635400291, 2.855449311474785, 1.1334077094891724, 1.578203583796112, 0.7839790321590494, 0.7821727442271517, 2.3850600370725807, 1.5656631300702746, 
             2.327, 2.327, 2.3, 2.3, 
             1.5596841017654897, 0.056053968019371674, 1.6157380697848598],
             [0.21767780038645262, 0.6919961585571482, 1.6839704162412432, 1.8539293248147957, 0.7079075377200521, 2.538111518193272, 1.8733032890931085, 1.983687965530557, 1.7986515332534698, 1.6412894658311044, 1.8598794860142835, 2.2558652786473097, 2.9200727069178956, 2.82527497539771, 2.6791168732640616, 2.8319761199989966, 0.9351479597160647, 1.5825368441775987, 1.0007917106164417]])
@@ -65,7 +82,7 @@ class Node(AbstractNode):
 
         self.angleThresholds = np.array([
             [0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.14,0.,0.,0.,0.13,0],
-            [0.12,0.15,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.],
+            [0.25,0.2,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.],
             [0.,0.,0.1,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.18,0.,0.2,0.,0.16,0.]])
         """
         Array(N,K) containing the differences in angle required for feedback to be given
@@ -79,8 +96,14 @@ class Node(AbstractNode):
             N: number of exercises
         """
 
+        self.emotionThresholds = np.array([30,30,50,50])
+        """
+        Arary(4) containing the thresholds for the various emotions
+            Angry, Neutral, Sad, Disgust
+        """
+
         self.glossary = np.array(
-            #Side Sqats
+            #Side Squats
             [[['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],
             ['Butt not low enough ','Butt too low '],
             ['',''],['',''],['',''],
@@ -114,16 +137,33 @@ class Node(AbstractNode):
         Called when a rep is finished.
         Resets the stored angle data for that rep.
         """
-        #frame stuff
+    ### EXERCISE VARIABLES
         self.selectedFrames = np.zeros((200,19))
         """
         Array(X,K) containing the store of frames to be evaluated
-            X: Number of frames (selectedFrameCount)
+            X: Maximum number of frames the buffer stores (maximum selectedFrameCount size)
             K: key angles (19)
         """
         self.selectedFrameCount = 0
         """
-        Number of frames in selectedFrames 
+        X - Number of frames in selectedFrames 
+        """
+    ### EMOTION VARIABLES
+        self.frameCount = 0
+        """
+        Frame Count for Emotions
+        """
+
+        self.selectedEmotionFrames = np.zeros((100,7))
+        """
+        Array(X,K) containing the store of frames to be evaluated
+            X: Maximum number of frames buffer stores (maximum selectedEmotionFrameCount size)
+            K: No. of emotions (7 possible emotions), angry, disgust, fear, happy, sad, surprise, neutral
+        """
+
+        self.selectedEmotionFrameCount = 0
+        """
+        X - Number of frames in selectedEmotionFrames 
         """
 
     def resetAll(self):
@@ -136,7 +176,7 @@ class Node(AbstractNode):
         # reset angle-related variables
         self.smallErrorCount = np.zeros(19)
         """
-        Array(K) containing the count of reps where angle K is too small
+        Array(K) contains the count of reps where angle K is too small
             K: key angles (19)
         """
 
@@ -166,8 +206,6 @@ class Node(AbstractNode):
         Count of frames where user is not fully visible and key angles are missing
         """
         globals.repCount = 0
-
-
 
 ### EXERCISE METHODS
 ### These methods are called once per exercise.
@@ -209,8 +247,8 @@ class Node(AbstractNode):
         Called when the exercise is finished.
         Used to convert the rep feedback into a feedback summary for the user.
             Args:
-                smallErrorCount (ndarray(19,dtype=int)): number of times angle was too small
-                largeErrorCount (ndarray(19,dtype=int)): number of times angle was too large
+                smallErrorCount (Array(19)[int]): number of times angle was too small
+                largeErrorCount (Array(19)[int]): number of times angle was too large
                 perfectReps (int): number of perfect reps (no errors)
                     
             Returns:
@@ -243,15 +281,23 @@ class Node(AbstractNode):
             deletes all frame data of previous rep.
         """
         globals.repCount += 1
-        # timer
         repTime = time.time() - self.repStartTime
-        timeDifference = self.compareTime(self.evalRepTime[globals.currentExercise],repTime)
-        # angles
-        angleDifferences = self.compareAngles(self.evalPoses[globals.currentExercise], self.angleThresholds[globals.currentExercise])
-        # repFeedback is an array that contains the feedback for each rep
+
+        ### Rep feedback
+        timeDifference = compareTime(self.evalRepTime[globals.currentExercise],repTime)
+        angleDifferences = compareAngles(self.evalPoses[globals.currentExercise], self.angleThresholds[globals.currentExercise],self.selectedFrames,self.selectedFrameCount)
+
         globals.repFeedback.append(self.giveFeedback(angleDifferences, timeDifference))
-        # reset frames
+        """array that contains the feedback for each rep"""
+
+        ### Emotion feedback
+        emotionAverage = compareEmotions(self.selectedEmotionFrames,self.selectedEmotionFrameCount)
+        emotionFeedback = self.emotionFeedback(emotionAverage,self.emotionThresholds)
+        if emotionFeedback != "":
+            globals.stressFeedback = emotionFeedback
+        print(f"Emotions: {emotionAverage}")
         self.resetFrames()
+
         # change pose state
         self.inPose = False
         self.switchPoseCount = 0
@@ -268,72 +314,27 @@ class Node(AbstractNode):
         # change pose state
         self.inPose = True
         self.switchPoseCount = 0
-        return None
-
-    def compareAngles(self, evalPose: np.ndarray, angleThresholds: np.ndarray):
-        """
-        Called when a rep is finished.
-        Used to compare between ideal and observed angles in user's pose
-            Args:
-                evalPose (ndarray(19,dtype=float)): the ideal pose to be compared against.
-                curPose (ndarray(19,dtype=float)): the current pose detected by the camera.
-                angleThresholds (ndarray(19,dtype=float)): the threshold of angle differences
-
-            Returns:
-                angleDifferences (ndarray(19,dtype=float)): angle differences, positive is too large, negative is too small, 0 is no significant difference    
-        """
-        angleDifferences = np.zeros(evalPose.shape) 
-        # check for 0 frames
-        if self.selectedFrameCount == 0:
-            return np.array([-99])
-        # remove empty data
-        filledselectedFrames = self.selectedFrames[0:self.selectedFrameCount]
-        # positive is too large, negative is too small 
-        differences = np.average(filledselectedFrames, axis=0) - evalPose
-
-        """
-        CREATING NEW EXERCISES
-        """
-        x = np.average(filledselectedFrames,axis=0)
-        print(f"curPose: {', '.join(str(angle) for angle in x)}")
-        print(differences)
-        # print(f"test: {x[10]}")
-
-        for i, x in enumerate(differences):
-            if angleThresholds[i] == 0.:
-                continue
-            # if difference is significant enough
-            if abs(x) > angleThresholds[i]:
-                angleDifferences[i] = differences[i]
-        return angleDifferences
-    
-    def compareTime(self, evalTime:np.float64, repTime:np.float64):
-        """
-        Called when a rep is finished
-        Evaluates if rep time is too short
-        """
-        if repTime < evalTime:
-            # rep time is too short
-            return 1
-        return 0
+        return None 
 
     def giveFeedback(self, angleDifferences: np.ndarray, timeDifference:bool):
         """
         Called when a rep is finished.
-        Used to convert angle data into text feedback to feed to front-end
+        Used to process angle data into text feedback to feed to front-end
             Args:
-                angleDifferences (ndarray(19,dtype=float)): angle differences, positive is too large, negative is too small, 0 is no significant difference
+                angleDifferences (Array(19)[float]): angle differences, positive is too large, negative is too small, 0 is no significant difference
                 timeDifference (bool): time difference, 1 is too short, 0 is no errors
                     
             Returns:
                 feedback (string): errors made in rep
         """
-        #check for error in compareAngles
         feedback = f"Rep {globals.repCount}: "
+
+        #check for no frames
         if angleDifferences[0] == -99:
             feedback += "No Frames Detected"
             return feedback
         angleDifferences /= np.pi
+
         # hasError tracks if there is any feedback
         hasError = False
         for i, difference in enumerate(angleDifferences):
@@ -360,6 +361,53 @@ class Node(AbstractNode):
             self.perfectReps += 1
             feedback += "Perfect!"
         return feedback
+
+    def emotionFeedback(self,emotionAverage:np.ndarray,emotionThreshold:np.ndarray):
+        """
+        Called when a rep is finished.
+        Used to process emotion data into text feedback to feed to front-end
+            Args:
+                emotionAverage (Array(7)[float]): emotion confidence, 100 is maximum confidence, 0 is no confidence
+                emotionThreshold (float): threshold beyond which emotions are considered significant
+                    
+            Returns:
+                feedback (string): emotions displayed in rep & related feedback
+        """
+        # check for no Face
+        if emotionAverage[0] == -99:
+            feedback = "No Face Detected"
+            return feedback
+        
+        feedback = ""
+
+    ### angry, disgust, fear, happy, sad, surprise, neutral
+
+        # if fearful/sad for some reason, idek
+        if emotionAverage[2] + emotionAverage[4] > emotionThreshold[2]:
+            feedback += "Stress detected. "
+        
+        # if disgust, ???
+        if emotionAverage[1] > emotionThreshold[3]:
+            pass
+
+        # if angry/happy, exercise is rigorous (grimace is identified by programme as happy)
+        if emotionAverage[0] + emotionAverage[3] > emotionThreshold[0]:
+            feedback += "Fatigue detected. "
+
+            if globals.difficulty == "Beginner":
+                feedback += "Consider resting to prevent injury. "
+            if globals.difficulty == "Expert":
+                feedback += "Continue to train to failure for maximum results. "
+        
+        if feedback != "":
+            return feedback
+
+        # if neutral, recommend continue
+        if emotionAverage[6] > emotionThreshold[1]:
+            feedback = "No Fatigue detected. Continue training. "
+
+        return feedback
+
 
 ### FRAME METHODS
 ### These methods are called every frame
@@ -393,7 +441,7 @@ class Node(AbstractNode):
         Called every frame while rep detection is active.
         Used to change between user being in a key pose and rest pose. If user is in key pose, add valid frames to selectedFrames.
             Args:
-                curPose (ndarray(19,dtype=float)): the current pose detected by the camera.
+                curPose (Array(19)[float]): the current pose detected by the camera.
                 frameStatus (int):  
         """
         if frameStatus == -1:
@@ -433,6 +481,21 @@ class Node(AbstractNode):
                 self.switchPoseCount = 0
         return None
 
+### EMOTIONS METHODS
+### These methods are for emotion detection
+
+    def detectEmotion(self):
+        # Gets dominant emotion
+        try:
+            emotions = DeepFace.analyze(globals.img, actions= ['emotion'], enforce_detection=True)['emotion']
+            self.selectedEmotionFrames[self.selectedEmotionFrameCount] = list(emotions.values())
+            self.selectedEmotionFrameCount += 1
+            
+        except:
+            pass
+
+### RUN
+
     def run(self, inputs: Dict[str, Any]) -> Dict[str, Any]:  # type: ignore
         """
         This node evaluates the similarity between the current pose (curPose)
@@ -440,6 +503,8 @@ class Node(AbstractNode):
 
         If it selects the frame, it will then compare the current pose to ideal pose, 
         then store the angleDifferences to be processed when the rep is completed.
+
+        It also evaluates the emotions of the user to determine level of workout.
 
         Args:
             inputs (dict): Dictionary with keys "img", "keypoints".
@@ -449,7 +514,7 @@ class Node(AbstractNode):
         """
 
 
-        """UI METHODS"""
+        ### UI METHODS
         if globals.exerciseSelected:
             self.changeExercise()
             globals.exerciseSelected = False
@@ -458,17 +523,17 @@ class Node(AbstractNode):
             self.endExercise()
             globals.exerciseEnded = False
 
-        """COMPUTATIONAL METHODS"""
+        ### COMPUTATIONAL METHODS
         if globals.runSwitch:
-            # Image data will be passed directly to globals.img in app.py
+            globals.img = inputs["img"]
             # Keypoints has a shape of (1, 17, 2)
             keypoints = inputs["keypoints"]
-            globals.img = inputs["img"]
+            
             # Calculates angles in radians of live feed
             curPose = processData(keypoints, globals.img.shape[0], globals.img.shape[1])
             score = comparePoses(self.evalPoses[globals.currentExercise],curPose, self.angleWeights[globals.currentExercise]) 
             
-            """FRAME STATUS"""
+            # FRAME STATUS
             frameStatus = self.shouldSelectFrames(score, self.scoreThresholds[globals.currentExercise])
 
 
@@ -488,10 +553,17 @@ class Node(AbstractNode):
                 self.invalidFrameCount = 0
                 self.checkPose(curPose,frameStatus)
             
-          
+        ### EMOTION METHODS
+            self.frameCount += 1
+            if self.frameCount == 5:
+                thread = threading.Thread(target=self.detectEmotion, name='thread', daemon=True)
+                self.frameCount = 0
+                thread.start()
+
+
             """DEBUG"""
             # print(f"curPose: {', '.join(str(angle) for angle in curPose)}")
-            # print(f"score: {score}")
+            print(f"score: {score}")
             # print(f"test: {curPose[10]}")
             ## print(f"angleDifferences: {angleDifferences}")   
             ## print(self.selectedFrameCount)
