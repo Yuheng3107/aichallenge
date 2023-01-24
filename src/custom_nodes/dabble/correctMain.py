@@ -103,7 +103,7 @@ class Node(AbstractNode):
         """
 
         self.glossary = np.array(
-            #Side Sqats
+            #Side Squats
             [[['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],
             ['Butt not low enough ','Butt too low '],
             ['',''],['',''],['',''],
@@ -141,25 +141,30 @@ class Node(AbstractNode):
         self.selectedFrames = np.zeros((200,19))
         """
         Array(X,K) containing the store of frames to be evaluated
-            X: Number of frames (selectedFrameCount)
+            X: Maximum number of frames the buffer stores (maximum selectedFrameCount size)
             K: key angles (19)
         """
         self.selectedFrameCount = 0
-        """X - Number of frames in selectedFrames"""
+        """
+        X - Number of frames in selectedFrames 
+        """
     ### EMOTION VARIABLES
         self.frameCount = 0
-        """Frame Count for Emotions"""
+        """
+        Frame Count for Emotions
+        """
 
         self.selectedEmotionFrames = np.zeros((100,7))
         """
         Array(X,K) containing the store of frames to be evaluated
-            X: Number of frames (selectedEmotionFrameCount)
-            K: emotions (7)
+            X: Maximum number of frames buffer stores (maximum selectedEmotionFrameCount size)
+            K: No. of emotions (7 possible emotions), angry, disgust, fear, happy, sad, surprise, neutral
         """
 
-        #angry, disgust, fear, happy, sad, surprise, neutral
         self.selectedEmotionFrameCount = 0
-        """X - Number of frames in selectedEmotionFrames"""
+        """
+        X - Number of frames in selectedEmotionFrames 
+        """
 
     def resetAll(self):
         """
@@ -171,7 +176,7 @@ class Node(AbstractNode):
         # reset angle-related variables
         self.smallErrorCount = np.zeros(19)
         """
-        Array(K) containing the count of reps where angle K is too small
+        Array(K) contains the count of reps where angle K is too small
             K: key angles (19)
         """
 
@@ -182,16 +187,24 @@ class Node(AbstractNode):
         """
 
         self.repTimeError = 0
-        """Count of reps where rep time is too short"""
+        """
+        Count of reps where rep time is too short
+        """
 
         self.repStartTime = 0
-        """Timer to keep track of when the current rep started"""
+        """
+        Timer to keep track of when the current rep started
+        """
 
         self.perfectReps = 0
-        """Count of perfect reps"""
+        """
+        Count of perfect reps
+        """
  
         self.invalidFrameCount = 0
-        """Count of frames where user is not fully visible and key angles are missing"""
+        """
+        Count of frames where user is not fully visible and key angles are missing
+        """
         globals.repCount = 0
 
 ### EXERCISE METHODS
@@ -360,14 +373,15 @@ class Node(AbstractNode):
             Returns:
                 feedback (string): emotions displayed in rep & related feedback
         """
-        # check for no frames
+        # check for no Face
         if emotionAverage[0] == -99:
-            feedback = "No Frames Detected"
+            feedback = "No Face Detected"
             return feedback
-
+        
         feedback = ""
 
     ### angry, disgust, fear, happy, sad, surprise, neutral
+
         # if fearful/sad for some reason, idek
         if emotionAverage[2] + emotionAverage[4] > emotionThreshold[2]:
             feedback += "Stress detected. Y u stress. "
@@ -383,7 +397,7 @@ class Node(AbstractNode):
             if globals.difficulty == "Beginner":
                 feedback += "Consider resting to prevent injury. "
             if globals.difficulty == "Expert":
-                feedback += "Continue to train to failure for maximum results. "
+                feedback += "Continue to train to failure for maximum results."
             return feedback
 
         # if neutral, recommend continue
@@ -497,6 +511,7 @@ class Node(AbstractNode):
             outputs (dict): empty.
         """
 
+
         ### UI METHODS
         if globals.exerciseSelected:
             self.changeExercise()
@@ -518,6 +533,8 @@ class Node(AbstractNode):
             
             # FRAME STATUS
             frameStatus = self.shouldSelectFrames(score, self.scoreThresholds[globals.currentExercise])
+
+
 
             #default message
             globals.mainFeedback = ["Exercise in progress"]
