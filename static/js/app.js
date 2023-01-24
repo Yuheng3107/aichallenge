@@ -71,7 +71,7 @@ startButton.addEventListener('click', (e) => {
 
             navigator.mediaDevices.getUserMedia({ video: true}).then(function(stream) {
                 video.srcObject = stream;
-                setInterval(getVideoFrames, 50);
+                setInterval(getVideoFrames, msPerFrame);
             }).catch(function(err) {
                 console.log("An error occurred: " + err);
             });
