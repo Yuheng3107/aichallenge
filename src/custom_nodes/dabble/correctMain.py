@@ -384,11 +384,11 @@ class Node(AbstractNode):
 
         # if fearful/sad for some reason, idek
         if emotionAverage[2] + emotionAverage[4] > emotionThreshold[2]:
-            feedback += "Stress detected. Y u stress. "
+            feedback += "Stress detected. "
         
         # if disgust, ???
         if emotionAverage[1] > emotionThreshold[3]:
-            feedback += "WTF y u disgust. "
+            pass
 
         # if angry/happy, exercise is rigorous (grimace is identified by programme as happy)
         if emotionAverage[0] + emotionAverage[3] > emotionThreshold[0]:
@@ -397,7 +397,13 @@ class Node(AbstractNode):
             if globals.difficulty == "Beginner":
                 feedback += "Consider resting to prevent injury. "
             if globals.difficulty == "Expert":
+<<<<<<< HEAD
                 feedback += "Continue to train to failure for maximum results."
+=======
+                feedback += "Continue to train to failure for maximum results. "
+        
+        if feedback != "":
+>>>>>>> b03e7010cc44837bbb5322d8171d6c783d40905a
             return feedback
 
         # if neutral, recommend continue
