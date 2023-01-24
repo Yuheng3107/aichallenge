@@ -167,7 +167,7 @@ textToSpeechButton.addEventListener('click', () => {
 
 
 difficultyButton.addEventListener('click', () => {
-    console.log('Test');
+
     if (difficultyButton.classList.contains('btn-danger')) {
         difficultyButton.innerText = 'Beginner Mode';
         socket.emit('changeDifficulty', 'Beginner');
