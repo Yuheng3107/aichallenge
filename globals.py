@@ -2,6 +2,9 @@
 import numpy as np
 
 def initialise():
+
+    global url
+    """url thats stores jpeg of current frame"""
     global img
     global repCount
     global mainFeedback
@@ -30,6 +33,7 @@ def initialise():
     global difficulty
     """Experience level of person exercising, either 
     Beginner or Expert, default is Beginner"""
+    url = None
     img = np.zeros((720, 1280, 3),dtype=np.float32)
     repCount = 0
     mainFeedback = ["Press Start"]

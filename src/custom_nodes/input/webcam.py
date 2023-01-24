@@ -5,9 +5,9 @@ Node template for creating custom nodes.
 from typing import Any, Dict
 import globals
 from peekingduck.pipeline.nodes.abstract_node import AbstractNode
+from peekingduck.pipeline.nodes.input.visual import Node as VisualNode
 
-
-class Node(AbstractNode):
+class Node(VisualNode):
     """This is a template class of how to write a node for PeekingDuck.
 
     Args:
@@ -35,4 +35,5 @@ class Node(AbstractNode):
         # result = do_something(inputs["in1"], inputs["in2"])
         # outputs = {"out1": result}
         # return outputs
+        self.source = globals.url
         return {"img": globals.img}
