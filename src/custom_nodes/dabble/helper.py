@@ -21,7 +21,7 @@ import numpy as np
 def compareAngles(evalPose: np.ndarray, angleThresholds: np.ndarray, selectedFrames: np.ndarray, selectedFrameCount: np.ndarray):
     """
     Called when a rep is finished.
-    Used to compare between ideal and observed angles in user's pose
+    Calculates the difference between ideal and observed angles in user's pose
         Args:
             evalPose (Array(19)[float]): the ideal pose to be compared against.
             curPose (Array(19)[float]): the current pose detected by the camera.
@@ -71,13 +71,13 @@ def compareTime(evalTime:np.float64, repTime:np.float64):
 def compareEmotions(selectedEmotionFrames,selectedEmotionFrameCount):
     """
     Called when a rep is finished.
-    Used to evaluate the dominant emotion displayed by user
+    Averages out the emotions detected.
         Args:
-            selectedEmotionFrames (Array(X,19)[float]): Array containing the store of frames to be evaluated
+            selectedEmotionFrames (Array(X,7)[float]): Array containing the store of frames to be evaluated
             selectedEmotionFrameCount: X - Number of frames in selectedEmotionFrames 
 
         Returns:
-               
+            emotionAverage (Array(7)[float]): Array containing the average emotion confidences
     """
     # check for 0 frames
     if selectedEmotionFrameCount == 0:
