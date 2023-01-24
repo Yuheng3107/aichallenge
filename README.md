@@ -71,3 +71,16 @@ it has to get from front end but doing so requires HTTPS connection.
 
 Currently, the docker container is unable to connect when HTTPS is enabled.
 
+# How to use the web app
+
+After running the web server using *flask run* and opening it in your chosen browser, you will be greeted with the following screen.
+
+![Screenshot of UI](https://i.imgur.com/7Pu5RtJ.png "Web App UI")
+
+To start exercising, do the following
+1. Click on the green "Start Camera" button
+2. Select an exercise from the drop down list, and then click "Start Exercise"
+3. Position your camera according to the instruction in the yellow alert box.
+4. Start doing the exercise. Verbal hints on how to improve your form for each rep will be read out by the browser
+5. When you are done, cick on "End Exercise" to see a summary of your form. You can also click on "Show Feedback Log" so see the history of feedback on each of your reps.
+
