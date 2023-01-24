@@ -28,7 +28,6 @@ def main():
     poses_node = poses.Node()
     # screen_node = screen.Node()
     # media_writer_node = media_writer.Node(output_dir=str(.cwd() / "results"))
-
     runner = Runner(
         nodes=[
             webcam_node,
