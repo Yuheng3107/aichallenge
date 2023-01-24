@@ -18,12 +18,12 @@ def main():
         ["Training_Data/Squats/Good_Pose/Side_View1.mp4","Training_Data/Squats/Bad_Pose/Butt/Side_View.mp4","Training_Data/Squats/Bad_Pose/Knee/Side_View2.mp4"],
         ["Training_Data/Squats/Good_Pose/Front_View2.mp4","Training_Data/Squats/Good_Pose/Front_View2.mp4","Training_Data/Squats/Good_Pose/Front_View4.mp4","Training_Data/Squats/Good_Pose/Front_View4.mp4","Training_Data/Squats/Bad_Pose/Knee/Front_View1.mp4"],
         ["Training_Data/Push_Up/Good_Pose/Side_View1.mp4","Training_Data/Push_Up/Bad_Pose1/Side_View.mp4","Training_Data/Push_Up/Bad_Pose2/Side_View.mp4"],
-        ["Training_Data/Squats/Sentimental/Front_View4.mp4","Training_Data/Squats/Sentimental_Neutral/Front_View1.mp4"]]
+        ["Training_Data/Squats/Sentimental/Front_View5.mp4","Training_Data/Squats/Sentimental_Neutral/Front_View1.mp4"]]
 
 
     # Add threading=True to arguments in visual.Node constructor to
     # enable threading
-    visual_node = visual.Node(source=sources[4][1])
+    visual_node = visual.Node(source=sources[0][0])
     posenet_node = posenet.Node(max_pose_detection=1)
     poses_node = poses.Node()
     # screen_node = screen.Node()
