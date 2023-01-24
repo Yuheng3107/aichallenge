@@ -5,8 +5,7 @@ Node template for creating custom nodes.
 from typing import Any, Dict
 import globals
 from peekingduck.pipeline.nodes.abstract_node import AbstractNode
-import cv2
-from peekingduck.pipeline.nodes.input.utils.read import VideoThread
+from peekingduck.pipeline.nodes.input.utils.read import VideoNoThread
 class Node(AbstractNode):
     """This is a template class of how to write a node for PeekingDuck.
 
@@ -36,10 +35,11 @@ class Node(AbstractNode):
         # return outputs
         if globals.url is not None:
             # Gets a VideoThread
-            cap = VideoThread(globals.url, False, False)
+            cap = VideoNoThread(globals.url, False)
             if cap:
                 success, img = cap.read_frame()
                 if success:
                     globals.img = img
+            
 
         return {"img": globals.img}
