@@ -462,7 +462,7 @@ class Node(AbstractNode):
             # Image data will be passed directly to globals.img in app.py
             # Keypoints has a shape of (1, 17, 2)
             keypoints = inputs["keypoints"]
-            
+            globals.img = inputs["img"]
             # Calculates angles in radians of live feed
             curPose = processData(keypoints, globals.img.shape[0], globals.img.shape[1])
             score = comparePoses(self.evalPoses[globals.currentExercise],curPose, self.angleWeights[globals.currentExercise]) 

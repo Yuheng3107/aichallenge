@@ -34,14 +34,16 @@ class Node(AbstractNode):
         # outputs = {"out1": result}
         # return outputs
         if globals.url is not None:
-            # Gets a VideoThread
+            # Gets a VideoNoThread, threading doesn't seem to work well
             cap = VideoNoThread(globals.url, False)
             while True:
                 success, img = cap.read_frame()
                 if not success:
                     break
                 if success:
-                    globals.img = img
+                    # Can't make it globals.img yet as we have to ensure
+                    # that images are processed by the posenet model
+                    return {"img": img}
             
 
         return {"img": globals.img}

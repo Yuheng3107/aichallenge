@@ -4,7 +4,7 @@
 # be found at https://peekingduck.readthedocs.io/en/stable/glossary.html.
 
 # img input is no longer from input.visual but front end
-input: ["keypoints"]
+input: ["keypoints", "img"]
 # Example:
 # Output `obj_attrs` for visualization with `draw.tag` node and `custom_key` for
 # use with other custom nodes. Replace as required.
