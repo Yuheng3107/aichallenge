@@ -81,7 +81,8 @@ def change_difficulty(difficulty):
 @socketio.on('video')
 def handle_video(data):
     
-    url = data['url']
+    globals.url = data['url']
+    
     cap = cv2.VideoCapture(url)
     ret, frame = cap.read()
     if ret:
