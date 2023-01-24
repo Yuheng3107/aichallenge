@@ -145,14 +145,10 @@ class Node(AbstractNode):
             K: key angles (19)
         """
         self.selectedFrameCount = 0
-        """
-        X - Number of frames in selectedFrames 
-        """
+        """X - Number of frames in selectedFrames"""
     ### EMOTION VARIABLES
         self.frameCount = 0
-        """
-        Frame Count for Emotions
-        """
+        """Frame Count for Emotions"""
 
         self.selectedEmotionFrames = np.zeros((100,7))
         """
@@ -163,9 +159,7 @@ class Node(AbstractNode):
 
         #angry, disgust, fear, happy, sad, surprise, neutral
         self.selectedEmotionFrameCount = 0
-        """
-        X - Number of frames in selectedEmotionFrames 
-        """
+        """X - Number of frames in selectedEmotionFrames"""
 
     def resetAll(self):
         """
@@ -188,24 +182,16 @@ class Node(AbstractNode):
         """
 
         self.repTimeError = 0
-        """
-        Count of reps where rep time is too short
-        """
+        """Count of reps where rep time is too short"""
 
         self.repStartTime = 0
-        """
-        Timer to keep track of when the current rep started
-        """
+        """Timer to keep track of when the current rep started"""
 
         self.perfectReps = 0
-        """
-        Count of perfect reps
-        """
+        """Count of perfect reps"""
  
         self.invalidFrameCount = 0
-        """
-        Count of frames where user is not fully visible and key angles are missing
-        """
+        """Count of frames where user is not fully visible and key angles are missing"""
         globals.repCount = 0
 
 ### EXERCISE METHODS
@@ -378,11 +364,10 @@ class Node(AbstractNode):
         if emotionAverage[0] == -99:
             feedback = "No Frames Detected"
             return feedback
-        
+
         feedback = ""
 
     ### angry, disgust, fear, happy, sad, surprise, neutral
-
         # if fearful/sad for some reason, idek
         if emotionAverage[2] + emotionAverage[4] > emotionThreshold[2]:
             feedback += "Stress detected. Y u stress. "
@@ -512,7 +497,6 @@ class Node(AbstractNode):
             outputs (dict): empty.
         """
 
-
         ### UI METHODS
         if globals.exerciseSelected:
             self.changeExercise()
@@ -534,8 +518,6 @@ class Node(AbstractNode):
             
             # FRAME STATUS
             frameStatus = self.shouldSelectFrames(score, self.scoreThresholds[globals.currentExercise])
-
-
 
             #default message
             globals.mainFeedback = ["Exercise in progress"]
