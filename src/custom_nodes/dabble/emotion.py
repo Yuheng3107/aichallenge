@@ -23,32 +23,7 @@ class Node(AbstractNode):
         # self.logger.info(f"model loaded with configs: config")
 
         super().__init__(config, node_path=__name__, **kwargs)
-        self.frameCount = 0
-        """
-        Number of frames that have passed. Emotions are detected every 10 frames.
-        """
-        self.selectedFrames = np.zeros((100,7))
-        """
-        Array(X,K) containing the store of frames to be evaluated
-            X: Number of frames (selectedFrameCount)
-            K: emotions (7)
-        """
-        #angry, disgust, fear, happy, sad, surprise, neutral
-        self.selectedFrameCount = 0
-        """
-        Number of frames in selectedFrames 
-        """
 
-    def detect_emotion(self,):
-        # Gets dominant emotion
-        try:
-            emotions = DeepFace.analyze(globals.img, actions= ['emotion'], enforce_detection=True)['emotion']
-            print(emotions)
-            self.selectedFrames[self.selectedFrameCount] = list(emotions.values())
-            self.selectedFrameCount += 1
-            
-        except:
-            print("No Face")
 
     def run(self, inputs: Dict[str, Any]) -> Dict[str, Any]:  # type: ignore
         """This node takes img data and processes it to detect emotions
@@ -62,11 +37,7 @@ class Node(AbstractNode):
         """
         
         
-        self.frameCount += 1
-        if self.frameCount == 10:
-            thread = threading.Thread(target=self.detect_emotion, name='thread', daemon=True)
-            self.frameCount = 0
-            thread.start()
+        
 
         
 
