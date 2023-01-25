@@ -20,8 +20,9 @@ import numpy as np
 
 def compareAngles(evalPose: np.ndarray, angleThresholds: np.ndarray, selectedFrames: np.ndarray, selectedFrameCount: np.ndarray):
     """
-    Called when a rep is finished.
     Calculates the difference between ideal and observed angles in user's pose
+        Called: when rep is finished.
+
         Args:
             evalPose (Array(19)[float]): the ideal pose to be compared against.
             curPose (Array(19)[float]): the current pose detected by the camera.
@@ -59,8 +60,8 @@ def compareAngles(evalPose: np.ndarray, angleThresholds: np.ndarray, selectedFra
 
 def compareTime(evalTime:np.float64, repTime:np.float64):
     """
-    Called when a rep is finished
     Evaluates if rep time is too short
+        Called: when rep is finished
     """
     if repTime < evalTime:
         # rep time is too short
@@ -70,8 +71,9 @@ def compareTime(evalTime:np.float64, repTime:np.float64):
 
 def compareEmotions(selectedEmotionFrames,selectedEmotionFrameCount):
     """
-    Called when a rep is finished.
     Averages out the emotions detected.
+        Called: when rep is finished.
+
         Args:
             selectedEmotionFrames (Array(X,7)[float]): Array containing the store of frames to be evaluated
             selectedEmotionFrameCount: X - Number of frames in selectedEmotionFrames 
@@ -93,8 +95,9 @@ def compareEmotions(selectedEmotionFrames,selectedEmotionFrameCount):
 
 def processData(keypoints: np.ndarray, height: int, width: int):
     """
-    Called every frame while rep detection is active.
     Used to convert keypoint data into angle data
+        Called: every frame while rep detection is active.
+
         Args:
             keypoints (Array(19)[float]): keypoints detected by PeekingDuck
             height (int): height of img
@@ -121,8 +124,7 @@ def processData(keypoints: np.ndarray, height: int, width: int):
     def makeLine(point1: np.float64, point2: np.float64):
         """
         Returns:
-            output (np array(2 float)): line from point1 to point2
-                (0,0) if the points cannot be calculated due to missing keypoint
+            output (np array(2 float)): line from point1 to point2, (0,0) if the points cannot be calculated due to missing keypoint
         """
         if (point1[0] == 0. and point1[1] == 0.) or (point2[0] == 0. and point2[1] == 0.):
             return np.zeros(2)
@@ -174,8 +176,7 @@ def processData(keypoints: np.ndarray, height: int, width: int):
     def calcAngle(line1: np.ndarray, line2: np.ndarray):
         """
         returns: 
-            angle (float): angle between line1 and line2
-                0 if the angle cannot be calculated due to missing line
+            angle (float): angle between line1 and line2, 0 if the angle cannot be calculated due to missing line
         """
         if (line1[0] == 0. and line1[1] == 0.) or (line2[0] == 0. and line2[1] == 0.):
             return 0.
@@ -238,15 +239,16 @@ def processData(keypoints: np.ndarray, height: int, width: int):
 
 def comparePoses(evalPose: np.ndarray, curPose: np.ndarray, angleWeights: np.ndarray):
     """
-    Called every frame while rep detection is active.
     Used to determine if user is currently in a certain pose.
-    Args:
-        evalPose (Array(19)[float]): the ideal pose to be compared against.
-        curPose (Array(19)[float]): the current pose detected by the camera.
+        Called: every frame while rep detection is active.
 
-    Returns:
-        score (float): a score between 0 and 1, 0 being completely similar and 1 being completely different.
-            -1 if curPose is missing crucial angle data.
+        Args:
+            evalPose (Array(19)[float]): the ideal pose to be compared against.
+            curPose (Array(19)[float]): the current pose detected by the camera.
+
+        Returns:
+            score (float): a score between 0 and 1, 0 being completely similar and 1 being completely different.
+                -1 if curPose is missing crucial angle data.
     """    
     # for data security 
     score = 0.
