@@ -112,7 +112,6 @@ form.addEventListener('submit', (e) => {
     // prevents default form submission 
     e.preventDefault();
     let exerciseId = form.elements["exerciseId"].value;
-    console.log(typeof exerciseId);
     // calls python function to update exercise id
     socket.emit('changeExercise', exerciseId);
     // Make repCount and repFeedback visible
@@ -208,8 +207,5 @@ toggleContainer.addEventListener('click', () => {
 })
 
 
-<<<<<<< HEAD
 
 
-=======
->>>>>>> main

@@ -1,8 +1,4 @@
 from pathlib import Path
-<<<<<<< HEAD
-=======
-from peekingduck.pipeline.nodes.input import visual
->>>>>>> main
 from peekingduck.pipeline.nodes.model import posenet
 from src.custom_nodes.input import webcam
 from src.custom_nodes.dabble import correctMain

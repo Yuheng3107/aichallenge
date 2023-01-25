@@ -399,11 +399,8 @@ class Node(AbstractNode):
             if globals.difficulty == "Expert":
                 feedback += "Continue to train to failure for maximum results. "
         
-<<<<<<< HEAD
-=======
         if feedback != "":
             return feedback
->>>>>>> main
 
         # if neutral, recommend continue
         if emotionAverage[6] > emotionThreshold[1]:
