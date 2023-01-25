@@ -113,7 +113,7 @@ form.addEventListener('submit', (e) => {
             camPosReq = {exercise: "Push-Up (Front)", position:"ground"};
             break;
     }
-    alert(`Please place camera at ${camPosReq.exercise} height for ${camPosReq.position}`, 'warning');
+    alert(`Please place camera at ${camPosReq.position} height for ${camPosReq.exercise}`, 'warning');
 });
 
 // Listens for feedback event from server which updates
@@ -178,24 +178,4 @@ toggleContainer.addEventListener('click', () => {
     toggleContainer.classList.toggle('active');
 })
 
-/*
-navigator.mediaDevices.getUserMedia({ video: true, audio: false })
-    .then(function(stream) {
-        let mediaRecorder = new MediaRecorder(stream, {mimeType: "video/webm"});
-        mediaRecorder.start();
-        let chunks = [];
-        mediaRecorder.ondataavailable = function(e) {
-            chunks.push(e.data);
-            console.log("Video data" + e.data);
-        }
-        mediaRecorder.onstop = function(e) {
-            let blob = new Blob(chunks, { 'type' : 'video/webm; codecs=vp9' });
-            chunks = [];
-            let videoURL = window.URL.createObjectURL(blob);
-            socket.emit('video', { 'video': true, 'buffer': videoURL });
-        }
-    })
-    .catch(function(err) {
-        console.log("An error occurred: " + err);
-    });
-*/
+
