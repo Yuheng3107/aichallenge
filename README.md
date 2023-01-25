@@ -59,15 +59,17 @@ in the terminal.
 If the server is successfully running, the prompt
 ```werkzeug  INFO:   * Running on http://127.0.0.1:5000 (Press CTRL+C to quit)``` should appear on your terminal, and you can paste http://127.0.0.1:5000 in your web browser (either Google Chrome or Microsoft Edge) to access the application web page.
 
-### Run using Docker Containers (WIP as HTTPS is not working on Docker Containers because of self-signed SSL Certificate)
+### Run using Docker Containers (For Deployment on the Cloud i.e AWS or GCP or Azure, or you can do it locally to test it out)
 Pull the image from Docker Hub:
 ```docker pull yuheng3107/aichallenge:latest```
 
 Run the Docker Container:
 ```docker run -p 5000:5000 yuheng3107/aichallenge```
 
-Note: Docker container is unable to get camera from source=0,
-it has to get from front end but doing so requires HTTPS connection.
+
+The Docker container is programmed to get image data from the front end and send it to the backend to be processed by PeekingDuck and finally sent back to the front end after it goes through the pipeline of nodes.
+
+It uses a custom 
 
 Currently, the docker container is unable to connect when HTTPS is enabled.
 

@@ -10,15 +10,6 @@ app = Flask(__name__)
 socketio = SocketIO(app)
 
 
-def gen():
-    """Generator function which yields img frames 
-    to be displayed in the front-end"""
-    while True:
-        
-        ret, jpeg = cv2.imencode('.jpeg', globals.img)
-        frame = jpeg.tobytes()
-        yield (b'--frame\r\n'
-               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
 @app.route('/')
 def index():
@@ -32,14 +23,6 @@ def start():
     """When start button is clicked, WebSocket event is triggered
     which starts the main programme"""
     main()
-
-@app.route('/video_feed')
-def video_feed():
-    """Route that updates video frames using the global
-    img variable"""
-    return Response(gen(),
-    mimetype='multipart/x-mixed-replace; boundary=frame')
-
 
 @socketio.on('feedback')
 def send_feedback():

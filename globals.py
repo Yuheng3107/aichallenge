@@ -2,8 +2,6 @@
 import numpy as np
 
 def initialise():
-    global url
-    """url thats stores jpeg of current frame"""
     
 ### UI Variables
     global img
@@ -11,6 +9,8 @@ def initialise():
     """True when button to select exercise is pressed"""
     global exerciseEnded
     """True when button to end exercise is pressed"""
+    global url
+    """url thats stores jpeg of current frame"""
 
 ### Exercise Variables
     global repCount

@@ -33,17 +33,16 @@ class Node(AbstractNode):
         # result = do_something(inputs["in1"], inputs["in2"])
         # outputs = {"out1": result}
         # return outputs
-        if globals.url is not None:
+        if globals.url:
             # Gets a VideoNoThread, threading doesn't seem to work well
             cap = VideoNoThread(globals.url, False)
-            while True:
-                success, img = cap.read_frame()
-                if not success:
-                    break
-                if success:
-                    # Can't make it globals.img yet as we have to ensure
-                    # that images are processed by the posenet model
-                    return {"img": img}
+            success, img = cap.read_frame()
+            if success:
+                globals.img = img
+                print(globals.img.shape)
+            else:
+                print("No image to read")
             
-
+            
+        # Need img to be in data pool for posenet model to work
         return {"img": globals.img}

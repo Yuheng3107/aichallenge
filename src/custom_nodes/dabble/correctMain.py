@@ -525,10 +525,9 @@ class Node(AbstractNode):
 
         ### COMPUTATIONAL METHODS
         if globals.runSwitch:
-            globals.img = inputs["img"]
             # Keypoints has a shape of (1, 17, 2)
             keypoints = inputs["keypoints"]
-            
+            print(globals.img.shape)
             # Calculates angles in radians of live feed
             curPose = processData(keypoints, globals.img.shape[0], globals.img.shape[1])
             score = comparePoses(self.evalPoses[globals.currentExercise],curPose, self.angleWeights[globals.currentExercise]) 

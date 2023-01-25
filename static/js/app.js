@@ -74,7 +74,8 @@ startButton.addEventListener('click', (e) => {
 
             navigator.mediaDevices.getUserMedia({ video: true}).then(function(stream) {
                 video.srcObject = stream;
-                setInterval(getVideoFrames, msPerFrame);
+                // 20 fps
+                setInterval(getVideoFrames, 10);
             }).catch(function(err) {
                 console.log("An error occurred: " + err);
             });
@@ -84,7 +85,7 @@ startButton.addEventListener('click', (e) => {
         started = true;
         
         // updates feedback every second
-        setInterval(getFeedback, msPerFrame);
+        setInterval(getFeedback, 1000);
     }
 });
 endButton.addEventListener('click', () => {
