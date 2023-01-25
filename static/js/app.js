@@ -23,8 +23,6 @@ const stressFeedback = document.querySelector('#stress-feedback');
 const difficultyButton = document.querySelector('#difficulty');
 const video = document.querySelector("#video");
 const canvas = document.querySelector("#canvas");
-const msPerFrame = (1000/30);
-// to get 30fps video
 const camPosition = document.querySelector("#cam-position");
 const toggleContainer = document.querySelector(".toggle-container")  
 
@@ -75,7 +73,7 @@ startButton.addEventListener('click', (e) => {
             navigator.mediaDevices.getUserMedia({ video: true}).then(function(stream) {
                 video.srcObject = stream;
                 // 20 fps
-                setInterval(getVideoFrames, 10);
+                setInterval(getVideoFrames, 50);
             }).catch(function(err) {
                 console.log("An error occurred: " + err);
             });

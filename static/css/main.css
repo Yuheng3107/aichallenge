@@ -4,8 +4,8 @@
 
 .video-feed {
     margin-top: 2rem;
-    max-width: 50vw;
-    max-height: 60vh;
+    width: 50vw;
+    height: 60vh;
 }
 
 #rep-info-group {
