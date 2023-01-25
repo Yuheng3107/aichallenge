@@ -139,7 +139,7 @@ form.addEventListener('submit', (e) => {
             camPosReq = {exercise: "Push-Up (Front)", position:"ground"};
             break;
     }
-    alert(`Please place camera at ${camPosReq.exercise} height for ${camPosReq.position}`, 'warning');
+    alert(`Please place camera at ${camPosReq.position} height for ${camPosReq.exercise}`, 'warning');
 });
 
 // Listens for feedback event from server which updates
