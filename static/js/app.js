@@ -26,6 +26,7 @@ const canvas = document.querySelector("#canvas");
 const msPerFrame = (1000/30);
 // to get 30fps video
 const camPosition = document.querySelector("#cam-position");
+const toggleContainer = document.querySelector(".toggle-container")  
 
 let synth;
 let textToSpeech = false;
@@ -94,17 +95,19 @@ endButton.addEventListener('click', () => {
 });
 
 const alert = (message, type) => {
-    const wrapper = document.createElement('div')
-    wrapper.innerHTML = [
+
+    camPosition.innerHTML = [
       `<div class="alert alert-${type} alert-dismissible mt-3" role="alert">`,
       `   <div>${message}</div>`,
       '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
       '</div>'
     ].join('')
-  
-    camPosition.append(wrapper)
+
+    // refactored so only one alert shows
   }
 
+
+//When exercise choice is confirmed, a form is submitted
 form.addEventListener('submit', (e) => {
     // prevents default form submission 
     e.preventDefault();
@@ -194,21 +197,19 @@ textToSpeechButton.addEventListener('click', () => {
     }
 })
 
-
-difficultyButton.addEventListener('click', () => {
-
-    if (difficultyButton.classList.contains('btn-danger')) {
-        difficultyButton.innerText = 'Beginner Mode';
-        socket.emit('changeDifficulty', 'Expert');
-    }
-    else {
-        difficultyButton.innerText = 'Expert Mode';
+toggleContainer.addEventListener('click', () => {
+    if (toggleContainer.classList.contains('active')) {
         socket.emit('changeDifficulty', 'Beginner');
     }
-    difficultyButton.classList.toggle('btn-danger');
-    difficultyButton.classList.toggle('btn-success');
+    else {
+        socket.emit('changeDifficulty', 'Expert');
+    }
+    toggleContainer.classList.toggle('active');
 })
 
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> main
