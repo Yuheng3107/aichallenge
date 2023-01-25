@@ -72,7 +72,7 @@ class Node(AbstractNode):
             K: key angles (19)
         """
 
-        self.scoreThresholds = np.array([0.2,0.14,0.06])
+        self.scoreThresholds = np.array([0.2,0.18,0.06])
         """
         Array(N) containing the Score Thresholds.
             N: number of exercises
@@ -82,7 +82,7 @@ class Node(AbstractNode):
 
         self.angleThresholds = np.array([
             [0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.14,0.,0.,0.,0.13,0],
-            [0.25,0.2,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.],
+            [0.25,0.35,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.],
             [0.,0.,0.1,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.18,0.,0.2,0.,0.16,0.]])
         """
         Array(N,K) containing the differences in angle required for feedback to be given
@@ -110,7 +110,7 @@ class Node(AbstractNode):
             ['Back not straight enough ','Back too straight '],
             ['','']],
             #Front Squats
-            [['Bending down too little. ','Bending down too much. '],['Knees collapse inwards. ','Bending down too much. Feet may be too wide apart. '],
+            [['Bending down too little. ','Bending down too much. '],['Knees collapse inwards. ','Feet may be too wide apart. '],
             ['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['','']],
             #Side Push-ups
             [['',''],['',''],
@@ -137,7 +137,7 @@ class Node(AbstractNode):
         Resets the stored angle data for that rep.
             Called: when a rep is finished.
         """
-    ### EXERCISE VARIABLES
+        ### EXERCISE VARIABLES
         self.selectedFrames = np.zeros((200,19))
         """
         Array(X,K) containing the store of frames to be evaluated
@@ -147,7 +147,7 @@ class Node(AbstractNode):
         self.selectedFrameCount = 0
         """X - Number of frames in selectedFrames """
 
-    ### EMOTION VARIABLES
+        ### EMOTION VARIABLES
         self.frameCount = 0
         """Frame Count for Emotions"""
 
@@ -256,7 +256,7 @@ class Node(AbstractNode):
             feedback.append(f" {self.glossary[globals.currentExercise,i,0]} {count} times")
         if self.repTimeError != 0:
             feedback.append(f" Rep times were too short {self.repTimeError} times")
-        feedback.append(f" {perfectReps} perferct reps.")
+        feedback.append(f" {perfectReps} perfect reps.")
         return feedback
 
 ### REP METHODS
@@ -448,7 +448,7 @@ class Node(AbstractNode):
             if frameStatus == 0:
                 self.switchPoseCount += 1
                 # if 5 rest frames in a row
-                if self.switchPoseCount > 5:
+                if self.switchPoseCount > 7:
                     # transition into rest pose
                     self.finishRep()
                     
@@ -462,7 +462,7 @@ class Node(AbstractNode):
             if frameStatus == 1:
                 self.switchPoseCount += 1
                 # if 5 pose frames in a row
-                if self.switchPoseCount > 5:
+                if self.switchPoseCount > 2:
                     # transition into key pose
                     self.middleOfRep()
 
