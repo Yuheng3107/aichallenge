@@ -21,14 +21,11 @@ const summary = document.querySelector('#summary');
 const textToSpeechButton = document.querySelector('.text-to-speech');
 const stressFeedback = document.querySelector('#stress-feedback');
 const difficultyButton = document.querySelector('#difficulty');
-<<<<<<< HEAD
 const video = document.querySelector("#video");
 const canvas = document.querySelector("#canvas");
 const msPerFrame = (1000/30);
 // to get 30fps video
-=======
 const camPosition = document.querySelector("#cam-position");
->>>>>>> main
 
 let synth;
 let textToSpeech = false;
@@ -58,20 +55,15 @@ document.addEventListener('DOMContentLoaded', (event) => {
 })
 
 startButton.addEventListener('click', (e) => {
-<<<<<<< HEAD
     
-=======
     console.log('start button clicked');
     // runs python script that starts Peekingduck
->>>>>>> main
     if (!started) {
         // runs python script that starts Peekingduck if PeekingDuck is not already running
         socket.emit('start');
         console.log("PeekingDuck running");
 
         startButton.style.display = "none";
-<<<<<<< HEAD
-        started = true; 
 
         if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
             // checks that browser supports getting camera feed from user
@@ -88,10 +80,8 @@ startButton.addEventListener('click', (e) => {
           }
         
 
-=======
         started = true;
         
->>>>>>> main
         // updates feedback every second
         setInterval(getFeedback, msPerFrame);
     }

@@ -8,15 +8,6 @@ import globals
 from deepface import DeepFace
 from peekingduck.pipeline.nodes.abstract_node import AbstractNode
 import threading
-<<<<<<< HEAD
-
-def detect_emotion():
-    # Gets dominant emotion
-    
-    dominant_emotion = DeepFace.analyze(globals.img, actions= ['emotion'], enforce_detection=False)['dominant_emotion']
-    globals.emotionsFreq[globals.emotions[dominant_emotion]] = globals.emotionsFreq[globals.emotions[dominant_emotion]] + 1
-=======
->>>>>>> main
     
 
 class Node(AbstractNode):

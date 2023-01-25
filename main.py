@@ -24,10 +24,6 @@ def main():
 
     # Add threading=True to arguments in visual.Node constructor to
     # enable threading
-<<<<<<< HEAD
-=======
-    visual_node = visual.Node(source=sources[0][0],threading = True)
->>>>>>> main
     posenet_node = posenet.Node(max_pose_detection=1)
     poses_node = poses.Node()
     # screen_node = screen.Node()

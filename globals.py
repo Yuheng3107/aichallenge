@@ -2,14 +2,10 @@
 import numpy as np
 
 def initialise():
-<<<<<<< HEAD
-
     global url
     """url thats stores jpeg of current frame"""
-=======
     
 ### UI Variables
->>>>>>> main
     global img
     global exerciseSelected
     """True when button to select exercise is pressed"""
@@ -34,12 +30,7 @@ def initialise():
     global difficulty
     """Experience level of person exercising, either 
     Beginner or Expert, default is Beginner"""
-<<<<<<< HEAD
     url = None
-=======
-
-
->>>>>>> main
     img = np.zeros((720, 1280, 3),dtype=np.float32)
     exerciseSelected = False
     exerciseEnded = False
