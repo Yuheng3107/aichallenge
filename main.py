@@ -9,7 +9,6 @@ from peekingduck.runner import Runner
 
 def main():
     processing_node = correctMain.Node(pkd_base_dir=Path.cwd() / "src" / "custom_nodes")
-    emotion_node = emotion.Node(pkd_base_dir=Path.cwd() / "src" / "custom_nodes")
     
 # Change source to file name to parse file
     sources = [[0],

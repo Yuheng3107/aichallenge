@@ -397,7 +397,9 @@ class Node(AbstractNode):
             if globals.difficulty == "Beginner":
                 feedback += "Consider resting to prevent injury. "
             if globals.difficulty == "Expert":
-                feedback += "Continue to train to failure for maximum results."
+                feedback += "Continue to train to failure for maximum results. "
+        
+        if feedback != "":
             return feedback
 
         # if neutral, recommend continue
