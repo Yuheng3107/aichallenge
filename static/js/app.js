@@ -17,6 +17,7 @@ const textToSpeechButton = document.querySelector('.text-to-speech');
 const stressFeedback = document.querySelector('#stress-feedback');
 const difficultyButton = document.querySelector('#difficulty');
 const camPosition = document.querySelector("#cam-position");
+const toggleContainer = document.querySelector(".toggle-container")  
 
 let synth;
 let textToSpeech = false;
@@ -76,6 +77,8 @@ const alert = (message, type) => {
     camPosition.append(wrapper)
   }
 
+
+//When exercise choice is confirmed, a form is submitted
 form.addEventListener('submit', (e) => {
     // prevents default form submission 
     e.preventDefault();
@@ -165,19 +168,14 @@ textToSpeechButton.addEventListener('click', () => {
     }
 })
 
-
-difficultyButton.addEventListener('click', () => {
-
-    if (difficultyButton.classList.contains('btn-danger')) {
-        difficultyButton.innerText = 'Beginner Mode';
-        socket.emit('changeDifficulty', 'Expert');
-    }
-    else {
-        difficultyButton.innerText = 'Expert Mode';
+toggleContainer.addEventListener('click', () => {
+    if (toggleContainer.classList.contains('active')) {
         socket.emit('changeDifficulty', 'Beginner');
     }
-    difficultyButton.classList.toggle('btn-danger');
-    difficultyButton.classList.toggle('btn-success');
+    else {
+        socket.emit('changeDifficulty', 'Expert');
+    }
+    toggleContainer.classList.toggle('active');
 })
 
 /*
