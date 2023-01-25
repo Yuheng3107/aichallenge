@@ -39,7 +39,6 @@ class Node(AbstractNode):
             success, img = cap.read_frame()
             if success:
                 globals.img = img
-                print(globals.img.shape)
             else:
                 print("No image to read")
             
