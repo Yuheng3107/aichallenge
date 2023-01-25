@@ -66,15 +66,15 @@ endButton.addEventListener('click', () => {
 });
 
 const alert = (message, type) => {
-    const wrapper = document.createElement('div')
-    wrapper.innerHTML = [
+
+    camPosition.innerHTML = [
       `<div class="alert alert-${type} alert-dismissible mt-3" role="alert">`,
       `   <div>${message}</div>`,
       '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
       '</div>'
     ].join('')
-  
-    camPosition.append(wrapper)
+
+    // refactored so only one alert shows
   }
 
 
