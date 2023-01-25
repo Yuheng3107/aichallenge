@@ -81,9 +81,6 @@ def change_difficulty(difficulty):
 @socketio.on('video')
 def handle_video(data):
     globals.url = data['url']
-    
-    
-    
 
 
 if __name__ == '__main__':

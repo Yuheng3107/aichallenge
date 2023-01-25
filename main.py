@@ -16,14 +16,18 @@ def main():
     
 # Change source to file name to parse file
     sources = [[0],
-        ["Training_Data/Squats/Good_Pose/Side_View.mp4","Training_Data/Squats/Bad_Pose/Butt/Side_View.mp4","Training_Data/Squats/Bad_Pose/Knee/Side_View2.mp4"],
-        ["Training_Data/Squats/Good_Pose/Front_View1.mp4","Training_Data/Squats/Good_Pose/Front_View2.mp4","Training_Data/Squats/Good_Pose/Front_View4.mp4","Training_Data/Squats/Good_Pose/Front_View4.mp4","Training_Data/Squats/Bad_Pose/Knee/Front_View1.mp4"],
-        ["Training_Data/Push_Up/Good_Pose/Side_View.mp4","Training_Data/Push_Up/Bad_Pose1/Side_View.mp4","Training_Data/Push_Up/Bad_Pose2/Side_View.mp4"],
-        ["Training_Data/Push_Up/Good_Pose/Front_View.mp4","Training_Data/Push_Up/Bad_Pose1/Front_View.mp4","Training_Data/Push_Up/Bad_Pose4/Front_View1.mp4","Training_Data/Push_Up/Bad_Pose4/Front_View2.mp4"]]
+        ["Training_Data/Squats/Good_Pose/Side_View1.mp4","Training_Data/Squats/Bad_Pose/Butt/Side_View.mp4","Training_Data/Squats/Bad_Pose/Knee/Side_View2.mp4"],
+        ["Training_Data/Squats/Good_Pose/Front_View2.mp4","Training_Data/Squats/Good_Pose/Front_View2.mp4","Training_Data/Squats/Good_Pose/Front_View4.mp4","Training_Data/Squats/Good_Pose/Front_View4.mp4","Training_Data/Squats/Bad_Pose/Knee/Front_View1.mp4"],
+        ["Training_Data/Push_Up/Good_Pose/Side_View1.mp4","Training_Data/Push_Up/Bad_Pose1/Side_View.mp4","Training_Data/Push_Up/Bad_Pose2/Side_View.mp4"],
+        ["Training_Data/Squats/Sentimental/Front_View5.mp4","Training_Data/Squats/Sentimental_Neutral/Front_View1.mp4"]]
 
 
     # Add threading=True to arguments in visual.Node constructor to
     # enable threading
+<<<<<<< HEAD
+=======
+    visual_node = visual.Node(source=sources[0][0],threading = True)
+>>>>>>> main
     posenet_node = posenet.Node(max_pose_detection=1)
     poses_node = poses.Node()
     # screen_node = screen.Node()

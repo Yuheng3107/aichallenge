@@ -2,50 +2,54 @@
 import numpy as np
 
 def initialise():
+<<<<<<< HEAD
 
     global url
     """url thats stores jpeg of current frame"""
-    global img
-    global repCount
-    global mainFeedback
-    """General Feedback + Summary Feedback"""
-    global repFeedback
-    """Rep Feedback"""
+=======
     
-    global runSwitch
-    """True when exercise is running"""
-    global currentExercise
-    """number from 0 to N representing the ID of the exercise"""
+### UI Variables
+>>>>>>> main
+    global img
     global exerciseSelected
     """True when button to select exercise is pressed"""
     global exerciseEnded
     """True when button to end exercise is pressed"""
-    global emotionsFreq
-    """np array of (7,) that contains frequency of each
-    possible emotion"""
-    global emotions
-    """Contains name of the 7 possible emotions and their index
-    in emotionsFreq"""
-    global isStressed
-    """Global bool that reflects whether user is stressed"""
+
+### Exercise Variables
+    global repCount
+    global runSwitch
+    """True when exercise is running"""
+    global currentExercise
+    """number from 0 to N representing the ID of the exercise"""
+
+
+### Feedback Variables
+    global mainFeedback
+    """General Feedback + Summary Feedback"""
+    global repFeedback
+    """Rep Feedback"""
     global stressFeedback
-    """Feedback to send to front end if user is stressed"""
+    """Emotion Feedback"""
     global difficulty
     """Experience level of person exercising, either 
     Beginner or Expert, default is Beginner"""
+<<<<<<< HEAD
     url = None
+=======
+
+
+>>>>>>> main
     img = np.zeros((720, 1280, 3),dtype=np.float32)
-    repCount = 0
-    mainFeedback = ["Press Start"]
-    repFeedback = []
-    
-    runSwitch = False
-    currentExercise = 0
     exerciseSelected = False
     exerciseEnded = False
-    emotions = {'angry': 0, 'disgust': 1, 'fear': 2, 'happy': 3, 'sad': 4, 'surprise': 5, 'neutral': 6}
-    emotionsFreq = np.zeros(7)
-    isStressed = False
-    stressFeedback = ""
+
+    repCount = 0
+    runSwitch = False
+    currentExercise = 0
+
+    mainFeedback = ["Press Start"]
+    repFeedback = []
+    stressFeedback = []
     difficulty = "Beginner"
 

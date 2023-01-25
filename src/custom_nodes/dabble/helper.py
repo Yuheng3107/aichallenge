@@ -1,19 +1,106 @@
+"""
+correctMain.py
+    - Rep Counting
+    - Detect & Give Feedback for:
+        - Key Poses
+        - Rep Time
+        - Emotions
+helper.py
+    - Calculating Key Angles
+    - Comparing: 
+        - Key Poses
+        - Rep Time
+        - Emotions
+"""
+
 import numpy as np
 
-"""
-FRAME METHODS
-These methods are called every frame
-"""
-def processData(keypoints: np.float64, height: int, width: int):
+### REP METHODS
+### These methods are called once per rep.
+
+def compareAngles(evalPose: np.ndarray, angleThresholds: np.ndarray, selectedFrames: np.ndarray, selectedFrameCount: np.ndarray):
+    """
+    Called when a rep is finished.
+    Calculates the difference between ideal and observed angles in user's pose
+        Args:
+            evalPose (Array(19)[float]): the ideal pose to be compared against.
+            curPose (Array(19)[float]): the current pose detected by the camera.
+            angleThresholds (Array(19)[float]): the threshold of angle differences
+            selectedFrames (Array(X,19)[float]): Array containing the store of frames to be evaluated
+            selectedFrameCount: X - Number of frames in selectedFrames 
+
+        Returns:
+            angleDifferences (Array(19)[float]): angle differences, positive is too large, negative is too small, 0 is no significant difference    
+    """
+    angleDifferences = np.zeros(evalPose.shape) 
+    # check for 0 frames
+    if selectedFrameCount == 0:
+        return np.array([-99])
+    # remove empty data
+    filledSelectedFrames = selectedFrames[0:selectedFrameCount]
+    # positive is too large, negative is too small 
+    differences = np.average(filledSelectedFrames, axis=0)
+
+    """
+    CREATING NEW EXERCISES
+    """
+    print(f"curPose: {', '.join(str(angle) for angle in differences)}")
+    
+    differences -= evalPose
+    print(differences)
+
+    for i, x in enumerate(differences):
+        if angleThresholds[i] == 0.:
+            continue
+        # if difference is significant enough
+        if abs(x) > angleThresholds[i]:
+            angleDifferences[i] = differences[i]
+    return angleDifferences
+
+def compareTime(evalTime:np.float64, repTime:np.float64):
+    """
+    Called when a rep is finished
+    Evaluates if rep time is too short
+    """
+    if repTime < evalTime:
+        # rep time is too short
+        return 1
+    return 0
+
+
+def compareEmotions(selectedEmotionFrames,selectedEmotionFrameCount):
+    """
+    Called when a rep is finished.
+    Averages out the emotions detected.
+        Args:
+            selectedEmotionFrames (Array(X,7)[float]): Array containing the store of frames to be evaluated
+            selectedEmotionFrameCount: X - Number of frames in selectedEmotionFrames 
+
+        Returns:
+            emotionAverage (Array(7)[float]): Array containing the average emotion confidences
+    """
+    # check for 0 frames
+    if selectedEmotionFrameCount == 0:
+        return np.array([-99])
+    # remove empty data
+    filledselectedFrames = selectedEmotionFrames[0:selectedEmotionFrameCount]
+
+    emotionAverage = np.average(filledselectedFrames, axis=0)
+    return emotionAverage
+
+### FRAME METHODS
+### These methods are called every frame
+
+def processData(keypoints: np.ndarray, height: int, width: int):
     """
     Called every frame while rep detection is active.
     Used to convert keypoint data into angle data
         Args:
-            keypoints (ndarray(19,dtype=float)): keypoints detected by PeekingDuck
+            keypoints (Array(19)[float]): keypoints detected by PeekingDuck
             height (int): height of img
 
         Returns:
-            curPose(ndarray(19,dtype=float)): angle data of the pose
+            curPose(Array(19)[float]): angle data of the pose
     """
     
     if (keypoints.shape != (1, 17, 2)):
@@ -154,8 +241,8 @@ def comparePoses(evalPose: np.ndarray, curPose: np.ndarray, angleWeights: np.nda
     Called every frame while rep detection is active.
     Used to determine if user is currently in a certain pose.
     Args:
-        evalPose (ndarray(19,dtype=float)): the ideal pose to be compared against.
-        curPose (ndarray(19,dtype=float)): the current pose detected by the camera.
+        evalPose (Array(19)[float]): the ideal pose to be compared against.
+        curPose (Array(19)[float]): the current pose detected by the camera.
 
     Returns:
         score (float): a score between 0 and 1, 0 being completely similar and 1 being completely different.
