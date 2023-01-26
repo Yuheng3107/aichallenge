@@ -72,7 +72,7 @@ class Node(AbstractNode):
             K: key angles (19)
         """
 
-        self.scoreThresholds = np.array([0.2,0.14,0.06])
+        self.scoreThresholds = np.array([0.2,0.18,0.06])
         """
         Array(N) containing the Score Thresholds.
             N: number of exercises
@@ -82,7 +82,7 @@ class Node(AbstractNode):
 
         self.angleThresholds = np.array([
             [0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.14,0.,0.,0.,0.13,0],
-            [0.25,0.2,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.],
+            [0.25,0.35,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.],
             [0.,0.,0.1,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.18,0.,0.2,0.,0.16,0.]])
         """
         Array(N,K) containing the differences in angle required for feedback to be given
@@ -110,7 +110,7 @@ class Node(AbstractNode):
             ['Back not straight enough ','Back too straight '],
             ['','']],
             #Front Squats
-            [['Bending down too little. ','Bending down too much. '],['Knees collapse inwards. ','Bending down too much. Feet may be too wide apart. '],
+            [['Bending down too little. ','Bending down too much. '],['Knees collapse inwards. ','Feet may be too wide apart. '],
             ['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['','']],
             #Side Push-ups
             [['',''],['',''],
@@ -134,10 +134,10 @@ class Node(AbstractNode):
     
     def resetFrames(self):
         """
-        Called when a rep is finished.
         Resets the stored angle data for that rep.
+            Called: when a rep is finished.
         """
-    ### EXERCISE VARIABLES
+        ### EXERCISE VARIABLES
         self.selectedFrames = np.zeros((200,19))
         """
         Array(X,K) containing the store of frames to be evaluated
@@ -145,14 +145,11 @@ class Node(AbstractNode):
             K: key angles (19)
         """
         self.selectedFrameCount = 0
-        """
-        X - Number of frames in selectedFrames 
-        """
-    ### EMOTION VARIABLES
+        """X - Number of frames in selectedFrames """
+
+        ### EMOTION VARIABLES
         self.frameCount = 0
-        """
-        Frame Count for Emotions
-        """
+        """Frame Count for Emotions"""
 
         self.selectedEmotionFrames = np.zeros((100,7))
         """
@@ -162,14 +159,12 @@ class Node(AbstractNode):
         """
 
         self.selectedEmotionFrameCount = 0
-        """
-        X - Number of frames in selectedEmotionFrames 
-        """
+        """X - Number of frames in selectedEmotionFrames"""
 
     def resetAll(self):
         """
-        Called when the a new exercise begins.
         Resets all exercise-related variables.
+            Called: when new exercise begins.
         """
         self.resetFrames()
 
@@ -187,24 +182,17 @@ class Node(AbstractNode):
         """
 
         self.repTimeError = 0
-        """
-        Count of reps where rep time is too short
-        """
+        """Count of reps where rep time is too short"""
 
         self.repStartTime = 0
-        """
-        Timer to keep track of when the current rep started
-        """
+        """Timer to keep track of when the current rep started"""
 
         self.perfectReps = 0
-        """
-        Count of perfect reps
-        """
+        """Count of perfect reps"""
  
         self.invalidFrameCount = 0
-        """
-        Count of frames where user is not fully visible and key angles are missing
-        """
+        """Count of frames where user is not fully visible and key angles are missing"""
+
         globals.repCount = 0
 
 ### EXERCISE METHODS
@@ -212,8 +200,8 @@ class Node(AbstractNode):
 
     def changeExercise(self):
         """
-        Called when a new exercise begins.
         Resets all exercise-related variables and then resumes running rep detection.
+            Called: when new exercise begins. 
         """    
         self.resetAll()
         # change pose state
@@ -229,8 +217,8 @@ class Node(AbstractNode):
     
     def endExercise(self):
         """
-        Called when the exercise is finished.
         Blacks out image, stops running rep detection, and calls for a feedback summary
+            Called: when exercise is finished. 
         """   
         globals.img = np.zeros((720, 1280, 3),dtype=np.float32)
         # turn off run
@@ -244,13 +232,14 @@ class Node(AbstractNode):
 
     def summariseFeedback(self,smallErrorCount: np.ndarray, largeErrorCount: np.ndarray, perfectReps: int):
         """
-        Called when the exercise is finished.
         Used to convert the rep feedback into a feedback summary for the user.
+            Called: when exercise is finished. 
+
             Args:
                 smallErrorCount (Array(19)[int]): number of times angle was too small
                 largeErrorCount (Array(19)[int]): number of times angle was too large
                 perfectReps (int): number of perfect reps (no errors)
-                    
+
             Returns:
                 feedback (list (string)): errors made in rep
         """
@@ -267,7 +256,7 @@ class Node(AbstractNode):
             feedback.append(f" {self.glossary[globals.currentExercise,i,0]} {count} times")
         if self.repTimeError != 0:
             feedback.append(f" Rep times were too short {self.repTimeError} times")
-        feedback.append(f" {perfectReps} perferct reps.")
+        feedback.append(f" {perfectReps} perfect reps.")
         return feedback
 
 ### REP METHODS
@@ -275,10 +264,8 @@ class Node(AbstractNode):
 
     def finishRep(self):
         """
-        Called when a rep is finished.
-            Changes inPose to being in rest pose,
-            gets the feedback for the rep and passes it to front-end,
-            deletes all frame data of previous rep.
+        Changes inPose to being in rest pose, gets the feedback for the rep, then deletes all frame data of the rep.
+            Called: when rep is finished.
         """
         globals.repCount += 1
         repTime = time.time() - self.repStartTime
@@ -306,8 +293,8 @@ class Node(AbstractNode):
 
     def middleOfRep(self):
         """
-        Called when user enters the key pose (at the middle of the rep).
         Changes inPose to being in key pose.
+            Called: when user enters the key pose (at the middle of the rep).
         """
         # timer
         self.repStartTime = time.time()
@@ -318,8 +305,9 @@ class Node(AbstractNode):
 
     def giveFeedback(self, angleDifferences: np.ndarray, timeDifference:bool):
         """
-        Called when a rep is finished.
         Used to process angle data into text feedback to feed to front-end
+            Called: when rep is finished.
+
             Args:
                 angleDifferences (Array(19)[float]): angle differences, positive is too large, negative is too small, 0 is no significant difference
                 timeDifference (bool): time difference, 1 is too short, 0 is no errors
@@ -364,8 +352,9 @@ class Node(AbstractNode):
 
     def emotionFeedback(self,emotionAverage:np.ndarray,emotionThreshold:np.ndarray):
         """
-        Called when a rep is finished.
         Used to process emotion data into text feedback to feed to front-end
+            Called: when rep is finished.
+
             Args:
                 emotionAverage (Array(7)[float]): emotion confidence, 100 is maximum confidence, 0 is no confidence
                 emotionThreshold (float): threshold beyond which emotions are considered significant
@@ -414,15 +403,15 @@ class Node(AbstractNode):
 
     def shouldSelectFrames(self, score, scoreThreshold):
         """
-        Called every frame while rep detection is active.
         Used to determine whether to select a frame to be used for evaluation of errors.
-        Args:
-            score (float): score returned by comparePoses, 0 being completely similar and 1 being completely different.
-            scoreThreshold (float): the threshold within which score has to be for the frame to be selected.
+            Called: every frame while rep detection is active.
 
-        Returns:()
-            output (int): 1 if frame is selected, 0 if frame is not selected 
-                2 if selectedFrames is full, -1 if frame is invalid
+            Args:
+                score (float): score returned by comparePoses, 0 being completely similar and 1 being completely different.
+                scoreThreshold (float): the threshold within which score has to be for the frame to be selected.
+
+            Returns:
+                output (int): 1 if selected, 0 if not selected, 2 if selectedFrames is full, -1 if invalid
         """
 
         # error catch for invalid frame
@@ -438,8 +427,9 @@ class Node(AbstractNode):
 
     def checkPose(self, curPose:np.ndarray, frameStatus:int):
         """
-        Called every frame while rep detection is active.
         Used to change between user being in a key pose and rest pose. If user is in key pose, add valid frames to selectedFrames.
+            Called: every frame while rep detection is active.
+
             Args:
                 curPose (Array(19)[float]): the current pose detected by the camera.
                 frameStatus (int):  
@@ -458,7 +448,7 @@ class Node(AbstractNode):
             if frameStatus == 0:
                 self.switchPoseCount += 1
                 # if 5 rest frames in a row
-                if self.switchPoseCount > 5:
+                if self.switchPoseCount > 7:
                     # transition into rest pose
                     self.finishRep()
                     
@@ -472,7 +462,7 @@ class Node(AbstractNode):
             if frameStatus == 1:
                 self.switchPoseCount += 1
                 # if 5 pose frames in a row
-                if self.switchPoseCount > 5:
+                if self.switchPoseCount > 2:
                     # transition into key pose
                     self.middleOfRep()
 
@@ -485,6 +475,10 @@ class Node(AbstractNode):
 ### These methods are for emotion detection
 
     def detectEmotion(self):
+        """
+        Runs face analysis if there is a face in frame, then adds the results to selectedEmotionFrames.
+            Called: every 5 frames while rep detection is active. 
+        """
         # Gets dominant emotion
         try:
             emotions = DeepFace.analyze(globals.img, actions= ['emotion'], enforce_detection=True)['emotion']
