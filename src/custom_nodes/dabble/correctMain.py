@@ -51,7 +51,11 @@ class Node(AbstractNode):
 
         # TO BE IMPORTED FROM NUMPY ARRAYS
         self.evalPoses = np.array([
+<<<<<<< HEAD
             [0.,0.,0.,0.,1.75,0.,0.,0.,0.4,0.,0.],
+=======
+            [0.,0.,0.,0.,1.75,0.,0.,0.,0.44,0.,0.],
+>>>>>>> main
             [0.,0.,0.,0.,0.,2.375,0.,2.264,0.,0.,0.],
             [0.,0.,0.,0.,2.825,0.,2.832,0.,1.583,0.,1.684]],dtype=np.float32)
         
@@ -90,7 +94,7 @@ class Node(AbstractNode):
             K: key angles (11)
         """
 
-        self.evalRepTime = np.array([3.5,3.5,2],dtype=np.float32)
+        self.evalRepTime = np.array([3.5,3.5,3.5],dtype=np.float32)
         """
         Array(N) containing the minimum ideal rep times
             N: number of exercises
@@ -113,7 +117,7 @@ class Node(AbstractNode):
             [['',''],['',''],['',''],['',''],['',''],
             ['Knees collapse inwards. ','Feet may be too wide apart. '],
             ['',''],
-            ['Bending down too little. ', 'Bending down too much. '],
+            ['Bending down too little. ','Bending down too much. '],
             ['',''],['',''],['','']],
             #Side Push-ups
             [['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],
@@ -265,6 +269,11 @@ class Node(AbstractNode):
             Called: when rep is finished.
         """
         repTime = time.time() - self.repStartTime
+        #anomaly, rep time too short
+        if repTime < 1.5:
+            return None
+
+        globals.repCount += 1
 
         #anomaly, rep time too short
         if repTime < 1.5:
