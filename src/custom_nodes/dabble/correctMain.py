@@ -275,16 +275,10 @@ class Node(AbstractNode):
 
         ### Emotion feedback
         emotionAverage = compareEmotions(self.selectedEmotionFrames,self.selectedEmotionFrameCount)
-<<<<<<< HEAD
-        emotionFeedback = self.emotionFeedback(emotionAverage,self.emotionThresholds)
-        if emotionFeedback != "":
-            globals.emotionFeedback = emotionFeedback
-=======
         emotionFeedback, currentEmotion = self.emotionFeedback(emotionAverage,self.emotionThresholds)
         if currentEmotion != 0:
             globals.emotionFeedback = emotionFeedback
             globals.currentEmotion = currentEmotion
->>>>>>> main
         print(f"Emotions: {emotionAverage}")
         self.resetFrames()
 
