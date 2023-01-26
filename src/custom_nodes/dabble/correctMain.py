@@ -12,8 +12,6 @@ helper.py
         - Rep Time
         - Emotions
 """
-
-from this import d
 from typing import Any, Dict, List
 import time
 
@@ -21,6 +19,7 @@ import numpy as np
 
 from peekingduck.pipeline.nodes.abstract_node import AbstractNode
 from deepface import DeepFace
+import cv2
 
 import threading
 
@@ -107,9 +106,9 @@ class Node(AbstractNode):
             #Side Squats
             [[['',''],['',''],['',''],['',''],
             ['Butt not low enough ','Butt too low '],
-            ['',''],
+            ['',''],['',''],['',''],
             ['Leaning forward too much ','Back too straight '],
-            ['',''],['',''],['',''],['','']],
+            ['',''],['','']],
             #Front Squats
             [['',''],['',''],['',''],['',''],['',''],
             ['Bending down too little. ','Bending down too much. '],
@@ -191,6 +190,8 @@ class Node(AbstractNode):
         """Count of frames where user is not fully visible and key angles are missing"""
 
         globals.repCount = 0
+        
+        cv2.destroyAllWindows()
 
 ### EXERCISE METHODS
 ### These methods are called once per exercise.
@@ -505,7 +506,9 @@ class Node(AbstractNode):
         Returns:
             outputs (dict): empty.
         """
-
+        
+        cv2.imshow("image",globals.img)
+        cv2.waitKey(1)
         ### UI METHODS
         if globals.currentExercise == -1:
             globals.mainFeedback = ["Please Select Exercise."]
@@ -551,7 +554,6 @@ class Node(AbstractNode):
                 thread = threading.Thread(target=self.detectEmotion, name='thread', daemon=True)
                 self.frameCount = 0
                 thread.start()
-
 
             """DEBUG"""
             # print(f"curPose: {', '.join(str(angle) for angle in curPose)}")
