@@ -5,12 +5,14 @@ from src.custom_nodes.dabble import correctMain
 from peekingduck.pipeline.nodes.output import media_writer, screen
 from peekingduck.runner import Runner
 
+import globals
+
 
 def start_pipeline():
     # Custom Nodes
     if globals.running:
         return
-    globals.running = False
+    globals.running = True
     webcam_node = webcam.Node(pkd_base_dir=Path.cwd() / "src" / "custom_nodes")
     processing_node = correctMain.Node(pkd_base_dir=Path.cwd() / "src" / "custom_nodes")
     screen_node = screen.Node()
