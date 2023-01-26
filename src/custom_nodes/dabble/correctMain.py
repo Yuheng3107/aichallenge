@@ -51,7 +51,7 @@ class Node(AbstractNode):
 
         # TO BE IMPORTED FROM NUMPY ARRAYS
         self.evalPoses = np.array([
-            [0.,0.,0.,0.,1.6832697218589587,0.,0.,0.,0.4398586657270065,0.,0.],
+            [0.,0.,0.,0.,1.75,0.,0.,0.,0.4398586657270065,0.,0.],
             [0.,0.,0.,0.,0.,2.374580135824015,0.,2.263713950425495,0.,0.,0.],
             [0.,0.,0.,0.,2.82527497539771,0.,2.8319761199989966,0.,1.5825368441775987,0.,1.6839704162412432]])
         
@@ -72,7 +72,7 @@ class Node(AbstractNode):
             K: key angles (11)
         """
 
-        self.scoreThresholds = np.array([0.2,0.18,0.06])
+        self.scoreThresholds = np.array([0.2,0.17,0.06])
         """
         Array(N) containing the Score Thresholds.
             N: number of exercises
@@ -82,7 +82,7 @@ class Node(AbstractNode):
 
         self.angleThresholds = np.array([
             [0.,0.,0.,0.,0.14,0.,0.,0.,0.13,0.,0.],
-            [0.,0.,0.,0.,0.,0.25,0.,0.35,0.,0.,0.],
+            [0.,0.,0.,0.,0.,0.33,0.,0.4,0.,0.,0.],
             [0.,0.,0.,0.,0.,0.,0.,0.,0.16,0.,0.1]])
         """
         Array(N,K) containing the differences in angle required for feedback to be given
@@ -249,7 +249,7 @@ class Node(AbstractNode):
             #none of that error
             if count == 0:
                 continue
-            feedback.append(f" {self.glossary[globals.currentExercise,i,0]} {count} times")
+            feedback.append(f" {self.glossary[globals.currentExercise,i,1]} {count} times")
         if self.repTimeError != 0:
             feedback.append(f" Rep times were too short {self.repTimeError} times")
         feedback.append(f" {perfectReps} perfect reps.")
