@@ -1,31 +1,27 @@
 import json
 from flask import Flask, render_template
 from flask_socketio import SocketIO, emit
-import globals
 from node_pipeline import start_pipeline
 
-class MyServer(Flask):
-    
-    def __init__(self, *args, **kwargs):
-        super(MyServer, self).__init__(*args, **kwargs)
-
-        #instanciate your variables here
-        self.connections = False   
+import globals
 
 
-app = MyServer(__name__)
+app = Flask(__name__)
 socketio = SocketIO(app)
+
+globals.superInitialise()
 
 @app.route('/')
 def index():
     """Index route which initialises global variables
     and returns the homepage"""
-    print(app.connections)
-    if app.connections == False:
+    print(globals.ISACTIVE)
+    print(globals.CONNECTION)
+    if globals.ISACTIVE == False and globals.CONNECTION == False:
         globals.initialise()
-        app.connections += True
+        globals.CONNECTION = True
         return render_template('./index.html')
-    return ""
+    return "Application is busy. Please wait a moment before refreshing the page."
     
 
 @socketio.on('start')
@@ -79,7 +75,7 @@ def handle_video(data):
 @socketio.on('disconnect')
 def reset_connection():
     globals.killSwitch = True
-    app.connections = False
+    globals.CONNECTION = False
 
 if __name__ == '__main__':
     # ssl_context=('cert.pem', 'key.pem')

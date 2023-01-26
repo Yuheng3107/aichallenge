@@ -124,6 +124,7 @@ class Node(AbstractNode):
         Array(N) containing the text descriptions of each angle
             N: number of exercises
         """
+        cv2.destroyAllWindows()
 
 ### RESET METHODS
 ### These methods reset variables 
@@ -190,8 +191,6 @@ class Node(AbstractNode):
         """Count of frames where user is not fully visible and key angles are missing"""
 
         globals.repCount = 0
-        
-        cv2.destroyAllWindows()
 
 ### EXERCISE METHODS
 ### These methods are called once per exercise.
