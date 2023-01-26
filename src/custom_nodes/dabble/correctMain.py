@@ -13,6 +13,7 @@ helper.py
         - Emotions
 """
 
+from this import d
 from typing import Any, Dict, List
 import time
 
@@ -51,9 +52,9 @@ class Node(AbstractNode):
 
         # TO BE IMPORTED FROM NUMPY ARRAYS
         self.evalPoses = np.array([
-            [0.,0.,0.,0.,1.75,0.,0.,0.,0.4398586657270065,0.,0.],
-            [0.,0.,0.,0.,0.,2.374580135824015,0.,2.263713950425495,0.,0.,0.],
-            [0.,0.,0.,0.,2.82527497539771,0.,2.8319761199989966,0.,1.5825368441775987,0.,1.6839704162412432]])
+            [0.,0.,0.,0.,1.75,0.,0.,0.,0.44,0.,0.],
+            [0.,0.,0.,0.,0.,2.375,0.,2.264,0.,0.,0.],
+            [0.,0.,0.,0.,2.825,0.,2.832,0.,1.583,0.,1.684]],dtype=np.float16)
         
         """
         Array(N,K) containing the correct poses
@@ -64,7 +65,7 @@ class Node(AbstractNode):
         self.angleWeights = np.array([
             [0.,0.,0.,0.,1.,0.,0.,0.,1.,0.,0.],
             [0.,0.,0.,0.,0.,1.,0.,1.,0.,0.,0.],
-            [0.,0.,0.,0.,0.,0.,0.,0.,1.,0.,10.]])
+            [0.,0.,0.,0.,0.,0.,0.,0.,1.,0.,10.]],dtype=np.float16)
         
         """
         Array(N,K) containing the weights that each angle should have in evaluation
@@ -72,7 +73,7 @@ class Node(AbstractNode):
             K: key angles (11)
         """
 
-        self.scoreThresholds = np.array([0.2,0.17,0.06])
+        self.scoreThresholds = np.array([0.2,0.17,0.06],dtype=np.float16)
         """
         Array(N) containing the Score Thresholds.
             N: number of exercises
@@ -83,20 +84,20 @@ class Node(AbstractNode):
         self.angleThresholds = np.array([
             [0.,0.,0.,0.,0.14,0.,0.,0.,0.13,0.,0.],
             [0.,0.,0.,0.,0.,0.33,0.,0.4,0.,0.,0.],
-            [0.,0.,0.,0.,0.,0.,0.,0.,0.16,0.,0.1]])
+            [0.,0.,0.,0.,0.,0.,0.,0.,0.16,0.,0.1]],dtype=np.float16)
         """
         Array(N,K) containing the differences in angle required for feedback to be given
             N: number of exercises
             K: key angles (11)
         """
 
-        self.evalRepTime = np.array([2,2,2])
+        self.evalRepTime = np.array([2,2,2],dtype=np.float16)
         """
         Array(N) containing the minimum ideal rep times
             N: number of exercises
         """
 
-        self.emotionThresholds = np.array([30,30,50])
+        self.emotionThresholds = np.array([30,30,50],dtype=np.float16)
         """
         Arary(4) containing the thresholds for the various emotions
             Angry, Neutral, Sad, Disgust
@@ -134,7 +135,7 @@ class Node(AbstractNode):
             Called: when a rep is finished.
         """
         ### EXERCISE VARIABLES
-        self.selectedFrames = np.zeros((200,11))
+        self.selectedFrames = np.zeros((200,11),dtype=np.float16)
         """
         Array(X,K) containing the store of frames to be evaluated
             X: Maximum number of frames the buffer stores (maximum selectedFrameCount size)
@@ -147,7 +148,7 @@ class Node(AbstractNode):
         self.frameCount = 0
         """Frame Count for Emotions"""
 
-        self.selectedEmotionFrames = np.zeros((100,7))
+        self.selectedEmotionFrames = np.zeros((100,7),dtype=np.float16)
         """
         Array(X,K) containing the store of frames to be evaluated
             X: Maximum number of frames buffer stores (maximum selectedEmotionFrameCount size)
@@ -165,13 +166,13 @@ class Node(AbstractNode):
         self.resetFrames()
 
         # reset angle-related variables
-        self.smallErrorCount = np.zeros(11)
+        self.smallErrorCount = np.zeros(11,dtype=int)
         """
         Array(K) contains the count of reps where angle K is too small
             K: key angles (11)
         """
 
-        self.largeErrorCount = np.zeros(11)
+        self.largeErrorCount = np.zeros(11,dtype=int)
         """
         Array(K) containing the count of reps where angle K is too large
             K: key angles (11)
