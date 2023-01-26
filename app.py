@@ -4,7 +4,7 @@ import json
 from flask import Flask, render_template, Response, request
 from flask_socketio import SocketIO, emit
 import globals
-from main import main
+from node_pipeline import start_pipeline
 
 app = Flask(__name__)
 socketio = SocketIO(app)
@@ -32,7 +32,7 @@ def start():
     """When start button is clicked, GET request (AJAX)
     is sent to this route to get the peekingduck pipeline
     running"""
-    main()
+    start_pipeline()
     return ""
 
 @app.route('/video_feed')

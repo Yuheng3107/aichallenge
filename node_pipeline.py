@@ -7,7 +7,7 @@ from peekingduck.pipeline.nodes.draw import poses
 from peekingduck.runner import Runner
 
 
-def main():
+def start_pipeline():
     processing_node = correctMain.Node(pkd_base_dir=Path.cwd() / "src" / "custom_nodes")
     
 # Change source to file name to parse file
@@ -43,4 +43,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    start_pipeline()
