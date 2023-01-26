@@ -216,6 +216,8 @@ toggleContainer.addEventListener('click', () => {
     toggleContainer.classList.toggle('active');
 })
 
+// Listens to disconnect events
 
-
-
+window.onbeforeunload = () => {
+    socket.emit('disconnect');
+}

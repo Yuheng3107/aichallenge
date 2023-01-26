@@ -4,26 +4,36 @@ from flask_socketio import SocketIO, emit
 import globals
 from node_pipeline import start_pipeline
 
+class MyServer(Flask):
+    
+    def __init__(self, *args, **kwargs):
+        super(MyServer, self).__init__(*args, **kwargs)
 
-app = Flask(__name__)
+        #instanciate your variables here
+        self.connections = False   
+
+
+app = MyServer(__name__)
 socketio = SocketIO(app)
-running = 0
-
 
 @app.route('/')
 def index():
     """Index route which initialises global variables
     and returns the homepage"""
-    if running == 0:
+    print(app.connections)
+    if app.connections == False:
         globals.initialise()
+        app.connections += True
         return render_template('./index.html')
-    running += 1
+    return ""
+    
 
 @socketio.on('start')
 def start():
     """When start button is clicked, WebSocket event is triggered
     which starts the main programme"""
     start_pipeline()
+    
 
 @socketio.on('feedback')
 def send_feedback():
@@ -39,6 +49,7 @@ def send_feedback():
         "emotionFeedback": globals.emotionFeedback,
     }
     emit('feedback', json.dumps(data))
+
 
 @socketio.on('endExercise')
 def end_exercise():
@@ -60,9 +71,14 @@ def change_difficulty(difficulty):
      in front end"""
     globals.difficulty = difficulty
 
+
 @socketio.on('video')
 def handle_video(data):
     globals.url = data['url']
+
+@socketio.on('disconnect')
+def reset_connection():
+    app.connections = False
 
 if __name__ == '__main__':
     # ssl_context=('cert.pem', 'key.pem')
