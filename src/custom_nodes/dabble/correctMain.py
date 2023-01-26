@@ -267,7 +267,7 @@ class Node(AbstractNode):
             feedback.append(f" {self.glossary[globals.currentExercise,i,0]} {count} times")
         if self.repTimeError != 0:
             feedback.append(f" Rep times were too short {self.repTimeError} times")
-        feedback.append(f" {perfectReps} perferct reps.")
+        feedback.append(f" {perfectReps} perfect reps.")
         return feedback
 
 ### REP METHODS
