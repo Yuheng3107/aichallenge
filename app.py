@@ -54,7 +54,7 @@ def send_feedback():
         "repCount": globals.repCount,
         "summary": globals.mainFeedback,
         "repFeedback": globals.repFeedback,
-        "stressFeedback": globals.stressFeedback,
+        "emotionFeedback": globals.emotionFeedback,
     }
     emit('feedback', json.dumps(data))
 

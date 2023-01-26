@@ -23,7 +23,7 @@ def initialise():
     """General Feedback + Summary Feedback"""
     global repFeedback
     """Rep Feedback"""
-    global stressFeedback
+    global emotionFeedback
     """Emotion Feedback"""
     global difficulty
     """Experience level of person exercising, either 
@@ -40,6 +40,6 @@ def initialise():
 
     mainFeedback = ["Press Start"]
     repFeedback = []
-    stressFeedback = []
+    emotionFeedback = []
     difficulty = "Beginner"
 
