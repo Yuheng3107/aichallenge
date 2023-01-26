@@ -13,9 +13,9 @@ def start_pipeline():
     
 # Change source to file name to parse file
     sources = [[0],
-        ["Training_Data/Squats/Good_Pose/Side_View1.mp4","Training_Data/Squats/Bad_Pose/Butt/Side_View.mp4","Training_Data/Squats/Bad_Pose/Knee/Side_View2.mp4"],
-        ["Training_Data/Squats/Good_Pose/Front_View1.mp4","Training_Data/Squats/Bad_Pose/Knee/Front_View3.mp4"],
-        ["Training_Data/Push_Up/Good_Pose/Side_View1.mp4","Training_Data/Push_Up/Bad_Pose1/Side_View.mp4","Training_Data/Push_Up/Bad_Pose2/Side_View.mp4"],
+        ["Training_Data/Squats/Good_Pose/Side_View3.mp4","Training_Data/Squats/Bad_Pose/Butt/Side_View.mp4","Training_Data/Squats/Bad_Pose/Knee/Side_View2.mp4"],
+        ["Training_Data/Squats/Good_Pose/Front_View10.mp4","Training_Data/Squats/Bad_Pose/Knee/Front_View4.mp4"],
+        ["Training_Data/Push_Up/Good_Pose/Side_View2.mp4","Training_Data/Push_Up/Bad_Pose1/Side_View.mp4","Training_Data/Push_Up/Bad_Pose2/Side_View.mp4"],
         ["Training_Data/Squats/Sentimental/Front_View5.mp4","Training_Data/Squats/Sentimental_Neutral/Front_View1.mp4"]]
 
 

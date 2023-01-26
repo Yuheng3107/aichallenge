@@ -51,28 +51,28 @@ class Node(AbstractNode):
 
         # TO BE IMPORTED FROM NUMPY ARRAYS
         self.evalPoses = np.array([
-            [1.5101271591974472, 1.4980141223917764, 2.9744070804606664, 0.6972723789351448, 0.4837195830264868, 2.2550842191658105, 0.4871277398325121, 0.48601296839902186, 0.9368117346906317, 1.5589928996090603, 2.1477453057967852, 1.7910356640090987, 1.336984596535936, 1.6832697218589587, 1.383993753712914, 1.6120344910706403, 1.9967021465554933, 0.4398586657270065, 1.6390865609852177],
-            [2.374580135824015, 2.263713950425495, 2.883816780362668, 1.8643469259111198, 2.997754635400291, 2.855449311474785, 1.1334077094891724, 1.578203583796112, 0.7839790321590494, 0.7821727442271517, 2.3850600370725807, 1.5656631300702746, 
-            2.327, 2.327, 2.3, 2.3, 
-            1.5596841017654897, 0.056053968019371674, 1.6157380697848598],
-            [0.21767780038645262, 0.6919961585571482, 1.6839704162412432, 1.8539293248147957, 0.7079075377200521, 2.538111518193272, 1.8733032890931085, 1.983687965530557, 1.7986515332534698, 1.6412894658311044, 1.8598794860142835, 2.2558652786473097, 2.9200727069178956, 2.82527497539771, 2.6791168732640616, 2.8319761199989966, 0.9351479597160647, 1.5825368441775987, 1.0007917106164417]])
+            [0.,0.,0.,0.,1.75,0.,0.,0.,0.4398586657270065,0.,0.],
+            [0.,0.,0.,0.,0.,2.374580135824015,0.,2.263713950425495,0.,0.,0.],
+            [0.,0.,0.,0.,2.82527497539771,0.,2.8319761199989966,0.,1.5825368441775987,0.,1.6839704162412432]])
+        
         """
         Array(N,K) containing the correct poses
             N: number of exercises
-            K: key angles (19)
+            K: key angles (11)
         """
 
         self.angleWeights = np.array([
-            [0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,1.,0.,0.,0.,1.,0.],
-            [1.,1.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.],
-            [0.,0.,10.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,1.,0.,1.,0.,1.,0.]])
+            [0.,0.,0.,0.,1.,0.,0.,0.,1.,0.,0.],
+            [0.,0.,0.,0.,0.,1.,0.,1.,0.,0.,0.],
+            [0.,0.,0.,0.,0.,0.,0.,0.,1.,0.,10.]])
+        
         """
         Array(N,K) containing the weights that each angle should have in evaluation
             N: number of exercises
-            K: key angles (19)
+            K: key angles (11)
         """
 
-        self.scoreThresholds = np.array([0.2,0.18,0.06])
+        self.scoreThresholds = np.array([0.2,0.17,0.06])
         """
         Array(N) containing the Score Thresholds.
             N: number of exercises
@@ -81,13 +81,13 @@ class Node(AbstractNode):
         """
 
         self.angleThresholds = np.array([
-            [0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.14,0.,0.,0.,0.13,0],
-            [0.25,0.35,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.],
-            [0.,0.,0.1,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.18,0.,0.2,0.,0.16,0.]])
+            [0.,0.,0.,0.,0.14,0.,0.,0.,0.13,0.,0.],
+            [0.,0.,0.,0.,0.,0.33,0.,0.4,0.,0.,0.],
+            [0.,0.,0.,0.,0.,0.,0.,0.,0.16,0.,0.1]])
         """
         Array(N,K) containing the differences in angle required for feedback to be given
             N: number of exercises
-            K: key angles (19)
+            K: key angles (11)
         """
 
         self.evalRepTime = np.array([2,2,2])
@@ -104,30 +104,26 @@ class Node(AbstractNode):
 
         self.glossary = np.array(
             #Side Squats
-            [[['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],
+            [[['',''],['',''],['',''],['',''],
             ['Butt not low enough ','Butt too low '],
-            ['',''],['',''],['',''],
-            ['Back not straight enough ','Back too straight '],
-            ['','']],
+            ['',''],
+            ['Leaning forward too much ','Back too straight '],
+            ['',''],['',''],['',''],['','']],
             #Front Squats
-            [['Bending down too little. ','Bending down too much. '],['Knees collapse inwards. ','Feet may be too wide apart. '],
-            ['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['','']],
+            [['',''],['',''],['',''],['',''],['',''],
+            ['Bending down too little. ','Bending down too much. '],
+            ['',''],
+            ['Knees collapse inwards. ','Feet may be too wide apart. '],
+            ['',''],['',''],['','']],
             #Side Push-ups
-            [['',''],['',''],
-            ['Legs too parallel with ground','legs not parallel with ground'],
-            ['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],
-            ['Back too straight ','Back not straight enough '],
-            ['',''],
-            ['Knees too straightened ','Knees too bent '],
-            ['',''],
+            [['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],
             ['Back too straightened ','Back sagging '],
-            ['','']]]
-            )
+            ['',''],
+            ['Legs too parallel with ground','legs not parallel with ground']]])
         """
         Array(N) containing the text descriptions of each angle
             N: number of exercises
         """
-
 
 ### RESET METHODS
 ### These methods reset variables 
@@ -138,11 +134,11 @@ class Node(AbstractNode):
             Called: when a rep is finished.
         """
         ### EXERCISE VARIABLES
-        self.selectedFrames = np.zeros((200,19))
+        self.selectedFrames = np.zeros((200,11))
         """
         Array(X,K) containing the store of frames to be evaluated
             X: Maximum number of frames the buffer stores (maximum selectedFrameCount size)
-            K: key angles (19)
+            K: key angles (11)
         """
         self.selectedFrameCount = 0
         """X - Number of frames in selectedFrames """
@@ -169,16 +165,16 @@ class Node(AbstractNode):
         self.resetFrames()
 
         # reset angle-related variables
-        self.smallErrorCount = np.zeros(19)
+        self.smallErrorCount = np.zeros(11)
         """
         Array(K) contains the count of reps where angle K is too small
-            K: key angles (19)
+            K: key angles (11)
         """
 
-        self.largeErrorCount = np.zeros(19)
+        self.largeErrorCount = np.zeros(11)
         """
         Array(K) containing the count of reps where angle K is too large
-            K: key angles (19)
+            K: key angles (11)
         """
 
         self.repTimeError = 0
@@ -236,8 +232,8 @@ class Node(AbstractNode):
             Called: when exercise is finished. 
 
             Args:
-                smallErrorCount (Array(19)[int]): number of times angle was too small
-                largeErrorCount (Array(19)[int]): number of times angle was too large
+                smallErrorCount (Array(11)[int]): number of times angle was too small
+                largeErrorCount (Array(11)[int]): number of times angle was too large
                 perfectReps (int): number of perfect reps (no errors)
 
             Returns:
@@ -253,7 +249,7 @@ class Node(AbstractNode):
             #none of that error
             if count == 0:
                 continue
-            feedback.append(f" {self.glossary[globals.currentExercise,i,0]} {count} times")
+            feedback.append(f" {self.glossary[globals.currentExercise,i,1]} {count} times")
         if self.repTimeError != 0:
             feedback.append(f" Rep times were too short {self.repTimeError} times")
         feedback.append(f" {perfectReps} perfect reps.")
@@ -316,7 +312,7 @@ class Node(AbstractNode):
             Called: when rep is finished.
 
             Args:
-                angleDifferences (Array(19)[float]): angle differences, positive is too large, negative is too small, 0 is no significant difference
+                angleDifferences (Array(11)[float]): angle differences, positive is too large, negative is too small, 0 is no significant difference
                 timeDifference (bool): time difference, 1 is too short, 0 is no errors
                     
             Returns:
@@ -439,7 +435,7 @@ class Node(AbstractNode):
             Called: every frame while rep detection is active.
 
             Args:
-                curPose (Array(19)[float]): the current pose detected by the camera.
+                curPose (Array(11)[float]): the current pose detected by the camera.
                 frameStatus (int):  
         """
         if frameStatus == -1:
