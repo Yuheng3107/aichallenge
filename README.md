@@ -1,8 +1,16 @@
 # National AI Student Challenge 2022
 This is the GitHub Repo for the National AI Student Challenge 2022. We have used [PeekingDuck](https://github.com/aisingapore/PeekingDuck) as our core tool for Computer Vision.
 
-## Prerequisites
-Running our app requires the installation of git, a Version Control Software (to clone the repository), as well as Python3 to run the code, and finally, a browser such as Google Chrome or Microsoft Edge which supports multi-part responses which are required to stream the PeekingDuck image data onto the web application.
+There are *two modes* in which you can run our app in. 
+
+The first is developer mode, where you can see the poses drawn onto the picture, and is used by us natively for testing/debugging. You can try out this mode to better understand how our model works.
+
+The second is the production web server mode (unfortunately it can only support one connection at a time currently), which we intend to deploy to the cloud for the end-user, where they can use it on both Desktop and Mobile to aid in their exercise.
+
+Please see the prequisites required for running our app in its respective modes.
+
+## Prerequisites for Dev Mode
+Running our app in development mode requires the installation of git, a Version Control Software (to clone the repository), as well as Python3 to run the code, and finally, a browser such as Google Chrome or Microsoft Edge which supports multi-part responses which are required to stream the PeekingDuck image data onto the web application.
 
 ### Installing Git  
 Git can be installed by visiting [this link](https://git-scm.com/downloads).
@@ -30,7 +38,7 @@ called aichallenge created.
 
 You can move into that directory by typing ```cd aichallenge``` into the terminal.
 
-In order to run our app, we highly recommend setting up a virtual environment, in order to prevent conflicts in package dependencies. We shall be using [venv](https://docs.python.org/3/library/venv.html) for our app.
+In order to run our app, we highly recommend setting up a virtual environment in order to prevent conflicts in package dependencies. We shall be using [venv](https://docs.python.org/3/library/venv.html) for our app.
 
 ### To use the virtual environment (venv), there are 2 steps required:
 
@@ -60,9 +68,11 @@ in the terminal.
 If the server is successfully running, the prompt
 ```werkzeug  INFO:   * Running on http://127.0.0.1:5000 (Press CTRL+C to quit)``` should appear on your terminal, and you can paste ```http://127.0.0.1:5000``` in your web browser (either Google Chrome or Microsoft Edge) to access the application web page.
 
-### Run using Docker Containers (For Deployment on the Cloud i.e AWS or GCP or Azure, or you can do it locally to test it out) Cloud is recommended for those with more experience, otherwise you can try running the docker container locally.
+### Run using Docker Containers (For Deployment on the Cloud i.e AWS or GCP or Azure, or you can do it locally to test it out)
 
-First, you have to download Docker..
+Note: Cloud is recommended for those with more experience, otherwise you can try running the docker container locally.
+
+First, you have to download Docker.
 
 #### Setting up Docker on the Cloud
 To run Docker on the Cloud (e.g EC2 instance on AWS), we can add the following code in our User data when launching a EC2 instance:
