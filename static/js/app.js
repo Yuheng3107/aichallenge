@@ -18,6 +18,7 @@ const emotionFeedback = document.querySelector('#emotion-feedback');
 const difficultyButton = document.querySelector('#difficulty');
 const camPosition = document.querySelector("#cam-position");
 const toggleContainer = document.querySelector(".toggle-container")  
+const spinner = document.querySelector('#spinner');
 
 let synth;
 let textToSpeech = false;
@@ -34,9 +35,7 @@ else {
 }
 let started = false;
 let socket = io();
-let spinner = document.createElement('i');
-spinner.classList.add("fa", "fa-spinner", "fa-spin");
-// creates a font awesome spinner
+
 document.addEventListener('DOMContentLoaded', (event) => {
     //hide the repcount and repfeedback on page load since there's no content
     
@@ -56,8 +55,7 @@ startButton.addEventListener('click', (e) => {
         startButton.style.display = "none";
         started = true;
         // updates feedback every 0.5s
-        // adds spinner to mainFeedback
-        mainFeedback.appendChild(spinner);
+        spinner.innerHTML = `<i class="fa fa-spinner fa-spin"></i> `;
         setInterval(getFeedback, 500);
     }
 });
@@ -141,11 +139,12 @@ socket.on('feedback', (stringData) => {
     }
     
     // Check whether peekingduck pipeline is still loading
-    if (data.mainFeedback != "Loading..." && loading) {
+    if (loading && data.mainFeedback != "Loading...") {
         // if it has finished loading, remove spinner
-        mainFeedback.removeChild(spinner)
+        spinner.innerHTML = "";
         loading = false;
     }
+    
     mainFeedback.innerText = data.mainFeedback;
     emotionFeedback.innerText = data.emotionFeedback;
 
