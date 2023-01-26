@@ -10,7 +10,7 @@ def start_pipeline():
     # Custom Nodes
     if globals.running:
         return
-    globals.running = False
+    globals.running = True
     webcam_node = webcam.Node(pkd_base_dir=Path.cwd() / "src" / "custom_nodes")
     processing_node = correctMain.Node(pkd_base_dir=Path.cwd() / "src" / "custom_nodes")
     screen_node = screen.Node()
