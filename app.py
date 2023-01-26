@@ -1,9 +1,8 @@
-import cv2
 import json
-from flask import Flask, render_template, Response, request
+from flask import Flask, render_template
 from flask_socketio import SocketIO, emit
 import globals
-from main import main
+from node_pipeline import start_pipeline
 
 
 app = Flask(__name__)
@@ -22,7 +21,7 @@ def index():
 def start():
     """When start button is clicked, WebSocket event is triggered
     which starts the main programme"""
-    main()
+    start_pipeline()
 
 @socketio.on('feedback')
 def send_feedback():
@@ -33,7 +32,7 @@ def send_feedback():
     on the front end"""
     data = {
         "repCount": globals.repCount,
-        "summary": globals.mainFeedback,
+        "mainFeedback": globals.mainFeedback,
         "repFeedback": globals.repFeedback,
         "emotionFeedback": globals.emotionFeedback,
     }

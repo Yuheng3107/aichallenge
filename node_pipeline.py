@@ -6,7 +6,7 @@ from src.custom_nodes.dabble import correctMain
 from peekingduck.runner import Runner
 
 
-def main():
+def start_pipeline():
     # Custom Nodes
     webcam_node = webcam.Node(pkd_base_dir=Path.cwd() / "src" / "custom_nodes")
     processing_node = correctMain.Node(pkd_base_dir=Path.cwd() / "src" / "custom_nodes")
@@ -14,7 +14,7 @@ def main():
 # Change source to file name to parse file
     sources = [[0],
         ["Training_Data/Squats/Good_Pose/Side_View1.mp4","Training_Data/Squats/Bad_Pose/Butt/Side_View.mp4","Training_Data/Squats/Bad_Pose/Knee/Side_View2.mp4"],
-        ["Training_Data/Squats/Good_Pose/Front_View2.mp4","Training_Data/Squats/Good_Pose/Front_View2.mp4","Training_Data/Squats/Good_Pose/Front_View4.mp4","Training_Data/Squats/Good_Pose/Front_View4.mp4","Training_Data/Squats/Bad_Pose/Knee/Front_View1.mp4"],
+        ["Training_Data/Squats/Good_Pose/Front_View1.mp4","Training_Data/Squats/Bad_Pose/Knee/Front_View3.mp4"],
         ["Training_Data/Push_Up/Good_Pose/Side_View1.mp4","Training_Data/Push_Up/Bad_Pose1/Side_View.mp4","Training_Data/Push_Up/Bad_Pose2/Side_View.mp4"],
         ["Training_Data/Squats/Sentimental/Front_View5.mp4","Training_Data/Squats/Sentimental_Neutral/Front_View1.mp4"]]
 
@@ -36,4 +36,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    start_pipeline()

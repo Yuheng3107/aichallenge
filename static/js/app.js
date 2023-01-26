@@ -17,18 +17,19 @@ const feedback = document.querySelector('#feedback');
 const form = document.querySelector('#changeExercise');
 const showLogButton = document.querySelector("#show-log-button");
 const feedbackList = document.querySelector('#feedback-list');
-const summary = document.querySelector('#summary');
+const mainFeedback = document.querySelector('#main-feedback');
 const textToSpeechButton = document.querySelector('.text-to-speech');
-const emotionFeedback = document.querySelector('#stress-feedback');
+const emotionFeedback = document.querySelector('#emotion-feedback');
 const difficultyButton = document.querySelector('#difficulty');
 const video = document.querySelector("#video");
 const canvas = document.querySelector("#canvas");
 const camPosition = document.querySelector("#cam-position");
 const toggleContainer = document.querySelector(".toggle-container")  
+const spinner = document.querySelector('#spinner');
 
 let synth;
 let textToSpeech = false;
-
+let loading = true;
 
 if ('speechSynthesis' in window) {
     synth = window.speechSynthesis;
@@ -81,14 +82,14 @@ startButton.addEventListener('click', (e) => {
         
 
         started = true;
-        
-        // updates feedback every second
-        setInterval(getFeedback, 1000);
+        // updates feedback every 0.5s
+        spinner.innerHTML = `<i class="fa fa-spinner fa-spin"></i> `;
+        setInterval(getFeedback, 500);
     }
 });
 endButton.addEventListener('click', () => {
     socket.emit('endExercise');
-    summary.classList.add("w-50", "fs-4", "card", "p-3", "mt-3");
+    mainFeedback.classList.add("w-50", "fs-4", "card", "p-3", "mt-3");
     repInfo.style.display='none';
     console.log('end button clicked');
 });
@@ -118,8 +119,9 @@ form.addEventListener('submit', (e) => {
     repCount.style.display = 'flex';
     repFeedback.style.display = 'flex';
     
-    summary.classList.remove("w-50", "fs-4", "card", "p-3", "mt-3");
+    mainFeedback.classList.remove("w-50", "fs-4", "card", "p-3", "mt-3");
     repInfo.style.display='flex';
+
     // Display camera position requirement as alert box
     // 0:Squat (Side)
     // 1:Squat (Front)
@@ -149,9 +151,10 @@ socket.on('feedback', (stringData) => {
     let data = JSON.parse(stringData);
     // if repCount changes, update text display on screen
     if (Number(repCount.textContent) != data["repCount"]) {
+        // update repCount
+        repCount.textContent = data["repCount"];
         repFeedback.textContent = data.repFeedback.slice(-1);
         //append list items to the feedback log
-        console.log(data);
         let li = document.createElement('li');
         li.innerText = data.repFeedback.slice(-1);
         feedbackList.insertBefore(li, feedbackList.firstChild);
@@ -162,8 +165,15 @@ socket.on('feedback', (stringData) => {
             synth.speak(speech);
         }
     }
-    repCount.textContent = data["repCount"];
-    summary.innerText = data.summary;
+    
+    // Check whether peekingduck pipeline is still loading
+    if (loading && data.mainFeedback != "Loading...") {
+        // if it has finished loading, remove spinner
+        spinner.innerHTML = "";
+        loading = false;
+    }
+    
+    mainFeedback.innerText = data.mainFeedback;
     emotionFeedback.innerText = data.emotionFeedback;
 
 })
