@@ -36,7 +36,7 @@ def initialise():
 
     repCount = 0
     runSwitch = False
-    currentExercise = 0
+    currentExercise = -1
 
     mainFeedback = ["Press Start"]
     repFeedback = []

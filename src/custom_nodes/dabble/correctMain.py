@@ -39,7 +39,7 @@ class Node(AbstractNode):
         # self.logger.info(f"model loaded with configs: config")
 
         super().__init__(config, node_path=__name__, **kwargs)
-        globals.mainFeedback = ["Please Select Exercise"]
+        globals.mainFeedback = ["Loading..."]
 
         self.resetAll()
 
@@ -507,8 +507,10 @@ class Node(AbstractNode):
             outputs (dict): empty.
         """
 
-
         ### UI METHODS
+        if globals.currentExercise == -1:
+            globals.mainFeedback = ["Please Select Exercise."]
+
         if globals.exerciseSelected:
             self.changeExercise()
             globals.exerciseSelected = False
@@ -529,8 +531,6 @@ class Node(AbstractNode):
             
             # FRAME STATUS
             frameStatus = self.shouldSelectFrames(score, self.scoreThresholds[globals.currentExercise])
-
-
 
             #default message
             globals.mainFeedback = ["Exercise in progress"]
