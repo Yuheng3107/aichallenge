@@ -21,7 +21,7 @@ const toggleContainer = document.querySelector(".toggle-container")
 
 let synth;
 let textToSpeech = false;
-
+let loading = true;
 
 if ('speechSynthesis' in window) {
     synth = window.speechSynthesis;
@@ -34,7 +34,9 @@ else {
 }
 let started = false;
 let socket = io();
-
+let spinner = document.createElement('i');
+spinner.classList.add("fa", "fa-spinner", "fa-spin");
+// creates a font awesome spinner
 document.addEventListener('DOMContentLoaded', (event) => {
     //hide the repcount and repfeedback on page load since there's no content
     
@@ -53,9 +55,10 @@ startButton.addEventListener('click', (e) => {
         fetch(startButton.getAttribute('data-url'));
         startButton.style.display = "none";
         started = true;
-        
-        // updates feedback every second
-        setInterval(getFeedback, 200);
+        // updates feedback every 0.5s
+        // adds spinner to mainFeedback
+        mainFeedback.appendChild(spinner);
+        setInterval(getFeedback, 500);
     }
 });
 endButton.addEventListener('click', () => {
@@ -83,7 +86,6 @@ form.addEventListener('submit', (e) => {
     // prevents default form submission 
     e.preventDefault();
     let exerciseId = form.elements["exerciseId"].value;
-    console.log(typeof exerciseId);
     // calls python function to update exercise id
     socket.emit('changeExercise', exerciseId);
     // Make repCount and repFeedback visible
@@ -93,6 +95,7 @@ form.addEventListener('submit', (e) => {
     
     mainFeedback.classList.remove("w-50", "fs-4", "card", "p-3", "mt-3");
     repInfo.style.display='flex';
+
     // Display camera position requirement as alert box
     // 0:Squat (Side)
     // 1:Squat (Front)
@@ -122,9 +125,10 @@ socket.on('feedback', (stringData) => {
     let data = JSON.parse(stringData);
     // if repCount changes, update text display on screen
     if (Number(repCount.textContent) != data["repCount"]) {
+        // update repCount
+        repCount.textContent = data["repCount"];
         repFeedback.textContent = data.repFeedback.slice(-1);
         //append list items to the feedback log
-        console.log(data);
         let li = document.createElement('li');
         li.innerText = data.repFeedback.slice(-1);
         feedbackList.insertBefore(li, feedbackList.firstChild);
@@ -135,7 +139,13 @@ socket.on('feedback', (stringData) => {
             synth.speak(speech);
         }
     }
-    repCount.textContent = data["repCount"];
+    
+    // Check whether peekingduck pipeline is still loading
+    if (data.mainFeedback != "Loading..." && loading) {
+        // if it has finished loading, remove spinner
+        mainFeedback.removeChild(spinner)
+        loading = false;
+    }
     mainFeedback.innerText = data.mainFeedback;
     emotionFeedback.innerText = data.emotionFeedback;
 
