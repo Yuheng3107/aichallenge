@@ -53,7 +53,7 @@ class Node(AbstractNode):
         self.evalPoses = np.array([
             [0.,0.,0.,0.,1.75,0.,0.,0.,0.44,0.,0.],
             [0.,0.,0.,0.,0.,2.375,0.,2.264,0.,0.,0.],
-            [0.,0.,0.,0.,2.825,0.,2.832,0.,1.583,0.,1.684]],dtype=np.float16)
+            [0.,0.,0.,0.,2.825,0.,2.832,0.,1.583,0.,1.684]],dtype=np.float32)
         
         """
         Array(N,K) containing the correct poses
@@ -64,7 +64,7 @@ class Node(AbstractNode):
         self.angleWeights = np.array([
             [0.,0.,0.,0.,1.,0.,0.,0.,1.,0.,0.],
             [0.,0.,0.,0.,0.,1.,0.,1.,0.,0.,0.],
-            [0.,0.,0.,0.,0.,0.,0.,0.,1.,0.,10.]],dtype=np.float16)
+            [0.,0.,0.,0.,0.,0.,0.,0.,1.,0.,10.]],dtype=np.float32)
         
         """
         Array(N,K) containing the weights that each angle should have in evaluation
@@ -72,7 +72,7 @@ class Node(AbstractNode):
             K: key angles (11)
         """
 
-        self.scoreThresholds = np.array([0.2,0.17,0.06],dtype=np.float16)
+        self.scoreThresholds = np.array([0.18,0.17,0.06],dtype=np.float32)
         """
         Array(N) containing the Score Thresholds.
             N: number of exercises
@@ -83,20 +83,20 @@ class Node(AbstractNode):
         self.angleThresholds = np.array([
             [0.,0.,0.,0.,0.14,0.,0.,0.,0.13,0.,0.],
             [0.,0.,0.,0.,0.,0.33,0.,0.4,0.,0.,0.],
-            [0.,0.,0.,0.,0.,0.,0.,0.,0.16,0.,0.1]],dtype=np.float16)
+            [0.,0.,0.,0.,0.,0.,0.,0.,0.16,0.,0.1]],dtype=np.float32)
         """
         Array(N,K) containing the differences in angle required for feedback to be given
             N: number of exercises
             K: key angles (11)
         """
 
-        self.evalRepTime = np.array([2,2,2],dtype=np.float16)
+        self.evalRepTime = np.array([2,2,2],dtype=np.float32)
         """
         Array(N) containing the minimum ideal rep times
             N: number of exercises
         """
 
-        self.emotionThresholds = np.array([30,30,50],dtype=np.float16)
+        self.emotionThresholds = np.array([30,30,50],dtype=np.float32)
         """
         Arary(4) containing the thresholds for the various emotions
             Angry, Neutral, Sad, Disgust
@@ -135,7 +135,7 @@ class Node(AbstractNode):
             Called: when a rep is finished.
         """
         ### EXERCISE VARIABLES
-        self.selectedFrames = np.zeros((200,11),dtype=np.float16)
+        self.selectedFrames = np.zeros((200,11),dtype=np.float32)
         """
         Array(X,K) containing the store of frames to be evaluated
             X: Maximum number of frames the buffer stores (maximum selectedFrameCount size)
@@ -148,7 +148,7 @@ class Node(AbstractNode):
         self.frameCount = 0
         """Frame Count for Emotions"""
 
-        self.selectedEmotionFrames = np.zeros((100,7),dtype=np.float16)
+        self.selectedEmotionFrames = np.zeros((100,7),dtype=np.float32)
         """
         Array(X,K) containing the store of frames to be evaluated
             X: Maximum number of frames buffer stores (maximum selectedEmotionFrameCount size)
@@ -524,7 +524,6 @@ class Node(AbstractNode):
         if globals.runSwitch:
             # Keypoints has a shape of (1, 17, 2)
             keypoints = inputs["keypoints"]
-            print(globals.img.shape)
             # Calculates angles in radians of live feed
             curPose = processData(keypoints, globals.img.shape[0], globals.img.shape[1])
             score = comparePoses(self.evalPoses[globals.currentExercise],curPose, self.angleWeights[globals.currentExercise]) 
