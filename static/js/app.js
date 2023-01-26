@@ -18,7 +18,6 @@ const emotionFeedback = document.querySelector('#emotion-feedback');
 const difficultyButton = document.querySelector('#difficulty');
 const camPosition = document.querySelector("#cam-position");
 const toggleContainer = document.querySelector(".toggle-container")  
-const spinner = document.querySelector('#spinner');
 
 let synth;
 let textToSpeech = false;
@@ -55,7 +54,6 @@ startButton.addEventListener('click', (e) => {
         startButton.style.display = "none";
         started = true;
         // updates feedback every 0.5s
-        spinner.innerHTML = `<i class="fa fa-spinner fa-spin"></i> `;
         setInterval(getFeedback, 500);
     }
 });
@@ -141,11 +139,14 @@ socket.on('feedback', (stringData) => {
     // Check whether peekingduck pipeline is still loading
     if (loading && data.mainFeedback != "Loading...") {
         // if it has finished loading, remove spinner
-        spinner.innerHTML = "";
         loading = false;
     }
-    
-    mainFeedback.innerText = data.mainFeedback;
+    if (loading) {
+        mainFeedback.innerHTML = `<i class="fa fa-spinner fa-spin"></i> ${data.mainFeedback}`;
+    }
+    else {
+        mainFeedback.innerText = data.mainFeedback;
+    }
     emotionFeedback.innerText = data.emotionFeedback;
 
 })
