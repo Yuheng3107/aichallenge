@@ -7,17 +7,17 @@ from node_pipeline import start_pipeline
 
 app = Flask(__name__)
 socketio = SocketIO(app)
-running = False
+running = 0
 
 
 @app.route('/')
 def index():
     """Index route which initialises global variables
     and returns the homepage"""
-    if running == False:
+    if running == 0:
         globals.initialise()
         return render_template('./index.html')
-        running = True
+    running += 1
 
 @socketio.on('start')
 def start():
