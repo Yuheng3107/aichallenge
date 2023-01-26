@@ -44,4 +44,4 @@ class Node(AbstractNode):
             
             
         # Need img to be in data pool for posenet model to work
-        return {"img": globals.img}
+        return {"img": globals.img, "filename": "screen"}
