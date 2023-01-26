@@ -33,7 +33,7 @@ def compareAngles(evalPose: np.ndarray, angleThresholds: np.ndarray, selectedFra
         Returns:
             angleDifferences (Array(11)[float]): angle differences, positive is too large, negative is too small, 0 is no significant difference    
     """
-    angleDifferences = np.zeros(evalPose.shape,dtype=np.float16) 
+    angleDifferences = np.zeros(evalPose.shape,dtype=np.float32) 
     # check for 0 frames
     if selectedFrameCount == 0:
         return np.array([-99])
@@ -58,7 +58,7 @@ def compareAngles(evalPose: np.ndarray, angleThresholds: np.ndarray, selectedFra
             angleDifferences[i] = differences[i]
     return angleDifferences
 
-def compareTime(evalTime:np.float16, repTime:np.float16):
+def compareTime(evalTime:np.float32, repTime:np.float32):
     """
     Evaluates if rep time is too short
         Called: when rep is finished
@@ -107,16 +107,16 @@ def processData(keypoints: np.ndarray, height: int, width: int):
     """
     
     if (keypoints.shape != (1, 17, 2)):
-        return np.zeros(11,dtype=np.float16)
+        return np.zeros(11,dtype=np.float32)
     # for datasec purposes, 0 is invalid data
-    data = np.zeros((17,2),dtype=np.float16) 
+    data = np.zeros((17,2),dtype=np.float32) 
     for i,x in enumerate(keypoints[0]):
         if x[0] == -1.:
             continue
         data[i,0] = x[0]*(width - 1)
         data[i,1] = x[1]*(height - 1)
     
-    def makeLine(point1: np.float16, point2: np.float16):
+    def makeLine(point1: np.float32, point2: np.float32):
         """
         Returns:
             output (np array(2 float)): line from point1 to point2, (0,0) if the points cannot be calculated due to missing keypoint
@@ -126,7 +126,7 @@ def processData(keypoints: np.ndarray, height: int, width: int):
         return point2-point1
 
     # array of lines, 0,0 is invalid data
-    lines = np.zeros((12,2),dtype=np.float16)
+    lines = np.zeros((12,2),dtype=np.float32)
 
     # vertical
     lines[0] = np.array([0,1],dtype=float)
@@ -166,7 +166,7 @@ def processData(keypoints: np.ndarray, height: int, width: int):
         cosine_angle = np.dot(-line1, line2) / (np.linalg.norm(-line1) * np.linalg.norm(line2))
         return np.arccos(cosine_angle)
     
-    def calcAvg(angle1:np.float16, angle2: np.float16):
+    def calcAvg(angle1:np.float32, angle2: np.float32):
         """
         returns: 
             angle (float): ratio of line1 to line2
@@ -177,7 +177,7 @@ def processData(keypoints: np.ndarray, height: int, width: int):
         return (angle1+angle2)/2
     
     # curPose, 0 is invalid data
-    curPose = np.zeros(11,dtype=np.float16)
+    curPose = np.zeros(11,dtype=np.float32)
 
     # rightHip-rightShoulder-rightElbow
     curPose[0] = calcAngle(-lines[6],lines[2])
