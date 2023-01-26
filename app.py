@@ -32,7 +32,9 @@ def start():
     """When start button is clicked, GET request (AJAX)
     is sent to this route to get the peekingduck pipeline
     running"""
-    start_pipeline()
+    if globals.mainFeedback[0] == "Press Start":
+        start_pipeline()
+    
     return ""
 
 @app.route('/video_feed')
