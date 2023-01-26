@@ -21,7 +21,10 @@ def index():
 def start():
     """When start button is clicked, WebSocket event is triggered
     which starts the main programme"""
-    start_pipeline()
+    if globals.mainFeedback[0] == "Press Start":
+        start_pipeline()
+
+    
 
 @socketio.on('feedback')
 def send_feedback():
