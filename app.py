@@ -52,7 +52,7 @@ def send_feedback():
     on the front end"""
     data = {
         "repCount": globals.repCount,
-        "summary": globals.mainFeedback,
+        "mainFeedback": globals.mainFeedback,
         "repFeedback": globals.repFeedback,
         "emotionFeedback": globals.emotionFeedback,
     }

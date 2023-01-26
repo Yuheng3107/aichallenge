@@ -12,9 +12,9 @@ const feedback = document.querySelector('#feedback');
 const form = document.querySelector('#changeExercise');
 const showLogButton = document.querySelector("#show-log-button");
 const feedbackList = document.querySelector('#feedback-list');
-const summary = document.querySelector('#summary');
+const mainFeedback = document.querySelector('#main-feedback');
 const textToSpeechButton = document.querySelector('.text-to-speech');
-const emotionFeedback = document.querySelector('#stress-feedback');
+const emotionFeedback = document.querySelector('#emotion-feedback');
 const difficultyButton = document.querySelector('#difficulty');
 const camPosition = document.querySelector("#cam-position");
 const toggleContainer = document.querySelector(".toggle-container")  
@@ -60,7 +60,7 @@ startButton.addEventListener('click', (e) => {
 });
 endButton.addEventListener('click', () => {
     socket.emit('endExercise');
-    summary.classList.add("w-50", "fs-4", "card", "p-3", "mt-3");
+    mainFeedback.classList.add("w-50", "fs-4", "card", "p-3", "mt-3");
     repInfo.style.display='none';
     console.log('end button clicked');
 });
@@ -91,7 +91,7 @@ form.addEventListener('submit', (e) => {
     repCount.style.display = 'flex';
     repFeedback.style.display = 'flex';
     
-    summary.classList.remove("w-50", "fs-4", "card", "p-3", "mt-3");
+    mainFeedback.classList.remove("w-50", "fs-4", "card", "p-3", "mt-3");
     repInfo.style.display='flex';
     // Display camera position requirement as alert box
     // 0:Squat (Side)
@@ -136,7 +136,7 @@ socket.on('feedback', (stringData) => {
         }
     }
     repCount.textContent = data["repCount"];
-    summary.innerText = data.summary;
+    mainFeedback.innerText = data.mainFeedback;
     emotionFeedback.innerText = data.emotionFeedback;
 
 })
