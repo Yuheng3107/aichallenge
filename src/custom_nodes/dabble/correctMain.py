@@ -90,7 +90,7 @@ class Node(AbstractNode):
             K: key angles (11)
         """
 
-        self.evalRepTime = np.array([3.5,2,2],dtype=np.float32)
+        self.evalRepTime = np.array([3.5,3.5,2],dtype=np.float32)
         """
         Array(N) containing the minimum ideal rep times
             N: number of exercises
