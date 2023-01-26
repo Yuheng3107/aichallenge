@@ -51,7 +51,7 @@ class Node(AbstractNode):
 
         # TO BE IMPORTED FROM NUMPY ARRAYS
         self.evalPoses = np.array([
-            [0.,0.,0.,0.,1.7096729,0.,0.,0.,0.44,0.,0.],
+            [0.,0.,0.,0.,1.75,0.,0.,0.,0.4,0.,0.],
             [0.,0.,0.,0.,0.,2.375,0.,2.264,0.,0.,0.],
             [0.,0.,0.,0.,2.825,0.,2.832,0.,1.583,0.,1.684]],dtype=np.float32)
         
@@ -72,7 +72,7 @@ class Node(AbstractNode):
             K: key angles (11)
         """
 
-        self.scoreThresholds = np.array([0.18,0.17,0.06],dtype=np.float32)
+        self.scoreThresholds = np.array([0.19,0.17,0.06],dtype=np.float32)
         """
         Array(N) containing the Score Thresholds.
             N: number of exercises
@@ -90,7 +90,7 @@ class Node(AbstractNode):
             K: key angles (11)
         """
 
-        self.evalRepTime = np.array([2,2,2],dtype=np.float32)
+        self.evalRepTime = np.array([3.5,2,2],dtype=np.float32)
         """
         Array(N) containing the minimum ideal rep times
             N: number of exercises
@@ -111,9 +111,9 @@ class Node(AbstractNode):
             ['',''],['','']],
             #Front Squats
             [['',''],['',''],['',''],['',''],['',''],
-            ['Bending down too little. ','Bending down too much. '],
-            ['',''],
             ['Knees collapse inwards. ','Feet may be too wide apart. '],
+            ['',''],
+            ['Bending down too little. ', 'Bending down too much. '],
             ['',''],['',''],['','']],
             #Side Push-ups
             [['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],
@@ -264,9 +264,14 @@ class Node(AbstractNode):
         Changes inPose to being in rest pose, gets the feedback for the rep, then deletes all frame data of the rep.
             Called: when rep is finished.
         """
-        globals.repCount += 1
         repTime = time.time() - self.repStartTime
 
+        #anomaly, rep time too short
+        if repTime < 1.5:
+            return None
+
+        globals.repCount += 1
+        
         ### Rep feedback
         timeDifference = compareTime(self.evalRepTime[globals.currentExercise],repTime)
         angleDifferences = compareAngles(self.evalPoses[globals.currentExercise], self.angleThresholds[globals.currentExercise],self.selectedFrames,self.selectedFrameCount)
@@ -447,7 +452,7 @@ class Node(AbstractNode):
             if frameStatus == 0:
                 self.switchPoseCount += 1
                 # if 5 rest frames in a row
-                if self.switchPoseCount > 7:
+                if self.switchPoseCount > 10:
                     # transition into rest pose
                     self.finishRep()
                     
@@ -461,7 +466,7 @@ class Node(AbstractNode):
             if frameStatus == 1:
                 self.switchPoseCount += 1
                 # if 5 pose frames in a row
-                if self.switchPoseCount > 2:
+                if self.switchPoseCount > 4:
                     # transition into key pose
                     self.middleOfRep()
 
