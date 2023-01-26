@@ -72,7 +72,7 @@ class Node(AbstractNode):
             K: key angles (11)
         """
 
-        self.scoreThresholds = np.array([0.18,0.17,0.06],dtype=np.float32)
+        self.scoreThresholds = np.array([0.19,0.17,0.06],dtype=np.float32)
         """
         Array(N) containing the Score Thresholds.
             N: number of exercises
