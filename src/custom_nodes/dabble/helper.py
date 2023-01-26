@@ -24,14 +24,14 @@ def compareAngles(evalPose: np.ndarray, angleThresholds: np.ndarray, selectedFra
         Called: when rep is finished.
 
         Args:
-            evalPose (Array(19)[float]): the ideal pose to be compared against.
-            curPose (Array(19)[float]): the current pose detected by the camera.
-            angleThresholds (Array(19)[float]): the threshold of angle differences
-            selectedFrames (Array(X,19)[float]): Array containing the store of frames to be evaluated
+            evalPose (Array(11)[float]): the ideal pose to be compared against.
+            curPose (Array(11)[float]): the current pose detected by the camera.
+            angleThresholds (Array(11)[float]): the threshold of angle differences
+            selectedFrames (Array(X,11)[float]): Array containing the store of frames to be evaluated
             selectedFrameCount: X - Number of frames in selectedFrames 
 
         Returns:
-            angleDifferences (Array(19)[float]): angle differences, positive is too large, negative is too small, 0 is no significant difference    
+            angleDifferences (Array(11)[float]): angle differences, positive is too large, negative is too small, 0 is no significant difference    
     """
     angleDifferences = np.zeros(evalPose.shape) 
     # check for 0 frames
@@ -99,27 +99,22 @@ def processData(keypoints: np.ndarray, height: int, width: int):
         Called: every frame while rep detection is active.
 
         Args:
-            keypoints (Array(19)[float]): keypoints detected by PeekingDuck
+            keypoints (Array(11)[float]): keypoints detected by PeekingDuck
             height (int): height of img
 
         Returns:
-            curPose(Array(19)[float]): angle data of the pose
+            curPose(Array(11)[float]): angle data of the pose
     """
     
     if (keypoints.shape != (1, 17, 2)):
-        return np.zeros(19)
-    #for datasec purposes, 0 is invalid data
+        return np.zeros(11)
+    # for datasec purposes, 0 is invalid data
     data = np.zeros((17,2)) 
     for i,x in enumerate(keypoints[0]):
         if x[0] == -1.:
             continue
         data[i,0] = x[0]*(width - 1)
         data[i,1] = x[1]*(height - 1)
-    #array of lines, 0,0 is invalid data
-    lines = np.zeros((19,2))
-    midShoulder = (data[5] + data[6])/2
-    midHip = (data[11] + data[12])/2
-
     
     def makeLine(point1: np.float64, point2: np.float64):
         """
@@ -130,49 +125,37 @@ def processData(keypoints: np.ndarray, height: int, width: int):
             return np.zeros(2)
         return point2-point1
 
-    #leftEar-nose
-    lines[0] = makeLine(data[3],data[0])
-    #rightEar-nose
-    lines[1] = makeLine(data[4],data[0])
-    #nose-midShoulder
-    lines[2] = makeLine(data[0],midShoulder)
+    # array of lines, 0,0 is invalid data
+    lines = np.zeros((12,2))
 
-    #midShoulder-leftShoulder
-    lines[3] = makeLine(midShoulder,data[5])
-    #midShoulder-rightShoulder
-    lines[4] = makeLine(midShoulder,data[6])
-    #leftShoulder-leftElbow
-    lines[5] = makeLine(data[5],data[7])
-    #rightShoulder-rightElbow
-    lines[6] = makeLine(data[6],data[8])
-    #leftElbow-leftWrist
-    lines[7] = makeLine(data[7],data[9])
-    #rightElbow-rightWrist
-    lines[8] = makeLine(data[8],data[10])
+    # vertical
+    lines[0] = np.array([0,1],dtype=float)
 
-    #vertical
-    lines[9] = np.array([0,1],dtype=float)
+    # leftShoulder-leftElbow
+    lines[1] = makeLine(data[5],data[7])
+    # rightShoulder-rightElbow
+    lines[2] = makeLine(data[6],data[8])
+    # leftElbow-leftWrist
+    lines[3] = makeLine(data[7],data[9])
+    # rightElbow-rightWrist
+    lines[4] = makeLine(data[8],data[10])
 
-    #midShoulder-midHip
-    lines[10] = makeLine(midShoulder,midHip)
-    #rightHip-rightAnkle
+    # leftShoulder-leftHip
+    lines[5] = makeLine(data[5],data[11])
+    # rightShoulder-rightHip
+    lines[6] = makeLine(data[6],data[12])
+
+    # leftHip-leftKnee
+    lines[7] = makeLine(data[11],data[13])
+    # rightHip-rightKnee
+    lines[8] = makeLine(data[12],data[14])
+    # leftKnee-leftAnkle
+    lines[9] = makeLine(data[13],data[15])
+    # rightKnee-rightAnkle
+    lines[10] = makeLine(data[14],data[16])
+    # rightHip-rightAnkle
     lines[11] = makeLine(data[12],data[16])
-    #midHip-rightHip
-    lines[12] = makeLine(midHip,data[12])
-    #leftShoulder-leftHip
-    lines[13] = makeLine(data[5],data[11])
-    #rightShoulder-rightHip
-    lines[14] = makeLine(data[6],data[12])
 
-    #leftHip-leftKnee
-    lines[15] = makeLine(data[11],data[13])
-    #rightHip-rightKnee
-    lines[16] = makeLine(data[12],data[14])
-    #leftKnee-leftAnkle
-    lines[17] = makeLine(data[13],data[15])
-    #rightKnee-rightAnkle
-    lines[18] = makeLine(data[14],data[16])
-    
     def calcAngle(line1: np.ndarray, line2: np.ndarray):
         """
         returns: 
@@ -183,58 +166,43 @@ def processData(keypoints: np.ndarray, height: int, width: int):
         cosine_angle = np.dot(-line1, line2) / (np.linalg.norm(-line1) * np.linalg.norm(line2))
         return np.arccos(cosine_angle)
     
-    def calcLine(line1:np.ndarray, line2: np.ndarray):
+    def calcAvg(angle1:np.float64, angle2: np.float64):
         """
         returns: 
-            ratio (float): ratio of line1 to line2
+            angle (float): ratio of line1 to line2
                 0 if the points cannot be calculated due to missing line
         """
-        if (line1[0] == 0. and line1[1] == 0.) or (line2[0] == 0. and line2[1] == 0.):
+        if angle1 == 0 or angle2 == 0:
             return 0.
-        return np.linalg.norm(line1)/np.linalg.norm(line2)
+        return (angle1+angle2)/2
     
-    #curPose, 0 is invalid data
-    curPose = np.zeros(19)
-    
-    #vertical-rightHip-rightAnkle
-    curPose[2] = calcAngle(lines[9],lines[11])
-    #nose-midShoulder-rightShoulder 
-    curPose[3] = calcAngle(lines[2],lines[4])
-    #midShoulder-leftShoulder-leftElbow
-    curPose[4] = calcAngle(lines[3],lines[5])
-    #midShoulder-rightShoulder-rightElbow
-    curPose[5] = calcAngle(lines[4],lines[6])
-    #nose-midShoulder-leftElbow
-    curPose[6] = calcAngle(lines[2],lines[5])
-    #nose-midShoulder-rightElbow
-    curPose[7] = calcAngle(lines[2],lines[6])
-    #leftShoulder-leftElbow-leftWrist
-    curPose[8] = calcAngle(lines[5],lines[7])
-    #rightShoulder-rightElbow-rightWrist
-    curPose[9] = calcAngle(lines[6],lines[8])
-    #arm-forearm ratio
-    curPose[10] = calcLine(lines[6],lines[8])
-    #midShoulder-midHip-rightHip
-    curPose[11] = calcAngle(lines[10],lines[12])
-    #leftShoulder-leftHip-leftKnee
-    curPose[12] = calcAngle(lines[13],lines[15])
-    #rightShoulder-rightHip-rightKnee
-    curPose[13] = calcAngle(lines[14],lines[16])
-    #leftHip-leftKnee-leftAnkle
-    curPose[14] = calcAngle(lines[15],lines[17])
-    #rightHip-rightKnee-rightAnkle
-    curPose[15] = calcAngle(lines[16],lines[18])
-    #nose-midShoulder-midHip
-    curPose[16] = calcAngle(lines[3],lines[10])
-    #vertical-midHip-midShoulder
-    curPose[17] = calcAngle(lines[9],np.negative(lines[10]))
-    #vertical(nose)-nose-midShoulder
-    curPose[18] = calcAngle(lines[9],lines[3])
+    # curPose, 0 is invalid data
+    curPose = np.zeros(11)
 
-    #Avg(shoulder-hip-knee)
-    curPose[0] = (curPose[12]+curPose[13])/2
-    #Avg(hip-knee-ankle)
-    curPose[1] = (curPose[14]+curPose[15])/2
+    # rightHip-rightShoulder-rightElbow
+    curPose[0] = calcAngle(-lines[6],lines[2])
+    # Avg(hip-shoulder-elbow)
+    curPose[1] = calcAvg(curPose[0],calcAngle(-lines[5],lines[1]))
+    # rightShoulder-rightElbow-rightWrist
+    curPose[2] = calcAngle(lines[2],lines[4])
+    # Avg(shoulder-elbow-wrist)
+    curPose[3] = calcAvg(curPose[2],calcAngle(lines[1],lines[3]))
+
+    # rightShoulder-rightHip-rightKnee
+    curPose[4] = calcAngle(lines[6],lines[8])
+    # Avg(shoulder-hip-knee)
+    curPose[5] = calcAvg(curPose[4],calcAngle(lines[5],lines[7]))
+    # rightHip-rightKnee-rightAnkle
+    curPose[6] = calcAngle(lines[8],lines[10])
+    # Avg(hip-knee-ankle)
+    curPose[7] = calcAvg(curPose[6],calcAngle(lines[7],lines[9]))
+    # vertical-rightHip-rightShoulder
+    curPose[8] = calcAngle(lines[0],-lines[6])
+    # Avg(vertical-hip-shoulder)
+    curPose[9] = calcAvg(curPose[8],calcAngle(lines[0],-lines[5]))
+    # vertical-rightHip-rightAnkle
+    curPose[10] = calcAngle(lines[0],lines[11])
+
     return curPose
 
 def comparePoses(evalPose: np.ndarray, curPose: np.ndarray, angleWeights: np.ndarray):
@@ -243,8 +211,8 @@ def comparePoses(evalPose: np.ndarray, curPose: np.ndarray, angleWeights: np.nda
         Called: every frame while rep detection is active.
 
         Args:
-            evalPose (Array(19)[float]): the ideal pose to be compared against.
-            curPose (Array(19)[float]): the current pose detected by the camera.
+            evalPose (Array(11)[float]): the ideal pose to be compared against.
+            curPose (Array(11)[float]): the current pose detected by the camera.
 
         Returns:
             score (float): a score between 0 and 1, 0 being completely similar and 1 being completely different.
