@@ -7,23 +7,23 @@ from node_pipeline import start_pipeline
 
 app = Flask(__name__)
 socketio = SocketIO(app)
-
+running = False
 
 
 @app.route('/')
 def index():
     """Index route which initialises global variables
     and returns the homepage"""
-    globals.initialise()
-    return render_template('./index.html')
+    if running == False:
+        globals.initialise()
+        return render_template('./index.html')
+        running = True
 
 @socketio.on('start')
 def start():
     """When start button is clicked, WebSocket event is triggered
     which starts the main programme"""
     start_pipeline()
-
-    
 
 @socketio.on('feedback')
 def send_feedback():
@@ -39,7 +39,6 @@ def send_feedback():
         "emotionFeedback": globals.emotionFeedback,
     }
     emit('feedback', json.dumps(data))
-
 
 @socketio.on('endExercise')
 def end_exercise():
@@ -61,11 +60,9 @@ def change_difficulty(difficulty):
      in front end"""
     globals.difficulty = difficulty
 
-
 @socketio.on('video')
 def handle_video(data):
     globals.url = data['url']
-
 
 if __name__ == '__main__':
     # ssl_context=('cert.pem', 'key.pem')
