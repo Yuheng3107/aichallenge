@@ -51,7 +51,7 @@ class Node(AbstractNode):
 
         # TO BE IMPORTED FROM NUMPY ARRAYS
         self.evalPoses = np.array([
-            [0.,0.,0.,0.,1.7096729,0.,0.,0.,0.44,0.,0.],
+            [0.,0.,0.,0.,1.75,0.,0.,0.,0.44,0.,0.],
             [0.,0.,0.,0.,0.,2.375,0.,2.264,0.,0.,0.],
             [0.,0.,0.,0.,2.825,0.,2.832,0.,1.583,0.,1.684]],dtype=np.float32)
         
@@ -111,9 +111,9 @@ class Node(AbstractNode):
             ['',''],['',''],['',''],['','']],
             #Front Squats
             [['',''],['',''],['',''],['',''],['',''],
-            ['Bending down too little. ','Bending down too much. '],
-            ['',''],
             ['Knees collapse inwards. ','Feet may be too wide apart. '],
+            ['',''],
+            ['Bending down too little. ','Bending down too much. '],
             ['',''],['',''],['','']],
             #Side Push-ups
             [['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],
