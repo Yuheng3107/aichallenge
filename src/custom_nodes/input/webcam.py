@@ -42,6 +42,6 @@ class Node(AbstractNode):
             else:
                 print("No image to read")
             
-            
+        
         # Need img to be in data pool for posenet model to work
-        return {"img": globals.img, "filename": "screen"}
+        return {"img": globals.img, "pipeline_end": globals.killSwitch}

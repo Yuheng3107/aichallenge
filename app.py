@@ -70,7 +70,8 @@ def handle_video(data):
 
 @socketio.on('disconnect')
 def reset_connection():
-    running -= 1 
+    running -= 1
+    globals.killSwitch = True
 
 if __name__ == '__main__':
     # ssl_context=('cert.pem', 'key.pem')

@@ -10,6 +10,8 @@ def initialise():
     """True when button to select exercise is pressed"""
     global exerciseEnded
     """True when button to end exercise is pressed"""
+    global killSwitch
+    """Switch to kill PeekingDuck"""
 ### Exercise Variables
     global repCount
     global runSwitch
@@ -51,4 +53,5 @@ def initialise():
     repFeedback = []
     emotionFeedback = ""
     difficulty = "Beginner"
+    killSwitch = False
 
