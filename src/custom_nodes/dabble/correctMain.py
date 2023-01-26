@@ -90,7 +90,7 @@ class Node(AbstractNode):
             K: key angles (11)
         """
 
-        self.evalRepTime = np.array([2,2,2],dtype=np.float32)
+        self.evalRepTime = np.array([3.5,3.5,3.5],dtype=np.float32)
         """
         Array(N) containing the minimum ideal rep times
             N: number of exercises
@@ -263,8 +263,12 @@ class Node(AbstractNode):
         Changes inPose to being in rest pose, gets the feedback for the rep, then deletes all frame data of the rep.
             Called: when rep is finished.
         """
-        globals.repCount += 1
         repTime = time.time() - self.repStartTime
+        #anomaly, rep time too short
+        if repTime < 1.5:
+            return None
+
+        globals.repCount += 1
 
         ### Rep feedback
         timeDifference = compareTime(self.evalRepTime[globals.currentExercise],repTime)
