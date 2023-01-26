@@ -11,7 +11,6 @@ def start_pipeline():
     # Custom Nodes
     webcam_node = webcam.Node(pkd_base_dir=Path.cwd() / "src" / "custom_nodes")
     processing_node = correctMain.Node(pkd_base_dir=Path.cwd() / "src" / "custom_nodes")
-
     posenet_node = posenet.Node(max_pose_detection=1)
     runner = Runner(
         nodes=[
