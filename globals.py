@@ -40,6 +40,6 @@ def initialise():
 
     mainFeedback = ["Press Start"]
     repFeedback = []
-    emotionFeedback = []
+    emotionFeedback = ""
     difficulty = "Beginner"
 
