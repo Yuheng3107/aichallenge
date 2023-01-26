@@ -25,6 +25,16 @@ def initialise():
     """Rep Feedback"""
     global emotionFeedback
     """Emotion Feedback"""
+    global currentEmotion
+    """
+    ID of emotion detected.
+        -1: no face
+        0: no emotion
+        1: fatigue
+        2: stress
+        3: stress & fatigue
+        4: neutral
+    """
     global difficulty
     """Experience level of person exercising, either 
     Beginner or Expert, default is Beginner"""

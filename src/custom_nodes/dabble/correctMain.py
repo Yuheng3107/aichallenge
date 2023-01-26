@@ -96,7 +96,7 @@ class Node(AbstractNode):
             N: number of exercises
         """
 
-        self.emotionThresholds = np.array([30,30,50,50])
+        self.emotionThresholds = np.array([30,30,50])
         """
         Arary(4) containing the thresholds for the various emotions
             Angry, Neutral, Sad, Disgust
@@ -279,9 +279,10 @@ class Node(AbstractNode):
 
         ### Emotion feedback
         emotionAverage = compareEmotions(self.selectedEmotionFrames,self.selectedEmotionFrameCount)
-        emotionFeedback = self.emotionFeedback(emotionAverage,self.emotionThresholds)
-        if emotionFeedback != "":
+        emotionFeedback, currentEmotion = self.emotionFeedback(emotionAverage,self.emotionThresholds)
+        if currentEmotion != 0:
             globals.emotionFeedback = emotionFeedback
+            globals.currentEmotion = currentEmotion
         print(f"Emotions: {emotionAverage}")
         self.resetFrames()
 
@@ -361,41 +362,42 @@ class Node(AbstractNode):
                     
             Returns:
                 feedback (string): emotions displayed in rep & related feedback
+                currentEmotion (int): ID of emotion
         """
         # check for no Face
         if emotionAverage[0] == -99:
             feedback = "No Face Detected"
-            return feedback
-        
+            currentEmotion = -1
+            return feedback, currentEmotion
+
         feedback = ""
+        currentEmotion = 0
 
-    ### angry, disgust, fear, happy, sad, surprise, neutral
-
+        ### angry, disgust, fear, happy, sad, surprise, neutral
         # if fearful/sad for some reason, idek
         if emotionAverage[2] + emotionAverage[4] > emotionThreshold[2]:
             feedback += "Stress detected. "
-        
-        # if disgust, ???
-        if emotionAverage[1] > emotionThreshold[3]:
-            pass
+            currentEmotion += 2
 
         # if angry/happy, exercise is rigorous (grimace is identified by programme as happy)
         if emotionAverage[0] + emotionAverage[3] > emotionThreshold[0]:
             feedback += "Fatigue detected. "
+            currentEmotion += 1
 
             if globals.difficulty == "Beginner":
                 feedback += "Consider resting to prevent injury. "
             if globals.difficulty == "Expert":
                 feedback += "Continue to train to failure for maximum results. "
         
-        if feedback != "":
-            return feedback
+        if currentEmotion != 0:
+            return feedback, currentEmotion
 
         # if neutral, recommend continue
         if emotionAverage[6] > emotionThreshold[1]:
             feedback = "No Fatigue detected. Continue training. "
+            currentEmotion = 4
 
-        return feedback
+        return feedback, currentEmotion
 
 
 ### FRAME METHODS
