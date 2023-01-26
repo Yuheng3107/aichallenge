@@ -4,27 +4,35 @@ from flask_socketio import SocketIO, emit
 import globals
 from node_pipeline import start_pipeline
 
+class MyServer(Flask):
+    
+    def __init__(self, *args, **kwargs):
+        super(MyServer, self).__init__(*args, **kwargs)
 
-app = Flask(__name__)
+        #instanciate your variables here
+        self.connections = False   
+
+
+app = MyServer(__name__)
 socketio = SocketIO(app)
-
-
 
 @app.route('/')
 def index():
     """Index route which initialises global variables
     and returns the homepage"""
+    print(app.connections)
+    if app.connections == False:
+        globals.initialise()
+        app.connections += True
+        return render_template('./index.html')
+    return ""
     
-    return render_template('./index.html')
 
 @socketio.on('start')
 def start():
     """When start button is clicked, WebSocket event is triggered
     which starts the main programme"""
-    success = start_pipeline()
-    if not success:
-        globals.initialise()
-
+    start_pipeline()
     
 
 @socketio.on('feedback')
@@ -70,8 +78,8 @@ def handle_video(data):
 
 @socketio.on('disconnect')
 def reset_connection():
-    running -= 1
     globals.killSwitch = True
+    app.connections = False
 
 if __name__ == '__main__':
     # ssl_context=('cert.pem', 'key.pem')
