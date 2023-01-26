@@ -4,6 +4,7 @@ import numpy as np
 def initialise():
     
 ### UI Variables
+    global url
     global img
     global exerciseSelected
     """True when button to select exercise is pressed"""
