@@ -270,12 +270,6 @@ class Node(AbstractNode):
             return None
 
         globals.repCount += 1
-
-        #anomaly, rep time too short
-        if repTime < 1.5:
-            return None
-
-        globals.repCount += 1
         
         ### Rep feedback
         timeDifference = compareTime(self.evalRepTime[globals.currentExercise],repTime)
