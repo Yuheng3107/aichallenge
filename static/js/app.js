@@ -14,7 +14,7 @@ const showLogButton = document.querySelector("#show-log-button");
 const feedbackList = document.querySelector('#feedback-list');
 const summary = document.querySelector('#summary');
 const textToSpeechButton = document.querySelector('.text-to-speech');
-const stressFeedback = document.querySelector('#stress-feedback');
+const emotionFeedback = document.querySelector('#stress-feedback');
 const difficultyButton = document.querySelector('#difficulty');
 const camPosition = document.querySelector("#cam-position");
 const toggleContainer = document.querySelector(".toggle-container")  
@@ -137,7 +137,7 @@ socket.on('feedback', (stringData) => {
     }
     repCount.textContent = data["repCount"];
     summary.innerText = data.summary;
-    stressFeedback.innerText = data.stressFeedback;
+    emotionFeedback.innerText = data.emotionFeedback;
 
 })
 
