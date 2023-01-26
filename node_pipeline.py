@@ -4,7 +4,7 @@ from src.custom_nodes.input import webcam
 from src.custom_nodes.dabble import correctMain
 from peekingduck.pipeline.nodes.output import media_writer, screen
 from peekingduck.runner import Runner
-
+import globals
 
 def start_pipeline():
     # Custom Nodes
