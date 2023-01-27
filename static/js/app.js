@@ -308,7 +308,9 @@ window.addEventListener("orientationchange", () => {
 
 
 
-  screen.orientation.onchange = function () {
+  
+
+  window.addEventListener('resize' () => {
     [canvas.height, canvas.width] = [canvas.width, canvas.height];
     [video.height, video.width] = [video.width, video.height];
-  }
+  });
