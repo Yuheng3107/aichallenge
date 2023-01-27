@@ -4,12 +4,17 @@ import numpy as np
 def superInitialise():
     global ISACTIVE
     global CONNECTION
+    
+    ### Sever Setting variables
+    global displayVideoOnBackend
 
     ISACTIVE = False
     CONNECTION = False
-
+    displayVideoOnBackend = False
 def initialise():
-    
+
+
+
 ### UI Variables
     global url
     global img
@@ -54,6 +59,7 @@ def initialise():
     exerciseSelected = False
     exerciseEnded = False
 
+
     repCount = 0
     runSwitch = False
     currentExercise = -1
@@ -64,4 +70,4 @@ def initialise():
     difficulty = "Beginner"
     killSwitch = False
     isKilled = False
-
+    

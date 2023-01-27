@@ -41,7 +41,7 @@
     </nav>
     <main class="d-flex flex-column align-items-lg-center container">
         <canvas id="canvas" style="display: none;" width="640" height="360"></canvas>
-        <video id="video" class="video-feed" width="640" height="360" autoplay alt="Video"></video>
+        <video id="video" class="video-feed" width="640" height="360" autoplay playsinline poster="{{url_for('static', filename='images/logo.png')}}" alt="Video"></video>
         <div id="rep-info-group">
             <span id="rep-count"></span>
             <p id="rep-feedback"></p>
