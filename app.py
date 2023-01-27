@@ -54,6 +54,7 @@ def end_exercise():
     which can be retrieved by front end"""
     if not globals.exerciseEnded:
         globals.exerciseEnded = True
+    # Add code to save exercise in a cookie
 
 @socketio.on('changeExercise')
 def change_exercise(exerciseId):

@@ -9,6 +9,7 @@ function getVideoFrames() {
     socket.emit('video', {'url': dataURL});
 }
 
+
 function setSpinner() {
     spinner.innerHTML = `<i class="fa fa-spinner fa-spin"></i>`;
 }
@@ -50,10 +51,6 @@ let textToSpeech = false;
 let loading = true;
 let constraints = {
     video: {
-    width: { ideal: 640 },
-    height: { ideal: 320 },
-    // constraints for getUserMedia which makes it try to get video in
-    // 640x320 resolution
     facingMode: "user"
     //  tries to get camera that faces user
   }
@@ -100,8 +97,23 @@ startButton.addEventListener('click', (e) => {
 
 
             navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
+                // sizes the video to be same size as stream
+                
                 video.srcObject = stream;
-                // 20 fps
+                // sizes the canvas to be same size as the camera resolution
+                let videoTracks = stream.getVideoTracks();
+                while (true) {
+                    if (videoTracks.length > 0) {
+                        let settings = videoTracks[0].getSettings();
+                        // set the video and canvas to the height and width of the stream
+                        video.width = settings.width;
+                        video.height = settings.height;
+                        canvas.width = settings.width;
+                        canvas.height = settings.height;
+                        break;
+                    }
+                }
+                // sends jpeg to backend at 20 fps
                 setInterval(getVideoFrames, 50);
             }).catch(function(err) {
                 console.log("An error occurred: " + err);
