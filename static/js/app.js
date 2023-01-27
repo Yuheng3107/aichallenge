@@ -113,8 +113,8 @@ startButton.addEventListener('click', (e) => {
                         break;
                     }
                 }
-                // sends jpeg to backend at 20 fps
-                setInterval(getVideoFrames, 50);
+                // sends jpeg to backend at 25 fps
+                setInterval(getVideoFrames, 40);
             }).catch(function(err) {
                 console.log("An error occurred: " + err);
             });
