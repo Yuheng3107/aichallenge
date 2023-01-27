@@ -259,6 +259,7 @@ toggleContainer.addEventListener('click', () => {
     toggleContainer.classList.toggle('active');
 })
 
+
 // Listens for disconnect events
 
 window.onbeforeunload = () => {
@@ -281,5 +282,10 @@ changeViewButtons.forEach(button => {
             // modifies video source to be new stream, and at the same time removes old stream
         });
     });
+});
+
+screen.addEventListener('orientationchange', () => {
+    [video.height, video.width] = [video.width, video.height];
+    [canvas.height, canvas.width] = [video.height, video.width];
 });
 
