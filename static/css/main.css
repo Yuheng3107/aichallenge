@@ -1,9 +1,7 @@
 :root {
     --rep-feedback-color: rgba(255, 255, 255, 0.241)
 }
-body {
-    height: 120vh;
-}
+
 .video-feed {
     margin-top: 2rem;
     width: 50vw;
@@ -111,5 +109,8 @@ body {
     margin: 0.5rem 0;
 }
 
+.end-button {
+    margin-bottom: 2rem;
+}
 /* #endregion */
 
