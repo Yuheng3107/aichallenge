@@ -295,14 +295,16 @@ ScreenOrientation.onchange = function(e) {
     [canvas.height, canvas.width] = [video.height, video.width];
 }
 
-
+/*
 window.addEventListener("orientationchange", () => {
     // code to run when the screen orientation changes
     window.alert(`${video.height}, ${video.width}`);
-    [video.height, video.width] = [video.width, video.height];
+  
     window.alert(`${video.height}, ${video.width}`);
-    [canvas.height, canvas.width] = [video.height, video.width];
+    
   });
-
-
-
+*/
+  screen.orientation.addEventListener("change", function() {
+    [canvas.height, canvas.width] = [video.height, video.width];
+    [video.height, video.width] = [video.width, video.height];
+  });
