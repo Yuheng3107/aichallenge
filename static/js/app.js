@@ -304,8 +304,9 @@ ScreenOrientation.onchange = function(e) {
 */
   window.addEventListener('resize', functionName)
 
+  let innerWidth = window.innerWidth;
   function functionName() {
-  
+    if (innerWidth == window.innerWidth) continue;
     if(window.innerWidth > window.innerHeight) {
     [canvas.height, canvas.width] = [canvas.width, canvas.height];
     [video.height, video.width] = [video.width, video.height];
