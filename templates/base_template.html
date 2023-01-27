@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Add local stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    {% block head %}
+    {% endblock %}
+    <title>{% block title %}{% endblock %}</title>
+</head>
+
+<body data-bs-theme="dark">
+
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">AI Challenge 2023</a>
+{% block navbar_items %}
+{% endblock %}
+        </div>
+    </nav>
+    {% block main %}
+    {% endblock %}
+</body>
+
+</html>

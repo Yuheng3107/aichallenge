@@ -8,6 +8,16 @@ function getVideoFrames() {
     let dataURL = canvas.toDataURL('image/jpeg');
     socket.emit('video', {'url': dataURL});
 }
+
+function setSpinner() {
+    spinner.innerHTML = `<i class="fa fa-spinner fa-spin"></i>`;
+}
+
+// feedback interval in ms, updates feedback every 0.5s
+const feedbackInterval = 500;
+
+
+
 const startButton = document.querySelector('.start-button');
 const endButton = document.querySelector('.end-button');
 const repInfo = document.querySelector('#rep-info-group');
@@ -25,6 +35,8 @@ const video = document.querySelector("#video");
 const canvas = document.querySelector("#canvas");
 const camPosition = document.querySelector("#cam-position");
 const toggleContainer = document.querySelector(".toggle-container")  
+const spinner = document.querySelector('#spinner');
+
 
 let synth;
 let textToSpeech = false;
@@ -61,9 +73,8 @@ startButton.addEventListener('click', (e) => {
         // runs python script that starts Peekingduck if PeekingDuck is not already running
         socket.emit('start');
         console.log("PeekingDuck running");
-
         startButton.style.display = "none";
-
+        
         if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
             // checks that browser supports getting camera feed from user
             // if so use the getUserMedia API to get video from the user, after
@@ -81,8 +92,11 @@ startButton.addEventListener('click', (e) => {
         
 
         started = true;
+
         // updates feedback every 0.5s
-        setInterval(getFeedback, 500);
+        setInterval(getFeedback, feedbackInterval);
+        // adds spinner at same time as feedback is updated
+        setTimeout(setSpinner, feedbackInterval);
     }
 });
 endButton.addEventListener('click', () => {
@@ -165,18 +179,14 @@ socket.on('feedback', (stringData) => {
     }
     
     // Check whether peekingduck pipeline is still loading
+    // faster to check bool than string, reduce lag, short-circuit first arg
     if (loading && data.mainFeedback != "Loading...") {
         // if it has finished loading, remove spinner
+        spinner.innerHTML = "";
         loading = false;
     }
-    if (loading) {
-        mainFeedback.innerHTML = `<i class="fa fa-spinner fa-spin"></i> ${data.mainFeedback}`;
-    }
-    else {
-        mainFeedback.innerText = data.mainFeedback;
-    }
+    mainFeedback.innerText = data.mainFeedback
     emotionFeedback.innerText = data.emotionFeedback;
-
 })
 
 showLogButton.addEventListener('click', (event) => {
