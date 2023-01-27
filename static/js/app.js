@@ -310,7 +310,7 @@ window.addEventListener("orientationchange", () => {
 
   
 
-  window.addEventListener('resize' () => {
+  window.addEventListener('resize', () => {
     [canvas.height, canvas.width] = [canvas.width, canvas.height];
     [video.height, video.width] = [video.width, video.height];
   });
