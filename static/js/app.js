@@ -37,10 +37,17 @@ const camPosition = document.querySelector("#cam-position");
 const toggleContainer = document.querySelector(".toggle-container")  
 const spinner = document.querySelector('#spinner');
 
-
 let synth;
 let textToSpeech = false;
 let loading = true;
+const constraints = {
+    video: {
+    width: { ideal: 640 },
+    height: { ideal: 320 }
+  }
+};
+// constrains for getUserMedia which makes it try to get video in
+// 640x320 resolution
 
 if ('speechSynthesis' in window) {
     synth = window.speechSynthesis;
@@ -48,7 +55,7 @@ if ('speechSynthesis' in window) {
 }
 else {
     // replace with overlay and div pop-up in the future
-    alert('text to speech not available');
+    window.alert('text to speech not available');
 
 }
 let started = false;
@@ -81,13 +88,16 @@ startButton.addEventListener('click', (e) => {
             // asking for permission from the user
 
 
-            navigator.mediaDevices.getUserMedia({ video: true}).then(function(stream) {
+            navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
                 video.srcObject = stream;
                 // 20 fps
                 setInterval(getVideoFrames, 50);
             }).catch(function(err) {
                 console.log("An error occurred: " + err);
             });
+          }
+          else {
+              window.alert("getUserMedia API not supported");
           }
         
 
@@ -226,7 +236,7 @@ toggleContainer.addEventListener('click', () => {
     toggleContainer.classList.toggle('active');
 })
 
-// Listens to disconnect events
+// Listens for disconnect events
 
 window.onbeforeunload = () => {
     socket.emit('disconnect');
