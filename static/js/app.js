@@ -43,8 +43,9 @@ const changeViewButtons = document.querySelectorAll('.change-view');
 
 /* Test Code to print all media devices for debugging */
 navigator.mediaDevices.enumerateDevices().then(devices => {
-    console.log(devices);
-    alert(`${devices}`);
+    devices.forEach(device => {
+        window.alert(`${device.kind}: ${device.label} id = ${device.deviceId}`);
+    })
 });
 
 
@@ -303,5 +304,5 @@ window.addEventListener("orientationchange", () => {
     [canvas.height, canvas.width] = [video.height, video.width];
   });
 
-  
+
 
