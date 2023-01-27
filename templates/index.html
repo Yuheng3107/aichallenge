@@ -14,7 +14,10 @@
 
 {% block navbar_items %} 
 <div class="d-flex align-items-center justify-content-center">
-    <button id="change-view">Change View</button>
+    <div id="change-view-group" class="me-2">
+        <img class="change-view" id="change-view" src="{{url_for('static', filename='svg/camera-flip.svg')}}" alt="Camera Flip Icon">
+        <img class="change-view" id="change-view-hover" src="{{url_for('static', filename='svg/camera-flip-outline.svg')}}" alt="Camera Flip Icon Hover">
+    </div>
     <span class="toggle-label me-1">Beginner</span>
     <div class="toggle-container">
         <div id="difficulty-toggle"></div>

@@ -36,7 +36,8 @@ const canvas = document.querySelector("#canvas");
 const camPosition = document.querySelector("#cam-position");
 const toggleContainer = document.querySelector(".toggle-container")  
 const spinner = document.querySelector('#spinner');
-const changeViewButton = document.querySelector('#change-view');
+const changeViewButtons = document.querySelectorAll('.change-view');
+// need both buttons to be clickable especially for mobile users
 
 /* Test Code to print all media devices for debugging
 navigator.mediaDevices.enumerateDevices().then(devices => {
@@ -253,17 +254,20 @@ window.onbeforeunload = () => {
 }
 
 // Flips camera when button is clicked
-changeViewButton.addEventListener('click', () => {
-    // toggle between front and back camera
-    if (constraints.video.facingMode == "user") {
-        constraints.video.facingMode = "environment";
-    }
-    else if (constraints.video.facingMode == "environment") {
-        constraints.video.facingMode = "user";
-    }
-    
-    navigator.mediaDevices.getUserMedia(constraints).then(stream => {
-        video.srcObject = stream;
-        // modifies video source to be new stream, and at the same time removes old stream
+changeViewButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        // toggle between front and back camera
+        if (constraints.video.facingMode == "user") {
+            constraints.video.facingMode = "environment";
+        }
+        else if (constraints.video.facingMode == "environment") {
+            constraints.video.facingMode = "user";
+        }
+        
+        navigator.mediaDevices.getUserMedia(constraints).then(stream => {
+            video.srcObject = stream;
+            // modifies video source to be new stream, and at the same time removes old stream
+        });
     });
-})
+});
+
