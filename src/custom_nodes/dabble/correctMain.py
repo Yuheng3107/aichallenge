@@ -124,7 +124,9 @@ class Node(AbstractNode):
         Array(N) containing the text descriptions of each angle
             N: number of exercises
         """
-        cv2.destroyAllWindows()
+        if globals.displayVideoOnBackend:
+            cv2.destroyAllWindows()
+        
 
 ### RESET METHODS
 ### These methods reset variables 
@@ -509,9 +511,11 @@ class Node(AbstractNode):
         Returns:
             outputs (dict): empty.
         """
+        # Added predefined global because it doesn't work on some OS i.e macOS
+        if globals.displayVideoOnBackend:
+            cv2.imshow("image",globals.img)
+            cv2.waitKey(1)
         
-        cv2.imshow("image",globals.img)
-        cv2.waitKey(1)
         ### UI METHODS
         if globals.currentExercise == -1:
             globals.mainFeedback = ["Please Select Exercise."]

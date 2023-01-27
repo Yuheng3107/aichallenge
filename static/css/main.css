@@ -115,6 +115,11 @@
     margin: 0.5rem 0;
 }
 
+.end-button {
+    margin-bottom: 2rem;
+}
+
+
 /* #endregion */
 
 
@@ -134,3 +139,25 @@
 }
 
 /* #endregion */
+/* Styles for icon to change camera view */
+#change-view, #change-view-hover {
+    width: 2rem;
+}
+
+#change-view-hover {
+    display: none;
+}
+
+#change-view-group:hover > img:first-child {
+    display: none;
+}
+
+#change-view-group:hover > img:last-child {
+    display: block;
+}
+
+
+
+
+
+/* endregion */

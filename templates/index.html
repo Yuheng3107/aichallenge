@@ -1,5 +1,63 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base_template.html" %}
+{% block head %} 
+<!-- Add icon library -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<!-- Add Javascript Logic for interactivity -->
+<script src="{{url_for('static', filename='js/app.js')}}" defer></script>
+<!-- Add socketio.js for websocket support -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+    integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
+    crossorigin="anonymous"></script>
+{% endblock %}
+
+{% block title %} Gym Poser {% endblock %} 
+
+{% block navbar_items %} 
+<div class="d-flex align-items-center justify-content-center">
+    <div id="change-view-group" class="me-2">
+        <img class="change-view" id="change-view" src="{{url_for('static', filename='svg/camera-flip.svg')}}" alt="Camera Flip Icon">
+        <img class="change-view" id="change-view-hover" src="{{url_for('static', filename='svg/camera-flip-outline.svg')}}" alt="Camera Flip Icon Hover">
+    </div>
+    <span class="toggle-label me-1">Beginner</span>
+    <div class="toggle-container">
+        <div id="difficulty-toggle"></div>
+    </div>
+    <span class="toggle-label ms-1 me-3">Expert</span>
+    <button class="text-to-speech btn btn-danger mt-2">Turn Off Text-To-Speech</button>
+</div>
+{% endblock %} 
+
+{% block main %} 
+<main class="d-flex flex-column align-items-lg-center container">
+    <canvas id="canvas" style="display: none;" width="640" height="360"></canvas>
+    <video id="video" class="video-feed" width="640" height="360" autoplay playsinline poster="{{url_for('static', filename='images/logo.png')}}" alt="Video"></video>
+    <div id="rep-info-group">
+        <span id="rep-count"></span>
+        <p id="rep-feedback"></p>
+    </div>
+    <p id="main-feedback-group">
+        <span id="spinner"></span>
+        <span id="main-feedback" class="text-center"></span>
+    </p>
+    
+    <p id="emotion-feedback"></p>
+    <button id="show-log-button"><span>Show Feedback Log</span><img
+            src="{{url_for('static', filename='svg/expand-icon.svg')}}" alt="expand icon" /></button>
+    <ul id="feedback-list"></ul>
+    <button class="start-button btn btn-success mt-3">Start Camera</button>
+    <form class="d-flex flex-row mt-3" id="changeExercise">
+        <select class="form-select" name="exerciseId" id="changeExercise">
+            <option selected value="0">Squat (Side)</option>
+            <option value="1">Squat (Front)</option>
+            <option value="2">Push-Up (Side)</option>
+            <option value="3">Push-Up (Front)</option>
+        </select>
+        <input class="ms-2 btn btn-outline-info d-inline" type="submit" value="Start Exercise">
+    </form>
+    <div id="cam-position"></div>
+    <button class="end-button btn btn-secondary mt-3">End Exercise</button>
+</main>
+{% endblock %}
 
 <head>
     <meta charset="UTF-8">

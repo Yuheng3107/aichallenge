@@ -8,6 +8,16 @@ function getVideoFrames() {
     let dataURL = canvas.toDataURL('image/jpeg');
     socket.emit('video', {'url': dataURL});
 }
+
+function setSpinner() {
+    spinner.innerHTML = `<i class="fa fa-spinner fa-spin"></i>`;
+}
+
+// feedback interval in ms, updates feedback every 0.5s
+const feedbackInterval = 500;
+
+
+
 const startButton = document.querySelector('.start-button');
 const endButton = document.querySelector('.end-button');
 const repInfo = document.querySelector('#rep-info-group');
@@ -25,10 +35,30 @@ const video = document.querySelector("#video");
 const canvas = document.querySelector("#canvas");
 const camPosition = document.querySelector("#cam-position");
 const toggleContainer = document.querySelector(".toggle-container")  
+const spinner = document.querySelector('#spinner');
+const changeViewButtons = document.querySelectorAll('.change-view');
+// need both buttons to be clickable especially for mobile users
+
+/* Test Code to print all media devices for debugging
+navigator.mediaDevices.enumerateDevices().then(devices => {
+    console.log(devices);
+});
+*/
 
 let synth;
 let textToSpeech = false;
 let loading = true;
+let constraints = {
+    video: {
+    width: { ideal: 640 },
+    height: { ideal: 320 },
+    // constraints for getUserMedia which makes it try to get video in
+    // 640x320 resolution
+    facingMode: "user"
+    //  tries to get camera that faces user
+  }
+};
+
 
 if ('speechSynthesis' in window) {
     synth = window.speechSynthesis;
@@ -36,7 +66,7 @@ if ('speechSynthesis' in window) {
 }
 else {
     // replace with overlay and div pop-up in the future
-    alert('text to speech not available');
+    window.alert('text to speech not available');
 
 }
 let started = false;
@@ -61,16 +91,15 @@ startButton.addEventListener('click', (e) => {
         // runs python script that starts Peekingduck if PeekingDuck is not already running
         socket.emit('start');
         console.log("PeekingDuck running");
-
         startButton.style.display = "none";
-
+        
         if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
             // checks that browser supports getting camera feed from user
             // if so use the getUserMedia API to get video from the user, after
             // asking for permission from the user
 
 
-            navigator.mediaDevices.getUserMedia({ video: true}).then(function(stream) {
+            navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
                 video.srcObject = stream;
                 // 20 fps
                 setInterval(getVideoFrames, 50);
@@ -78,11 +107,17 @@ startButton.addEventListener('click', (e) => {
                 console.log("An error occurred: " + err);
             });
           }
+          else {
+              window.alert("getUserMedia API not supported on your browser");
+          }
         
 
         started = true;
+
         // updates feedback every 0.5s
-        setInterval(getFeedback, 500);
+        setInterval(getFeedback, feedbackInterval);
+        // adds spinner at same time as feedback is updated
+        setTimeout(setSpinner, feedbackInterval);
     }
 });
 endButton.addEventListener('click', () => {
@@ -165,18 +200,14 @@ socket.on('feedback', (stringData) => {
     }
     
     // Check whether peekingduck pipeline is still loading
+    // faster to check bool than string, reduce lag, short-circuit first arg
     if (loading && data.mainFeedback != "Loading...") {
         // if it has finished loading, remove spinner
+        spinner.innerHTML = "";
         loading = false;
     }
-    if (loading) {
-        mainFeedback.innerHTML = `<i class="fa fa-spinner fa-spin"></i> ${data.mainFeedback}`;
-    }
-    else {
-        mainFeedback.innerText = data.mainFeedback;
-    }
+    mainFeedback.innerText = data.mainFeedback
     emotionFeedback.innerText = data.emotionFeedback;
-
 })
 
 showLogButton.addEventListener('click', (event) => {
@@ -216,8 +247,27 @@ toggleContainer.addEventListener('click', () => {
     toggleContainer.classList.toggle('active');
 })
 
-// Listens to disconnect events
+// Listens for disconnect events
 
 window.onbeforeunload = () => {
     socket.emit('disconnect');
 }
+
+// Flips camera when button is clicked
+changeViewButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        // toggle between front and back camera
+        if (constraints.video.facingMode == "user") {
+            constraints.video.facingMode = "environment";
+        }
+        else if (constraints.video.facingMode == "environment") {
+            constraints.video.facingMode = "user";
+        }
+        
+        navigator.mediaDevices.getUserMedia(constraints).then(stream => {
+            video.srcObject = stream;
+            // modifies video source to be new stream, and at the same time removes old stream
+        });
+    });
+});
+
