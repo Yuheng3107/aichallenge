@@ -1,6 +1,13 @@
 
 import numpy as np
 
+def superInitialise():
+    global ISACTIVE
+    global CONNECTION
+
+    ISACTIVE = False
+    CONNECTION = False
+
 def initialise():
     
 ### UI Variables
@@ -12,6 +19,8 @@ def initialise():
     """True when button to end exercise is pressed"""
     global killSwitch
     """Switch to kill PeekingDuck"""
+    global isKilled
+    """Verify if PeekingDuck successfully killed"""
 ### Exercise Variables
     global repCount
     global runSwitch
@@ -54,4 +63,5 @@ def initialise():
     emotionFeedback = ""
     difficulty = "Beginner"
     killSwitch = False
+    isKilled = False
 
