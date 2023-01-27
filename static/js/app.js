@@ -290,5 +290,6 @@ ScreenOrientation.onchange = () => {
     [video.height, video.width] = [video.width, video.height];
     window.alert(`${video.height}, ${video.width}`);
     [canvas.height, canvas.width] = [video.height, video.width];
-});
+}
+
 
