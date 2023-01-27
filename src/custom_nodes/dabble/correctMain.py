@@ -53,7 +53,7 @@ class Node(AbstractNode):
         self.evalPoses = np.array([
             [0.,0.,0.,0.,1.75,0.,0.,0.,0.44,0.,0.],
             [0.,0.,0.,0.,0.,2.375,0.,2.264,0.,0.,0.],
-            [0.,0.,0.,0.,2.825,0.,2.832,0.,1.583,0.,1.684]],dtype=np.float32)
+            [0.,0.,0.,0.,2.825,0.,2.832,0.,1.583,0.,1.7]],dtype=np.float32)
         
         """
         Array(N,K) containing the correct poses
@@ -83,7 +83,7 @@ class Node(AbstractNode):
         self.angleThresholds = np.array([
             [0.,0.,0.,0.,0.14,0.,0.,0.,0.13,0.,0.],
             [0.,0.,0.,0.,0.,0.33,0.,0.4,0.,0.,0.],
-            [0.,0.,0.,0.,0.,0.,0.,0.,0.16,0.,0.1]],dtype=np.float32)
+            [0.,0.,0.,0.,0.,0.,0.,0.,0.16,0.,0.2]],dtype=np.float32)
         """
         Array(N,K) containing the differences in angle required for feedback to be given
             N: number of exercises
