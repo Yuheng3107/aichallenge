@@ -555,11 +555,12 @@ class Node(AbstractNode):
                 self.checkPose(curPose,frameStatus)
             
         ### EMOTION METHODS
-            self.frameCount += 1
-            if self.frameCount == 5:
-                thread = threading.Thread(target=self.detectEmotion, name='thread', daemon=True)
-                self.frameCount = 0
-                thread.start()
+            if globals.currentExercise == 1:
+                self.frameCount += 1
+                if self.frameCount == 5:
+                    thread = threading.Thread(target=self.detectEmotion, name='thread', daemon=True)
+                    self.frameCount = 0
+                    thread.start()
 
             """DEBUG"""
             # print(f"curPose: {', '.join(str(angle) for angle in curPose)}")
@@ -567,6 +568,6 @@ class Node(AbstractNode):
             # print(f"test: {curPose[10]}")
             ## print(f"angleDifferences: {angleDifferences}")   
             ## print(self.selectedFrameCount)
-        print(f"shape:{globals.img.shape}")
+        # print(f"shape:{globals.img.shape}")
         
         return {}
