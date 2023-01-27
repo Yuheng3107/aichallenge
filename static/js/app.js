@@ -41,12 +41,12 @@ const changeViewButtons = document.querySelectorAll('.change-view');
 
 // need both buttons to be clickable especially for mobile users
 
-/* Test Code to print all media devices for debugging */
+/* Test Code to print all media devices for debugging 
 navigator.mediaDevices.enumerateDevices().then(devices => {
     devices.forEach(device => {
         window.alert(`${device.kind}: ${device.label} id = ${device.deviceId}`);
     })
-});
+});*/
 
 
 let synth;
