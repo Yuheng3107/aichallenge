@@ -288,6 +288,7 @@ changeViewButtons.forEach(button => {
 });
 
 // Listens to change in screen orientation and changes video height and width to suit the change
+/*
 ScreenOrientation.onchange = function(e) {
     window.alert(`${video.height}, ${video.width}`);
     [video.height, video.width] = [video.width, video.height];
@@ -300,7 +301,7 @@ ScreenOrientation.onchange = function(e) {
     [canvas.height, canvas.width] = [canvas.width, canvas.height];
     [video.height, video.width] = [video.width, video.height];
   }
-
+*/
   window.addEventListener('resize', functionName)
 
   function functionName() {
