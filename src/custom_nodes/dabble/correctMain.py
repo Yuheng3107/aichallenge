@@ -119,7 +119,7 @@ class Node(AbstractNode):
             [['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],
             ['Back too straightened ','Back sagging '],
             ['',''],
-            ['Legs too parallel with ground','legs not parallel with ground']]])
+            ['legs not parallel with ground ','Legs too parallel with ground ']]])
         """
         Array(N) containing the text descriptions of each angle
             N: number of exercises
@@ -567,6 +567,6 @@ class Node(AbstractNode):
             # print(f"test: {curPose[10]}")
             ## print(f"angleDifferences: {angleDifferences}")   
             ## print(self.selectedFrameCount)
-            ## print(f"shape:{globals.img.shape}")
+        # print(f"shape:{globals.img.shape}")
         
         return {}
