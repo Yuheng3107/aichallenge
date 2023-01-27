@@ -36,18 +36,28 @@ const canvas = document.querySelector("#canvas");
 const camPosition = document.querySelector("#cam-position");
 const toggleContainer = document.querySelector(".toggle-container")  
 const spinner = document.querySelector('#spinner');
+const changeViewButton = document.querySelector('#change-view');
+
+/* Test Code to print all media devices for debugging
+navigator.mediaDevices.enumerateDevices().then(devices => {
+    console.log(devices);
+});
+*/
 
 let synth;
 let textToSpeech = false;
 let loading = true;
-const constraints = {
+let constraints = {
     video: {
     width: { ideal: 640 },
-    height: { ideal: 320 }
+    height: { ideal: 320 },
+    // constraints for getUserMedia which makes it try to get video in
+    // 640x320 resolution
+    facingMode: "user"
+    //  tries to get camera that faces user
   }
 };
-// constrains for getUserMedia which makes it try to get video in
-// 640x320 resolution
+
 
 if ('speechSynthesis' in window) {
     synth = window.speechSynthesis;
@@ -97,7 +107,7 @@ startButton.addEventListener('click', (e) => {
             });
           }
           else {
-              window.alert("getUserMedia API not supported");
+              window.alert("getUserMedia API not supported on your browser");
           }
         
 
@@ -241,3 +251,19 @@ toggleContainer.addEventListener('click', () => {
 window.onbeforeunload = () => {
     socket.emit('disconnect');
 }
+
+// Flips camera when button is clicked
+changeViewButton.addEventListener('click', () => {
+    // toggle between front and back camera
+    if (constraints.video.facingMode == "user") {
+        constraints.video.facingMode = "environment";
+    }
+    else if (constraints.video.facingMode == "environment") {
+        constraints.video.facingMode = "user";
+    }
+    
+    navigator.mediaDevices.getUserMedia(constraints).then(stream => {
+        video.srcObject = stream;
+        // modifies video source to be new stream, and at the same time removes old stream
+    });
+})
