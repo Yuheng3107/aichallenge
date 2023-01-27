@@ -47,7 +47,28 @@ navigator.mediaDevices.enumerateDevices().then(devices => {
         window.alert(`${device.kind}: ${device.label} id = ${device.deviceId}`);
     })
 });*/
-
+let userAgent = navigator.userAgent;
+let browserName = "others";
+         
+if (userAgent.match(/chrome|chromium|crios/i)){
+    browserName = "chrome";
+}
+else if (userAgent.match(/firefox|fxios/i)){
+    browserName = "firefox";
+}  
+else if (userAgent.match(/safari/i)){
+    browserName = "safari";
+}
+else if (userAgent.match(/opr\//i)){
+    browserName = "opera";
+} 
+else if (userAgent.match(/edg/i)){
+    browserName = "edge";
+}
+else
+{
+    browserName="No browser detection";
+}
 
 let synth;
 let textToSpeech = false;
@@ -109,10 +130,20 @@ startButton.addEventListener('click', (e) => {
                     if (videoTracks.length > 0) {
                         let settings = videoTracks[0].getSettings();
                         // set the video and canvas to the height and width of the stream
-                        video.width = settings.width;
-                        video.height = settings.height;
-                        canvas.width = settings.width;
-                        canvas.height = settings.height;
+                        if (browserName == "safari" || browserName == "firefox")
+                        {
+                            video.width = settings.height;
+                            video.height = settings.width;
+                            canvas.width = settings.height;
+                            canvas.height = settings.width;
+                        }
+                        else {
+                            video.width = settings.width;
+                            video.height = settings.height;
+                            canvas.width = settings.width;
+                            canvas.height = settings.height;
+                        }
+                        
                         break;
                     }
                 }
