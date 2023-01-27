@@ -38,13 +38,15 @@ const camPosition = document.querySelector("#cam-position");
 const toggleContainer = document.querySelector(".toggle-container")  
 const spinner = document.querySelector('#spinner');
 const changeViewButtons = document.querySelectorAll('.change-view');
+
 // need both buttons to be clickable especially for mobile users
 
-/* Test Code to print all media devices for debugging
+/* Test Code to print all media devices for debugging */
 navigator.mediaDevices.enumerateDevices().then(devices => {
     console.log(devices);
+    alert(`${devices}`);
 });
-*/
+
 
 let synth;
 let textToSpeech = false;
@@ -293,10 +295,13 @@ ScreenOrientation.onchange = function(e) {
 }
 
 
-window.addEventListener("orientationchange", function() {
+window.addEventListener("orientationchange", () => {
     // code to run when the screen orientation changes
     window.alert(`${video.height}, ${video.width}`);
     [video.height, video.width] = [video.width, video.height];
     window.alert(`${video.height}, ${video.width}`);
     [canvas.height, canvas.width] = [video.height, video.width];
-  }, false);
+  });
+
+  
+
