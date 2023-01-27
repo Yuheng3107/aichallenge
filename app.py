@@ -21,7 +21,7 @@ def index():
         globals.initialise()
         globals.CONNECTION = True
         return render_template('./index.html')
-    return "Application is busy. Please wait a moment before refreshing the page."
+    return render_template('server_full.html')
     
 
 @socketio.on('start')
