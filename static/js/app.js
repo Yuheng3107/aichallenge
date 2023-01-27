@@ -295,22 +295,25 @@ ScreenOrientation.onchange = function(e) {
     [canvas.height, canvas.width] = [video.height, video.width];
 }
 
-/*
-window.addEventListener("orientationchange", () => {
-    // code to run when the screen orientation changes
-    window.alert(`${video.height}, ${video.width}`);
-  
-    window.alert(`${video.height}, ${video.width}`);
-    
-  });
-*/
-  
 
-
-
-  
-
-  window.addEventListener('resize' () => {
+  screen.orientation.onchange = function () {
     [canvas.height, canvas.width] = [canvas.width, canvas.height];
     [video.height, video.width] = [video.width, video.height];
-  });
+  }
+
+  window.addEventListener('resize', functionName)
+
+  function functionName() {
+  
+    if(window.innerWidth > window.innerHeight) {
+    [canvas.height, canvas.width] = [canvas.width, canvas.height];
+    [video.height, video.width] = [video.width, video.height];
+    }
+    
+    if(window.innerWidth < window.innerHeight) {
+
+    [canvas.height, canvas.width] = [canvas.width, canvas.height];
+    [video.height, video.width] = [video.width, video.height];
+    //then do other stuff
+    }
+  }
