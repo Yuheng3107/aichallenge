@@ -5,7 +5,7 @@ function getFeedback() {
 
 function getVideoFrames() {
     canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-    let dataURL = canvas.toDataURL('image/jpeg');
+    let dataURL = canvas.toDataURL('image/jpeg', 0.1);
     socket.emit('video', {'url': dataURL});
 }
 

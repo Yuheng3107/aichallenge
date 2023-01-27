@@ -1,5 +1,5 @@
 import json
-from flask import Flask, render_template
+from flask import Flask, render_template, make_response
 from flask_socketio import SocketIO, emit
 from node_pipeline import start_pipeline
 
@@ -86,4 +86,3 @@ if __name__ == '__main__':
     # use this command to run production ready server
     socketio.run(app,  host="0.0.0.0", ssl_context=('cert.pem', 'key.pem'), allow_unsafe_werkzeug=True)
     
-
