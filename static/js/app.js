@@ -286,9 +286,9 @@ changeViewButtons.forEach(button => {
 
 // Listens to change in screen orientation and changes video height and width to suit the change
 screen.addEventListener('orientationchange', () => {
-    window.alert(video.height, video.width);
+    window.alert(`${video.height}, ${video.width}`);
     [video.height, video.width] = [video.width, video.height];
-    window.alert(video.height, video.width);
+    window.alert(`${video.height}, ${video.width}`);
     [canvas.height, canvas.width] = [video.height, video.width];
 });
 
