@@ -13,8 +13,11 @@ globals.superInitialise()
 
 ### WEBPAGE METHODS
 ##########
-
 @app.route('/')
+def main_page():
+    return redirect('/app')
+
+@app.route('/app')
 def index():
     """Index route which initialises global variables
     and returns the homepage"""
@@ -37,7 +40,7 @@ def start():
     globals.ISACTIVE = True
     start_pipeline()
 
-@socketio.on('disconnect', namespace="/")
+@socketio.on('disconnect', namespace="/app")
 def kill_peeking_duck():
     """
     Listener that listens to disconnect events in the app page
