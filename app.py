@@ -36,7 +36,7 @@ def start():
     emit('kickout', broadcast=True)
     start_pipeline()
 
-@socketio.on('disconnect')
+@socketio.on('disconnect', namespace='/app')
 def kill_peeking_duck():
     """
     Listener that listens to disconnect events in the app page
