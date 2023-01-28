@@ -36,12 +36,13 @@ def start():
     emit('kickout', broadcast=True)
     start_pipeline()
 
-@socketio.on('disconnect', namespace="/app")
+@socketio.on('disconnect', namespace='/app')
 def kill_peeking_duck():
     """
     Listener that listens to disconnect events in the app page
     Activated when person disconnects to kill the PeekingDuck Pipeline
     """
+    print('disconnectEvent')
     if globals.ISACTIVE:
         # Kills PeekingDuck if PeekingDuck is running
         globals.killSwitch = True
@@ -108,4 +109,3 @@ if __name__ == '__main__':
     # gunicorn -w 1 --threads 100 app:app 
     # use this command to run production ready server
     socketio.run(app,  host="0.0.0.0", ssl_context=('cert.pem', 'key.pem'), allow_unsafe_werkzeug=True)
-    
