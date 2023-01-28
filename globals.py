@@ -3,13 +3,11 @@ import numpy as np
 
 def superInitialise():
     global ISACTIVE
-    global CONNECTION
     
     ### Sever Setting variables
     global displayVideoOnBackend
 
     ISACTIVE = False
-    CONNECTION = False
     displayVideoOnBackend = True
 def initialise():
 
