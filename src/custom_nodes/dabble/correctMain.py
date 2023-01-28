@@ -336,11 +336,11 @@ class Node(AbstractNode):
             if (difference > 0):
                 # angle needs to be smaller, as it is larger than ideal pose
                 self.smallErrorCount[i] += 1
-                feedback += "f{self.glossary[globals.currentExercise,i,0]}. "
+                feedback += f"{self.glossary[globals.currentExercise,i,0]}. "
             else:
                 # angle needs to be greater, as it is smaller than ideal pose
                 self.largeErrorCount[i] += 1
-                feedback += "f{self.glossary[globals.currentExercise,i,1]}. "
+                feedback += f"{self.glossary[globals.currentExercise,i,1]}. "
 
         if timeDifference == 1:
             # time error
@@ -564,7 +564,7 @@ class Node(AbstractNode):
 
             """DEBUG"""
             # print(f"curPose: {', '.join(str(angle) for angle in curPose)}")
-            # print(f"score: {score}")
+            print(f"score: {score}")
             # print(f"test: {curPose[10]}")
             ## print(f"angleDifferences: {angleDifferences}")   
             ## print(self.selectedFrameCount)

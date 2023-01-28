@@ -1,14 +1,13 @@
 import json
 from flask import Flask, render_template, make_response
 from flask_socketio import SocketIO, emit
-from requests import session
 from node_pipeline import start_pipeline
 
 import globals
 
 
 app = Flask(__name__)
-socketio = SocketIO(app)
+socketio = SocketIO(app, manage_session=True, cookie={}, monitor_clients=True)
 
 globals.superInitialise()
 
