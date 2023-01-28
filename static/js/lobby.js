@@ -8,9 +8,15 @@ socket.on('connect', () => {
 });
 
 // sends text in input to backend, and backend will send to all clients
-sendButton.addEventListener('submit', (e) => {
+sendButton.addEventListener('click', (e) => {
     e.preventDefault();
     socket.send(myMessage.value);
+});
+
+myMessage.addEventListener('keypress', (e) => {
+    if (e.key === "Enter") {
+        sendButton.click();
+    }
 })
 
 socket.on('message', (msg) => {
