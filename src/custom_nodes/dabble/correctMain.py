@@ -52,8 +52,8 @@ class Node(AbstractNode):
         # TO BE IMPORTED FROM NUMPY ARRAYS
         self.evalPoses = np.array([
             [0.,0.,0.,0.,1.75,0.,0.,0.,0.44,0.,0.],
-            [0.,0.,0.,0.,0.,2.375,0.,2.264,0.,0.,0.],
-            [0.,0.,0.,0.,2.825,0.,2.832,0.,1.583,0.,1.684]],dtype=np.float32)
+            [0.,0.,0.,0.,0.,2.375,0.,2.25,0.,0.,0.],
+            [0.,0.,0.,0.,2.825,0.,2.832,0.,1.583,0.,1.7]],dtype=np.float32)
         
         """
         Array(N,K) containing the correct poses
@@ -82,15 +82,15 @@ class Node(AbstractNode):
 
         self.angleThresholds = np.array([
             [0.,0.,0.,0.,0.14,0.,0.,0.,0.13,0.,0.],
-            [0.,0.,0.,0.,0.,0.33,0.,0.4,0.,0.,0.],
-            [0.,0.,0.,0.,0.,0.,0.,0.,0.16,0.,0.1]],dtype=np.float32)
+            [0.,0.,0.,0.,0.,0.33,0.,0.28,0.,0.,0.],
+            [0.,0.,0.,0.,0.,0.,0.,0.,0.08,0.,0.25]],dtype=np.float32)
         """
         Array(N,K) containing the differences in angle required for feedback to be given
             N: number of exercises
             K: key angles (11)
         """
 
-        self.evalRepTime = np.array([3.5,3.5,3.5],dtype=np.float32)
+        self.evalRepTime = np.array([2.5,2.5,2],dtype=np.float32)
         """
         Array(N) containing the minimum ideal rep times
             N: number of exercises
@@ -105,21 +105,21 @@ class Node(AbstractNode):
         self.glossary = np.array(
             #Side Squats
             [[['',''],['',''],['',''],['',''],
-            ['Butt not low enough ','Butt too low '],
+            ['Butt not low enough','Butt too low'],
             ['',''],['',''],['',''],
-            ['Leaning forward too much ','Back too straight '],
+            ['Leaning forward too much','Back too straight'],
             ['',''],['','']],
             #Front Squats
             [['',''],['',''],['',''],['',''],['',''],
-            ['Knees collapse inwards. ','Feet may be too wide apart. '],
+            ['Knees collapse inwards','Feet may be too wide apart'],
             ['',''],
-            ['Bending down too little. ','Bending down too much. '],
+            ['Bending down too little','Bending down too much'],
             ['',''],['',''],['','']],
             #Side Push-ups
             [['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],
-            ['Back too straightened ','Back sagging '],
+            ['Back too straightened','Back sagging'],
             ['',''],
-            ['Legs too parallel with ground','legs not parallel with ground']]])
+            ['legs not parallel with ground','Legs too parallel with ground']]])
         """
         Array(N) containing the text descriptions of each angle
             N: number of exercises
@@ -336,11 +336,11 @@ class Node(AbstractNode):
             if (difference > 0):
                 # angle needs to be smaller, as it is larger than ideal pose
                 self.smallErrorCount[i] += 1
-                feedback += self.glossary[globals.currentExercise,i,0]
+                feedback += "f{self.glossary[globals.currentExercise,i,0]}. "
             else:
                 # angle needs to be greater, as it is smaller than ideal pose
                 self.largeErrorCount[i] += 1
-                feedback += self.glossary[globals.currentExercise,i,1]
+                feedback += "f{self.glossary[globals.currentExercise,i,1]}. "
 
         if timeDifference == 1:
             # time error
@@ -555,18 +555,19 @@ class Node(AbstractNode):
                 self.checkPose(curPose,frameStatus)
             
         ### EMOTION METHODS
-            self.frameCount += 1
-            if self.frameCount == 5:
-                thread = threading.Thread(target=self.detectEmotion, name='thread', daemon=True)
-                self.frameCount = 0
-                thread.start()
+            if globals.currentExercise == 1:
+                self.frameCount += 1
+                if self.frameCount == 5:
+                    thread = threading.Thread(target=self.detectEmotion, name='thread', daemon=True)
+                    self.frameCount = 0
+                    thread.start()
 
             """DEBUG"""
             # print(f"curPose: {', '.join(str(angle) for angle in curPose)}")
-            print(f"score: {score}")
+            # print(f"score: {score}")
             # print(f"test: {curPose[10]}")
             ## print(f"angleDifferences: {angleDifferences}")   
             ## print(self.selectedFrameCount)
-            ## print(f"shape:{globals.img.shape}")
+        # print(f"shape:{globals.img.shape}")
         
         return {}

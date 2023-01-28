@@ -1,5 +1,5 @@
 import json
-from flask import Flask, render_template
+from flask import Flask, render_template, make_response
 from flask_socketio import SocketIO, emit
 from node_pipeline import start_pipeline
 
@@ -54,6 +54,7 @@ def end_exercise():
     which can be retrieved by front end"""
     if not globals.exerciseEnded:
         globals.exerciseEnded = True
+    # Add code to save exercise in a cookie
 
 @socketio.on('changeExercise')
 def change_exercise(exerciseId):
@@ -85,4 +86,3 @@ if __name__ == '__main__':
     # use this command to run production ready server
     socketio.run(app,  host="0.0.0.0", ssl_context=('cert.pem', 'key.pem'), allow_unsafe_werkzeug=True)
     
-

@@ -136,6 +136,43 @@
 .end-button {
     margin-bottom: 2rem;
 }
+
+
+/* #endregion */
+
+/* Styles for icon to change camera view */
+#change-view, #change-view-hover {
+    width: 2rem;
+}
+
+#change-view-hover {
+    display: none;
+}
+
+#change-view-group:hover > img:first-child {
+    display: none;
+}
+
+#change-view-group:hover > img:last-child {
+    display: block;
+}
+/* endregion */
+
+
+
+/* #region RESPONSIVE DESIGN */
+@media only screen and (max-width: 768px) {
+    .video-feed {
+        margin-top: 2rem;
+        width: 100%;
+        height: unset;
+    }
+    #rep-count {
+        font-size: 2rem;
+        min-width: 3rem;
+    }
+}
+
 /* #endregion */
 
 

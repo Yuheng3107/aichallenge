@@ -5,9 +5,10 @@ function getFeedback() {
 
 function getVideoFrames() {
     canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-    let dataURL = canvas.toDataURL('image/jpeg');
+    let dataURL = canvas.toDataURL('image/jpeg', 0.1);
     socket.emit('video', {'url': dataURL});
 }
+
 
 function setSpinner() {
     spinner.innerHTML = `<i class="fa fa-spinner fa-spin"></i>`;
@@ -36,11 +37,49 @@ const canvas = document.querySelector("#canvas");
 const camPosition = document.querySelector("#cam-position");
 const toggleContainer = document.querySelector(".toggle-container")  
 const spinner = document.querySelector('#spinner');
+const changeViewButtons = document.querySelectorAll('.change-view');
 
+// need both buttons to be clickable especially for mobile users
+
+/* Test Code to print all media devices for debugging 
+navigator.mediaDevices.enumerateDevices().then(devices => {
+    devices.forEach(device => {
+        window.alert(`${device.kind}: ${device.label} id = ${device.deviceId}`);
+    })
+});*/
+let userAgent = navigator.userAgent;
+let browserName = "others";
+         
+if (userAgent.match(/chrome|chromium|crios/i)){
+    browserName = "chrome";
+}
+else if (userAgent.match(/firefox|fxios/i)){
+    browserName = "firefox";
+}  
+else if (userAgent.match(/safari/i)){
+    browserName = "safari";
+}
+else if (userAgent.match(/opr\//i)){
+    browserName = "opera";
+} 
+else if (userAgent.match(/edg/i)){
+    browserName = "edge";
+}
+else
+{
+    browserName="No browser detection";
+}
 
 let synth;
 let textToSpeech = false;
 let loading = true;
+let constraints = {
+    video: {
+    facingMode: "user"
+    //  tries to get camera that faces user
+  }
+};
+
 
 if ('speechSynthesis' in window) {
     synth = window.speechSynthesis;
@@ -48,7 +87,7 @@ if ('speechSynthesis' in window) {
 }
 else {
     // replace with overlay and div pop-up in the future
-    alert('text to speech not available');
+    window.alert('text to speech not available');
 
 }
 let started = false;
@@ -81,13 +120,41 @@ startButton.addEventListener('click', (e) => {
             // asking for permission from the user
 
 
-            navigator.mediaDevices.getUserMedia({ video: true}).then(function(stream) {
+            navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
+                // sizes the video to be same size as stream
+                
                 video.srcObject = stream;
-                // 20 fps
-                setInterval(getVideoFrames, 50);
+                // sizes the canvas to be same size as the camera resolution
+                let videoTracks = stream.getVideoTracks();
+                while (true) {
+                    if (videoTracks.length > 0) {
+                        let settings = videoTracks[0].getSettings();
+                        // set the video and canvas to the height and width of the stream
+                        if (browserName == "safari" || browserName == "firefox")
+                        {
+                            video.width = settings.height;
+                            video.height = settings.width;
+                            canvas.width = settings.height;
+                            canvas.height = settings.width;
+                        }
+                        else {
+                            video.width = settings.width;
+                            video.height = settings.height;
+                            canvas.width = settings.width;
+                            canvas.height = settings.height;
+                        }
+                        
+                        break;
+                    }
+                }
+                // sends jpeg to backend at 25 fps
+                setInterval(getVideoFrames, 40);
             }).catch(function(err) {
                 console.log("An error occurred: " + err);
             });
+          }
+          else {
+              window.alert("getUserMedia API not supported on your browser");
           }
         
 
@@ -226,8 +293,65 @@ toggleContainer.addEventListener('click', () => {
     toggleContainer.classList.toggle('active');
 })
 
-// Listens to disconnect events
+
+// Listens for disconnect events
 
 window.onbeforeunload = () => {
     socket.emit('disconnect');
 }
+
+// Flips camera when button is clicked
+changeViewButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        // toggle between front and back camera
+        if (constraints.video.facingMode == "user") {
+            constraints.video.facingMode = "environment";
+        }
+        else if (constraints.video.facingMode == "environment") {
+            constraints.video.facingMode = "user";
+        }
+        
+        navigator.mediaDevices.getUserMedia(constraints).then(stream => {
+            video.srcObject = stream;
+            // modifies video source to be new stream, and at the same time removes old stream
+        });
+    });
+});
+
+// Listens to change in screen orientation and changes video height and width to suit the change
+/*
+ScreenOrientation.onchange = function(e) {
+    window.alert(`${video.height}, ${video.width}`);
+    [video.height, video.width] = [video.width, video.height];
+    window.alert(`${video.height}, ${video.width}`);
+    [canvas.height, canvas.width] = [video.height, video.width];
+}
+
+
+  screen.orientation.onchange = function () {
+    [canvas.height, canvas.width] = [canvas.width, canvas.height];
+    [video.height, video.width] = [video.width, video.height];
+  }
+*/
+
+
+  window.addEventListener('resize', functionName)
+
+  let innerWidth = window.innerWidth;
+
+  function functionName() {
+    if (innerWidth === window.innerWidth) return;
+    innerWidth = window.innerWidth;
+    if(window.innerWidth > window.innerHeight) {
+    [canvas.height, canvas.width] = [canvas.width, canvas.height];
+    [video.height, video.width] = [video.width, video.height];
+    }
+    
+    if(window.innerWidth < window.innerHeight) {
+
+    [canvas.height, canvas.width] = [canvas.width, canvas.height];
+    [video.height, video.width] = [video.width, video.height];
+    //then do other stuff
+    }
+  }
+  

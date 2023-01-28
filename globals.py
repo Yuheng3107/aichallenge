@@ -10,7 +10,7 @@ def superInitialise():
 
     ISACTIVE = False
     CONNECTION = False
-    displayVideoOnBackend = False
+    displayVideoOnBackend = True
 def initialise():
 
 

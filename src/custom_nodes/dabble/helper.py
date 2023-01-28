@@ -129,7 +129,7 @@ def processData(keypoints: np.ndarray, height: int, width: int):
     lines = np.zeros((12,2),dtype=np.float32)
 
     # vertical
-    lines[0] = np.array([0,1],dtype=float)
+    lines[0] = np.array([0,1],dtype=np.float32)
 
     # leftShoulder-leftElbow
     lines[1] = makeLine(data[5],data[7])
