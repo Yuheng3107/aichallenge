@@ -1,6 +1,7 @@
 import json
 from flask import Flask, render_template, make_response
 from flask_socketio import SocketIO, emit
+from requests import session
 from node_pipeline import start_pipeline
 
 import globals
@@ -74,8 +75,10 @@ def handle_video(data):
     globals.url = data['url']
 
 @socketio.on('disconnect')
-def reset_connection(data):
-    if data['started']:
+def kill_peeking_duck():
+    """Activated when person disconnects to kill the PeekingDuck Pipeline"""
+    if globals.ISACTIVE:
+        # Kills PeekingDuck if PeekingDuck is running
         globals.killSwitch = True
 
 @app.route('/lobby')

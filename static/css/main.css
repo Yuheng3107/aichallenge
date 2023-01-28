@@ -1,7 +1,10 @@
 :root {
     --rep-feedback-color: rgba(255, 255, 255, 0.241)
 }
-
+/* To prevent accidental refresh of page on mobile */
+body {
+    overscroll-behavior-y: contain !important;
+ }
 .video-feed {
     margin-top: 2rem;
     width: 50vw;
@@ -210,5 +213,6 @@
 }
 
 /* #endregion */
+
 
 

@@ -297,9 +297,7 @@ toggleContainer.addEventListener('click', () => {
 
 // Listens for disconnect events
 
-window.onbeforeunload = () => {
-    socket.emit('disconnect',{"started": started});
-}
+
 
 // Flips camera when button is clicked
 changeViewButtons.forEach(button => {
@@ -356,6 +354,7 @@ ScreenOrientation.onchange = function(e) {
     }
   }
 
+  // kicks everyone out when someone runs a PeekingDuck instance
   socket.on('kickout', () => {
       if (!started) {
           window.location.href += "/lobby";
