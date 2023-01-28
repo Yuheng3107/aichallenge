@@ -1,4 +1,5 @@
 
+
 function getFeedback() {
     socket.emit('feedback');
 }
@@ -87,7 +88,7 @@ else {
 
 }
 let started = false;
-let socket = io();
+let socket = io("/app");
 
 document.addEventListener('DOMContentLoaded', (event) => {
     //hide the repcount and repfeedback on page load since there's no content
