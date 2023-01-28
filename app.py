@@ -66,7 +66,6 @@ def change_difficulty(difficulty):
      in front end"""
     globals.difficulty = difficulty
 
-
 @socketio.on('video')
 def handle_video(data):
     globals.url = data['url']
