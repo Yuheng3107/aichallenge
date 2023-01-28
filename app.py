@@ -98,7 +98,7 @@ def change_difficulty(difficulty):
 def handle_video(data):
     globals.url = data['url']
 
-@socketio.on('message', namespace='/lobby')
+@socketio.on('message')
 def handle_message(msg):
     send(msg, broadcast=True)
 
