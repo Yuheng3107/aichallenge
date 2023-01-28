@@ -88,6 +88,7 @@ else {
 
 }
 let started = false;
+// initialises io with namespace /app
 let socket = io("/app");
 
 document.addEventListener('DOMContentLoaded', (event) => {
@@ -330,7 +331,7 @@ function functionName() {
 socket.on('kickout', () => {
     if (!started) {
         
-        window.location.href = window.location.href.slice(0, -3) + "lobby";
+        window.location.href += "lobby"
     }
 })
 

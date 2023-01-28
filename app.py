@@ -13,11 +13,8 @@ globals.superInitialise()
 
 ### WEBPAGE METHODS
 ##########
-@app.route('/')
-def main_page():
-    return redirect('/app')
 
-@app.route('/app')
+@app.route('/')
 def index():
     """Index route which initialises global variables
     and returns the homepage"""
