@@ -69,9 +69,12 @@ def change_difficulty(difficulty):
 def handle_video(data):
     globals.url = data['url']
 
-@socketio.on('disconnect')
+@socketio.on('disconnect', namespace="/app")
 def kill_peeking_duck():
-    """Activated when person disconnects to kill the PeekingDuck Pipeline"""
+    """
+    Listener that listens to disconnect events in the app page
+    Activated when person disconnects to kill the PeekingDuck Pipeline
+    """
     if globals.ISACTIVE:
         # Kills PeekingDuck if PeekingDuck is running
         globals.killSwitch = True
