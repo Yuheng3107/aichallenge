@@ -12,6 +12,7 @@ socketio = SocketIO(app, manage_session=True, cookie={}, monitor_clients=True)
 globals.superInitialise()
 
 ### WEBPAGE METHODS
+##########
 
 @app.route('/')
 def index():
@@ -26,8 +27,8 @@ def index():
 @app.route('/lobby')
 def send_to_lobby():
     return render_template('lobby.html')
-
-@socketio.on('start')
+    
+@socketio.on('start', namespace='/')
 def start():
     """When start button is clicked, WebSocket event is triggered
     which starts the main programme"""
@@ -35,17 +36,19 @@ def start():
     globals.ISACTIVE = True
     start_pipeline()
 
-@socketio.on('disconnect')
+@socketio.on('disconnect', namespace="/")
 def kill_peeking_duck():
-    print("Disconnect")
-    """Listener that listens to disconnect events in the app page
-    Activated when person disconnects to kill the PeekingDuck Pipeline"""
-    
+    """
+    Listener that listens to disconnect events in the app page
+    Activated when person disconnects to kill the PeekingDuck Pipeline
+    """
     if globals.ISACTIVE:
         # Kills PeekingDuck if PeekingDuck is running
-        globals.killSwitch = True 
+        globals.killSwitch = True
+
 
 ### UI METHODS (FEEDBACK)
+##########
 
 @socketio.on('feedback')
 def send_feedback():
@@ -62,7 +65,9 @@ def send_feedback():
     }
     emit('feedback', json.dumps(data))
 
+
 ### UI METHODS (BUTTONS)
+###########
 
 @socketio.on('endExercise')
 def end_exercise():
@@ -84,6 +89,9 @@ def change_difficulty(difficulty):
     for backend to receive when user changes difficulty
      in front end"""
     globals.difficulty = difficulty
+
+### DATA METHODS
+##########
 
 @socketio.on('video')
 def handle_video(data):
