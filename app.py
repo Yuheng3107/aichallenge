@@ -1,5 +1,5 @@
 import json
-from flask import Flask, render_template, make_response
+from flask import Flask, render_template, make_response, redirect
 from flask_socketio import SocketIO, emit, send
 from node_pipeline import start_pipeline
 
@@ -11,14 +11,21 @@ socketio = SocketIO(app, manage_session=True, cookie={}, monitor_clients=True)
 
 globals.superInitialise()
 
+### WEBPAGE METHODS
+##########
+
 @app.route('/')
 def index():
     """Index route which initialises global variables
     and returns the homepage"""
-    print(globals.ISACTIVE)
+    print(f"PeekingDuck Running: {globals.ISACTIVE}")
     if globals.ISACTIVE == False:
         globals.initialise()
         return render_template('./index.html')
+    return redirect('/lobby')  
+
+@app.route('/lobby')
+def send_to_lobby():
     return render_template('lobby.html')
     
 
@@ -27,8 +34,23 @@ def start():
     """When start button is clicked, WebSocket event is triggered
     which starts the main programme"""
     emit('kickout', broadcast=True)
+    globals.ISACTIVE = True
     start_pipeline()
-    
+
+@socketio.on('disconnect', namespace="/")
+def kill_peeking_duck():
+    """
+    Listener that listens to disconnect events in the app page
+    Activated when person disconnects to kill the PeekingDuck Pipeline
+    """
+    if globals.ISACTIVE:
+        # Kills PeekingDuck if PeekingDuck is running
+        globals.killSwitch = True
+
+
+### UI METHODS (FEEDBACK)
+##########
+
 @socketio.on('feedback')
 def send_feedback():
     """Activated whenever feedback event is called from
@@ -44,6 +66,9 @@ def send_feedback():
     }
     emit('feedback', json.dumps(data))
 
+
+### UI METHODS (BUTTONS)
+###########
 
 @socketio.on('endExercise')
 def end_exercise():
@@ -66,23 +91,12 @@ def change_difficulty(difficulty):
      in front end"""
     globals.difficulty = difficulty
 
+### DATA METHODS
+##########
+
 @socketio.on('video')
 def handle_video(data):
     globals.url = data['url']
-
-@socketio.on('disconnect', namespace="/")
-def kill_peeking_duck():
-    """
-    Listener that listens to disconnect events in the app page
-    Activated when person disconnects to kill the PeekingDuck Pipeline
-    """
-    if globals.ISACTIVE:
-        # Kills PeekingDuck if PeekingDuck is running
-        globals.killSwitch = True
-
-@app.route('/lobby')
-def send_to_lobby():
-    return render_template('lobby.html')
 
 @socketio.on('message')
 def handle_message(msg):
