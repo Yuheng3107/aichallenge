@@ -87,7 +87,7 @@ else {
 
 }
 let started = false;
-let socket = io.of("/app");
+let socket = io();
 
 document.addEventListener('DOMContentLoaded', (event) => {
     //hide the repcount and repfeedback on page load since there's no content
@@ -332,7 +332,6 @@ socket.on('kickout', () => {
     }
 })
 
-  
 // Listens to change in screen orientation and changes video height and width to suit the change
 /*
 ScreenOrientation.onchange = function(e) {
