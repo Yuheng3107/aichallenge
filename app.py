@@ -28,7 +28,8 @@ def index():
 def send_to_lobby():
     return render_template('lobby.html')
     
-@socketio.on('start', namespace='/')
+
+@socketio.on('start')
 def start():
     """When start button is clicked, WebSocket event is triggered
     which starts the main programme"""
