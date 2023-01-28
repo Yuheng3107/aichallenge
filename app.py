@@ -28,7 +28,9 @@ def index():
 def start():
     """When start button is clicked, WebSocket event is triggered
     which starts the main programme"""
+    emit('kickout', broadcast=True)
     start_pipeline()
+    
     
 
 @socketio.on('feedback')
@@ -77,6 +79,10 @@ def handle_video(data):
 def reset_connection():
     globals.killSwitch = True
     globals.CONNECTION = False
+
+@app.route('/lobby')
+def send_to_lobby():
+    return render_template('server_full.html')
 
 if __name__ == '__main__':
     # ssl_context=('cert.pem', 'key.pem')

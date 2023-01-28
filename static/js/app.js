@@ -81,6 +81,7 @@ let constraints = {
 };
 
 
+
 if ('speechSynthesis' in window) {
     synth = window.speechSynthesis;
     textToSpeech = true;
@@ -105,11 +106,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
 })
 
 startButton.addEventListener('click', (e) => {
-    
     console.log('start button clicked');
     // runs python script that starts Peekingduck
     if (!started) {
         // runs python script that starts Peekingduck if PeekingDuck is not already running
+        started = true;
         socket.emit('start');
         console.log("PeekingDuck running");
         startButton.style.display = "none";
@@ -158,7 +159,7 @@ startButton.addEventListener('click', (e) => {
           }
         
 
-        started = true;
+        
 
         // updates feedback every 0.5s
         setInterval(getFeedback, feedbackInterval);
@@ -354,4 +355,11 @@ ScreenOrientation.onchange = function(e) {
     //then do other stuff
     }
   }
+
+  socket.on('kickout', () => {
+      if (!started) {
+          window.location.href += "/lobby";
+      }
+  })
+  
   
