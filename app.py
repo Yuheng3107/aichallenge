@@ -22,7 +22,7 @@ def index():
     return render_template('lobby.html')
     
 
-@socketio.on('start')
+@socketio.on('start', namespace='/')
 def start():
     """When start button is clicked, WebSocket event is triggered
     which starts the main programme"""
@@ -71,7 +71,7 @@ def change_difficulty(difficulty):
 def handle_video(data):
     globals.url = data['url']
 
-@socketio.on('disconnect', namespace="/app")
+@socketio.on('disconnect', namespace="/")
 def kill_peeking_duck():
     """
     Listener that listens to disconnect events in the app page
