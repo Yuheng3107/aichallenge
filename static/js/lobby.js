@@ -9,7 +9,6 @@ socket.on('connect', () => {
 
 // sends text in input to backend, and backend will send to all clients
 sendButton.addEventListener('click', (e) => {
-    e.preventDefault();
     socket.send(myMessage.value);
 });
 
