@@ -176,6 +176,7 @@ startButton.addEventListener('click', (e) => {
         setTimeout(setSpinner, feedbackInterval);
     }
 });
+
 endButton.addEventListener('click', () => {
     socket.emit('endExercise');
     mainFeedback.classList.add("w-50", "fs-4", "card", "p-3", "mt-3");
@@ -276,8 +277,6 @@ showLogButton.addEventListener('click', (event) => {
     }
 })
 
-
-
 textToSpeechButton.addEventListener('click', () => {
     if (textToSpeech) {
         textToSpeech = false;
@@ -303,11 +302,6 @@ toggleContainer.addEventListener('click', () => {
     toggleContainer.classList.toggle('active');
 })
 
-
-// Listens for disconnect events
-
-
-
 // Flips camera when button is clicked
 changeViewButtons.forEach(button => {
     button.addEventListener('click', () => {
@@ -326,6 +320,32 @@ changeViewButtons.forEach(button => {
     });
 });
 
+window.addEventListener('resize', functionName)
+
+let innerWidth = window.innerWidth;
+
+function functionName() {
+    if (innerWidth === window.innerWidth) return;
+    innerWidth = window.innerWidth;
+    if(window.innerWidth > window.innerHeight) {
+        [canvas.height, canvas.width] = [canvas.width, canvas.height];
+        [video.height, video.width] = [video.width, video.height];
+    }
+    
+    if(window.innerWidth < window.innerHeight) {
+        [canvas.height, canvas.width] = [canvas.width, canvas.height];
+        [video.height, video.width] = [video.width, video.height];
+    }
+}
+
+// kicks everyone out when someone runs a PeekingDuck instance
+socket.on('kickout', () => {
+    if (!started) {
+        window.location.href += "/lobby";
+    }
+})
+
+  
 // Listens to change in screen orientation and changes video height and width to suit the change
 /*
 ScreenOrientation.onchange = function(e) {
@@ -341,33 +361,3 @@ ScreenOrientation.onchange = function(e) {
     [video.height, video.width] = [video.width, video.height];
   }
 */
-
-
-  window.addEventListener('resize', functionName)
-
-  let innerWidth = window.innerWidth;
-
-  function functionName() {
-    if (innerWidth === window.innerWidth) return;
-    innerWidth = window.innerWidth;
-    if(window.innerWidth > window.innerHeight) {
-    [canvas.height, canvas.width] = [canvas.width, canvas.height];
-    [video.height, video.width] = [video.width, video.height];
-    }
-    
-    if(window.innerWidth < window.innerHeight) {
-
-    [canvas.height, canvas.width] = [canvas.width, canvas.height];
-    [video.height, video.width] = [video.width, video.height];
-    //then do other stuff
-    }
-  }
-
-  // kicks everyone out when someone runs a PeekingDuck instance
-  socket.on('kickout', () => {
-      if (!started) {
-          window.location.href += "/lobby";
-      }
-  })
-  
-  
