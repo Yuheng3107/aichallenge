@@ -82,7 +82,7 @@ class Node(AbstractNode):
 
         self.angleThresholds = np.array([
             [0.,0.,0.,0.,0.13,0.,0.,0.,0.15,0.,0.],
-            [0.,0.,0.,0.,0.,0.33,0.,0.28,0.,0.,0.],
+            [0.,0.,0.,0.,0.,0.25,0.,0.35,0.,0.,0.],
             [0.,0.,0.,0.,0.,0.,0.,0.,0.08,0.,0.25]],dtype=np.float32)
         """
         Array(N,K) containing the differences in angle required for feedback to be given

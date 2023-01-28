@@ -18,7 +18,7 @@ globals.superInitialise()
 def index():
     """Index route which initialises global variables
     and returns the homepage"""
-    print(f"PeekingDuck Running: {globals.ISACTIVE}")
+    print(f"Connection. PeekingDuck Running: {globals.ISACTIVE}")
     if globals.ISACTIVE == False:
         globals.initialise()
         return render_template('./index.html')
@@ -42,7 +42,7 @@ def kill_peeking_duck():
     Listener that listens to disconnect events in the app page
     Activated when person disconnects to kill the PeekingDuck Pipeline
     """
-    print('disconnectEvent')
+    print('Disconnection.')
     if globals.ISACTIVE:
         # Kills PeekingDuck if PeekingDuck is running
         globals.killSwitch = True
