@@ -20,6 +20,7 @@ def start_pipeline():
             processing_node
         ]
     )
+    globals.ISACTIVE = True
     runner.run()
     print("PeekingDuck Stopped")
     globals.ISACTIVE = False

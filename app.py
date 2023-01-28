@@ -37,7 +37,6 @@ def start():
     """When start button is clicked, WebSocket event is triggered
     which starts the main programme"""
     emit('kickout', broadcast=True)
-    globals.ISACTIVE = True
     start_pipeline()
 
 @socketio.on('disconnect', namespace="/app")
