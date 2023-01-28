@@ -333,6 +333,10 @@ socket.on('kickout', () => {
     }
 })
 
+window.addEventListener('beforeunload', (event) => {
+    event.returnValue = 'Leave?';
+});
+
 // Listens to change in screen orientation and changes video height and width to suit the change
 /*
 ScreenOrientation.onchange = function(e) {

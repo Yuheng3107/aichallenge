@@ -8,7 +8,7 @@ def superInitialise():
     global displayVideoOnBackend
 
     ISACTIVE = False
-    displayVideoOnBackend = False
+    displayVideoOnBackend = True
 def initialise():
 
 

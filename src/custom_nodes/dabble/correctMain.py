@@ -51,7 +51,7 @@ class Node(AbstractNode):
 
         # TO BE IMPORTED FROM NUMPY ARRAYS
         self.evalPoses = np.array([
-            [0.,0.,0.,0.,1.75,0.,0.,0.,0.44,0.,0.],
+            [0.,0.,0.,0.,1.65,0.,0.,0.,0.44,0.,0.],
             [0.,0.,0.,0.,0.,2.375,0.,2.25,0.,0.,0.],
             [0.,0.,0.,0.,2.825,0.,2.832,0.,1.583,0.,1.7]],dtype=np.float32)
         
@@ -72,7 +72,7 @@ class Node(AbstractNode):
             K: key angles (11)
         """
 
-        self.scoreThresholds = np.array([0.19,0.17,0.06],dtype=np.float32)
+        self.scoreThresholds = np.array([0.18,0.17,0.06],dtype=np.float32)
         """
         Array(N) containing the Score Thresholds.
             N: number of exercises
@@ -81,7 +81,7 @@ class Node(AbstractNode):
         """
 
         self.angleThresholds = np.array([
-            [0.,0.,0.,0.,0.14,0.,0.,0.,0.13,0.,0.],
+            [0.,0.,0.,0.,0.13,0.,0.,0.,0.15,0.,0.],
             [0.,0.,0.,0.,0.,0.33,0.,0.28,0.,0.,0.],
             [0.,0.,0.,0.,0.,0.,0.,0.,0.08,0.,0.25]],dtype=np.float32)
         """
@@ -352,6 +352,8 @@ class Node(AbstractNode):
             # perfect rep
             self.perfectReps += 1
             feedback += "Perfect!"
+        
+        print(feedback)
         return feedback
 
     def emotionFeedback(self,emotionAverage:np.ndarray,emotionThreshold:np.ndarray):
@@ -564,7 +566,7 @@ class Node(AbstractNode):
 
             """DEBUG"""
             # print(f"curPose: {', '.join(str(angle) for angle in curPose)}")
-            print(f"score: {score}")
+            # print(f"score: {score}")
             # print(f"test: {curPose[10]}")
             ## print(f"angleDifferences: {angleDifferences}")   
             ## print(self.selectedFrameCount)
