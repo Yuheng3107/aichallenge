@@ -341,7 +341,7 @@ function functionName() {
 // kicks everyone out when someone runs a PeekingDuck instance
 socket.on('kickout', () => {
     if (!started) {
-        window.location.href += "/lobby";
+        window.location.href += "lobby";
     }
 })
 

@@ -21,7 +21,6 @@ def index():
         return render_template('./index.html')
     return render_template('lobby.html')
     
-
 @socketio.on('start')
 def start():
     """When start button is clicked, WebSocket event is triggered
@@ -65,7 +64,6 @@ def change_difficulty(difficulty):
     for backend to receive when user changes difficulty
      in front end"""
     globals.difficulty = difficulty
-
 
 @socketio.on('video')
 def handle_video(data):
