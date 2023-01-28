@@ -19,7 +19,7 @@ def index():
     if globals.ISACTIVE == False:
         globals.initialise()
         return render_template('./index.html')
-    return render_template('server_full.html')
+    return render_template('lobby.html')
     
 
 @socketio.on('start')
@@ -82,7 +82,7 @@ def kill_peeking_duck():
 
 @app.route('/lobby')
 def send_to_lobby():
-    return render_template('server_full.html')
+    return render_template('lobby.html')
 
 if __name__ == '__main__':
     # ssl_context=('cert.pem', 'key.pem')
