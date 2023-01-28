@@ -1,4 +1,5 @@
 
+
 function getFeedback() {
     socket.emit('feedback');
 }
@@ -87,7 +88,8 @@ else {
 
 }
 let started = false;
-let socket = io();
+// initialises io with namespace /app
+let socket = io("/app");
 
 document.addEventListener('DOMContentLoaded', (event) => {
     //hide the repcount and repfeedback on page load since there's no content
@@ -329,7 +331,7 @@ function functionName() {
 socket.on('kickout', () => {
     if (!started) {
         
-        window.location.href = window.location.href.slice(0, -3) + "lobby";
+        window.location.href += "lobby"
     }
 })
 

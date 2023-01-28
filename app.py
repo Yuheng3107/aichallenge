@@ -13,11 +13,8 @@ globals.superInitialise()
 
 ### WEBPAGE METHODS
 ##########
-@app.route('/')
-def main_page():
-    return redirect('/app')
 
-@app.route('/app')
+@app.route('/')
 def index():
     """Index route which initialises global variables
     and returns the homepage"""
@@ -32,7 +29,7 @@ def send_to_lobby():
     return render_template('lobby.html')
     
 
-@socketio.on('start')
+@socketio.on('start', namespace='/app')
 def start():
     """When start button is clicked, WebSocket event is triggered
     which starts the main programme"""
@@ -54,7 +51,7 @@ def kill_peeking_duck():
 ### UI METHODS (FEEDBACK)
 ##########
 
-@socketio.on('feedback')
+@socketio.on('feedback', namespace='/app')
 def send_feedback():
     """Activated whenever feedback event is called from
     the client and server will send back a feedback event which
@@ -73,7 +70,7 @@ def send_feedback():
 ### UI METHODS (BUTTONS)
 ###########
 
-@socketio.on('endExercise')
+@socketio.on('endExercise', namespace='/app')
 def end_exercise():
     """Updates globals that exercise has ended so
     that the peekingduck backend knows to create a summary
@@ -82,12 +79,12 @@ def end_exercise():
         globals.exerciseEnded = True
     # Add code to save exercise in a cookie
 
-@socketio.on('changeExercise')
+@socketio.on('changeExercise', namespace='/app')
 def change_exercise(exerciseId):
     globals.currentExercise = int(exerciseId)
     globals.exerciseSelected = True
 
-@socketio.on('changeDifficulty')
+@socketio.on('changeDifficulty', namespace='/app')
 def change_difficulty(difficulty):
     """Function that updates global variable
     for backend to receive when user changes difficulty
@@ -97,11 +94,11 @@ def change_difficulty(difficulty):
 ### DATA METHODS
 ##########
 
-@socketio.on('video')
+@socketio.on('video', namespace='/app')
 def handle_video(data):
     globals.url = data['url']
 
-@socketio.on('message')
+@socketio.on('message', namespace='/lobby')
 def handle_message(msg):
     send(msg, broadcast=True)
 
