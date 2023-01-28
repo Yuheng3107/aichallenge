@@ -12,7 +12,6 @@ helper.py
         - Rep Time
         - Emotions
 """
-
 from typing import Any, Dict, List
 import time
 
@@ -20,6 +19,7 @@ import numpy as np
 
 from peekingduck.pipeline.nodes.abstract_node import AbstractNode
 from deepface import DeepFace
+import cv2
 
 import threading
 
@@ -39,7 +39,7 @@ class Node(AbstractNode):
         # self.logger.info(f"model loaded with configs: config")
 
         super().__init__(config, node_path=__name__, **kwargs)
-        globals.mainFeedback = ["Please Select Exercise"]
+        globals.mainFeedback = ["Loading..."]
 
         self.resetAll()
 
@@ -51,28 +51,28 @@ class Node(AbstractNode):
 
         # TO BE IMPORTED FROM NUMPY ARRAYS
         self.evalPoses = np.array([
-            [1.5101271591974472, 1.4980141223917764, 2.9744070804606664, 0.6972723789351448, 0.4837195830264868, 2.2550842191658105, 0.4871277398325121, 0.48601296839902186, 0.9368117346906317, 1.5589928996090603, 2.1477453057967852, 1.7910356640090987, 1.336984596535936, 1.6832697218589587, 1.383993753712914, 1.6120344910706403, 1.9967021465554933, 0.4398586657270065, 1.6390865609852177],
-            [2.374580135824015, 2.263713950425495, 2.883816780362668, 1.8643469259111198, 2.997754635400291, 2.855449311474785, 1.1334077094891724, 1.578203583796112, 0.7839790321590494, 0.7821727442271517, 2.3850600370725807, 1.5656631300702746, 
-            2.327, 2.327, 2.3, 2.3, 
-            1.5596841017654897, 0.056053968019371674, 1.6157380697848598],
-            [0.21767780038645262, 0.6919961585571482, 1.6839704162412432, 1.8539293248147957, 0.7079075377200521, 2.538111518193272, 1.8733032890931085, 1.983687965530557, 1.7986515332534698, 1.6412894658311044, 1.8598794860142835, 2.2558652786473097, 2.9200727069178956, 2.82527497539771, 2.6791168732640616, 2.8319761199989966, 0.9351479597160647, 1.5825368441775987, 1.0007917106164417]])
+            [0.,0.,0.,0.,1.75,0.,0.,0.,0.44,0.,0.],
+            [0.,0.,0.,0.,0.,2.375,0.,2.264,0.,0.,0.],
+            [0.,0.,0.,0.,2.825,0.,2.832,0.,1.583,0.,1.684]],dtype=np.float32)
+        
         """
         Array(N,K) containing the correct poses
             N: number of exercises
-            K: key angles (19)
+            K: key angles (11)
         """
 
         self.angleWeights = np.array([
-            [0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,1.,0.,0.,0.,1.,0.],
-            [1.,1.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.],
-            [0.,0.,10.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,1.,0.,1.,0.,1.,0.]])
+            [0.,0.,0.,0.,1.,0.,0.,0.,1.,0.,0.],
+            [0.,0.,0.,0.,0.,1.,0.,1.,0.,0.,0.],
+            [0.,0.,0.,0.,0.,0.,0.,0.,1.,0.,10.]],dtype=np.float32)
+        
         """
         Array(N,K) containing the weights that each angle should have in evaluation
             N: number of exercises
-            K: key angles (19)
+            K: key angles (11)
         """
 
-        self.scoreThresholds = np.array([0.2,0.18,0.06])
+        self.scoreThresholds = np.array([0.19,0.17,0.06],dtype=np.float32)
         """
         Array(N) containing the Score Thresholds.
             N: number of exercises
@@ -81,22 +81,22 @@ class Node(AbstractNode):
         """
 
         self.angleThresholds = np.array([
-            [0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.14,0.,0.,0.,0.13,0],
-            [0.25,0.35,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.],
-            [0.,0.,0.1,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.18,0.,0.2,0.,0.16,0.]])
+            [0.,0.,0.,0.,0.14,0.,0.,0.,0.13,0.,0.],
+            [0.,0.,0.,0.,0.,0.33,0.,0.4,0.,0.,0.],
+            [0.,0.,0.,0.,0.,0.,0.,0.,0.16,0.,0.1]],dtype=np.float32)
         """
         Array(N,K) containing the differences in angle required for feedback to be given
             N: number of exercises
-            K: key angles (19)
+            K: key angles (11)
         """
 
-        self.evalRepTime = np.array([2,2,2])
+        self.evalRepTime = np.array([3.5,3.5,3.5],dtype=np.float32)
         """
         Array(N) containing the minimum ideal rep times
             N: number of exercises
         """
 
-        self.emotionThresholds = np.array([30,30,50,50])
+        self.emotionThresholds = np.array([30,30,50],dtype=np.float32)
         """
         Arary(4) containing the thresholds for the various emotions
             Angry, Neutral, Sad, Disgust
@@ -104,30 +104,29 @@ class Node(AbstractNode):
 
         self.glossary = np.array(
             #Side Squats
-            [[['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],
+            [[['',''],['',''],['',''],['',''],
             ['Butt not low enough ','Butt too low '],
             ['',''],['',''],['',''],
-            ['Back not straight enough ','Back too straight '],
-            ['','']],
+            ['Leaning forward too much ','Back too straight '],
+            ['',''],['','']],
             #Front Squats
-            [['Bending down too little. ','Bending down too much. '],['Knees collapse inwards. ','Feet may be too wide apart. '],
-            ['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['','']],
+            [['',''],['',''],['',''],['',''],['',''],
+            ['Knees collapse inwards. ','Feet may be too wide apart. '],
+            ['',''],
+            ['Bending down too little. ','Bending down too much. '],
+            ['',''],['',''],['','']],
             #Side Push-ups
-            [['',''],['',''],
-            ['Legs too parallel with ground','legs not parallel with ground'],
-            ['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],
-            ['Back too straight ','Back not straight enough '],
-            ['',''],
-            ['Knees too straightened ','Knees too bent '],
-            ['',''],
+            [['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],
             ['Back too straightened ','Back sagging '],
-            ['','']]]
-            )
+            ['',''],
+            ['Legs too parallel with ground','legs not parallel with ground']]])
         """
         Array(N) containing the text descriptions of each angle
             N: number of exercises
         """
-
+        if globals.displayVideoOnBackend:
+            cv2.destroyAllWindows()
+        
 
 ### RESET METHODS
 ### These methods reset variables 
@@ -138,11 +137,11 @@ class Node(AbstractNode):
             Called: when a rep is finished.
         """
         ### EXERCISE VARIABLES
-        self.selectedFrames = np.zeros((200,19))
+        self.selectedFrames = np.zeros((200,11),dtype=np.float32)
         """
         Array(X,K) containing the store of frames to be evaluated
             X: Maximum number of frames the buffer stores (maximum selectedFrameCount size)
-            K: key angles (19)
+            K: key angles (11)
         """
         self.selectedFrameCount = 0
         """X - Number of frames in selectedFrames """
@@ -151,7 +150,7 @@ class Node(AbstractNode):
         self.frameCount = 0
         """Frame Count for Emotions"""
 
-        self.selectedEmotionFrames = np.zeros((100,7))
+        self.selectedEmotionFrames = np.zeros((100,7),dtype=np.float32)
         """
         Array(X,K) containing the store of frames to be evaluated
             X: Maximum number of frames buffer stores (maximum selectedEmotionFrameCount size)
@@ -169,16 +168,16 @@ class Node(AbstractNode):
         self.resetFrames()
 
         # reset angle-related variables
-        self.smallErrorCount = np.zeros(19)
+        self.smallErrorCount = np.zeros(11,dtype=int)
         """
         Array(K) contains the count of reps where angle K is too small
-            K: key angles (19)
+            K: key angles (11)
         """
 
-        self.largeErrorCount = np.zeros(19)
+        self.largeErrorCount = np.zeros(11,dtype=int)
         """
         Array(K) containing the count of reps where angle K is too large
-            K: key angles (19)
+            K: key angles (11)
         """
 
         self.repTimeError = 0
@@ -236,8 +235,8 @@ class Node(AbstractNode):
             Called: when exercise is finished. 
 
             Args:
-                smallErrorCount (Array(19)[int]): number of times angle was too small
-                largeErrorCount (Array(19)[int]): number of times angle was too large
+                smallErrorCount (Array(11)[int]): number of times angle was too small
+                largeErrorCount (Array(11)[int]): number of times angle was too large
                 perfectReps (int): number of perfect reps (no errors)
 
             Returns:
@@ -253,7 +252,7 @@ class Node(AbstractNode):
             #none of that error
             if count == 0:
                 continue
-            feedback.append(f" {self.glossary[globals.currentExercise,i,0]} {count} times")
+            feedback.append(f" {self.glossary[globals.currentExercise,i,1]} {count} times")
         if self.repTimeError != 0:
             feedback.append(f" Rep times were too short {self.repTimeError} times")
         feedback.append(f" {perfectReps} perfect reps.")
@@ -267,9 +266,13 @@ class Node(AbstractNode):
         Changes inPose to being in rest pose, gets the feedback for the rep, then deletes all frame data of the rep.
             Called: when rep is finished.
         """
-        globals.repCount += 1
         repTime = time.time() - self.repStartTime
+        #anomaly, rep time too short
+        if repTime < 1.5:
+            return None
 
+        globals.repCount += 1
+        
         ### Rep feedback
         timeDifference = compareTime(self.evalRepTime[globals.currentExercise],repTime)
         angleDifferences = compareAngles(self.evalPoses[globals.currentExercise], self.angleThresholds[globals.currentExercise],self.selectedFrames,self.selectedFrameCount)
@@ -279,9 +282,10 @@ class Node(AbstractNode):
 
         ### Emotion feedback
         emotionAverage = compareEmotions(self.selectedEmotionFrames,self.selectedEmotionFrameCount)
-        emotionFeedback = self.emotionFeedback(emotionAverage,self.emotionThresholds)
-        if emotionFeedback != "":
+        emotionFeedback, currentEmotion = self.emotionFeedback(emotionAverage,self.emotionThresholds)
+        if currentEmotion != 0:
             globals.emotionFeedback = emotionFeedback
+            globals.currentEmotion = currentEmotion
         print(f"Emotions: {emotionAverage}")
         self.resetFrames()
 
@@ -309,7 +313,7 @@ class Node(AbstractNode):
             Called: when rep is finished.
 
             Args:
-                angleDifferences (Array(19)[float]): angle differences, positive is too large, negative is too small, 0 is no significant difference
+                angleDifferences (Array(11)[float]): angle differences, positive is too large, negative is too small, 0 is no significant difference
                 timeDifference (bool): time difference, 1 is too short, 0 is no errors
                     
             Returns:
@@ -361,41 +365,42 @@ class Node(AbstractNode):
                     
             Returns:
                 feedback (string): emotions displayed in rep & related feedback
+                currentEmotion (int): ID of emotion
         """
         # check for no Face
         if emotionAverage[0] == -99:
             feedback = "No Face Detected"
-            return feedback
-        
+            currentEmotion = -1
+            return feedback, currentEmotion
+
         feedback = ""
+        currentEmotion = 0
 
-    ### angry, disgust, fear, happy, sad, surprise, neutral
-
+        ### angry, disgust, fear, happy, sad, surprise, neutral
         # if fearful/sad for some reason, idek
         if emotionAverage[2] + emotionAverage[4] > emotionThreshold[2]:
             feedback += "Stress detected. "
-        
-        # if disgust, ???
-        if emotionAverage[1] > emotionThreshold[3]:
-            pass
+            currentEmotion += 2
 
         # if angry/happy, exercise is rigorous (grimace is identified by programme as happy)
         if emotionAverage[0] + emotionAverage[3] > emotionThreshold[0]:
             feedback += "Fatigue detected. "
+            currentEmotion += 1
 
             if globals.difficulty == "Beginner":
                 feedback += "Consider resting to prevent injury. "
             if globals.difficulty == "Expert":
                 feedback += "Continue to train to failure for maximum results. "
         
-        if feedback != "":
-            return feedback
+        if currentEmotion != 0:
+            return feedback, currentEmotion
 
         # if neutral, recommend continue
         if emotionAverage[6] > emotionThreshold[1]:
             feedback = "No Fatigue detected. Continue training. "
+            currentEmotion = 4
 
-        return feedback
+        return feedback, currentEmotion
 
 
 ### FRAME METHODS
@@ -431,7 +436,7 @@ class Node(AbstractNode):
             Called: every frame while rep detection is active.
 
             Args:
-                curPose (Array(19)[float]): the current pose detected by the camera.
+                curPose (Array(11)[float]): the current pose detected by the camera.
                 frameStatus (int):  
         """
         if frameStatus == -1:
@@ -448,7 +453,7 @@ class Node(AbstractNode):
             if frameStatus == 0:
                 self.switchPoseCount += 1
                 # if 5 rest frames in a row
-                if self.switchPoseCount > 7:
+                if self.switchPoseCount > 10:
                     # transition into rest pose
                     self.finishRep()
                     
@@ -462,7 +467,7 @@ class Node(AbstractNode):
             if frameStatus == 1:
                 self.switchPoseCount += 1
                 # if 5 pose frames in a row
-                if self.switchPoseCount > 2:
+                if self.switchPoseCount > 4:
                     # transition into key pose
                     self.middleOfRep()
 
@@ -506,9 +511,15 @@ class Node(AbstractNode):
         Returns:
             outputs (dict): empty.
         """
-
-
+        # Added predefined global because it doesn't work on some OS i.e macOS
+        if globals.displayVideoOnBackend:
+            cv2.imshow("image",globals.img)
+            cv2.waitKey(1)
+        
         ### UI METHODS
+        if globals.currentExercise == -1:
+            globals.mainFeedback = ["Please Select Exercise."]
+
         if globals.exerciseSelected:
             self.changeExercise()
             globals.exerciseSelected = False
@@ -519,18 +530,14 @@ class Node(AbstractNode):
 
         ### COMPUTATIONAL METHODS
         if globals.runSwitch:
-            globals.img = inputs["img"]
             # Keypoints has a shape of (1, 17, 2)
             keypoints = inputs["keypoints"]
-            
             # Calculates angles in radians of live feed
             curPose = processData(keypoints, globals.img.shape[0], globals.img.shape[1])
             score = comparePoses(self.evalPoses[globals.currentExercise],curPose, self.angleWeights[globals.currentExercise]) 
             
             # FRAME STATUS
             frameStatus = self.shouldSelectFrames(score, self.scoreThresholds[globals.currentExercise])
-
-
 
             #default message
             globals.mainFeedback = ["Exercise in progress"]
@@ -553,7 +560,6 @@ class Node(AbstractNode):
                 thread = threading.Thread(target=self.detectEmotion, name='thread', daemon=True)
                 self.frameCount = 0
                 thread.start()
-
 
             """DEBUG"""
             # print(f"curPose: {', '.join(str(angle) for angle in curPose)}")

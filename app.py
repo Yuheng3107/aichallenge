@@ -1,47 +1,35 @@
-
-import cv2
 import json
-from flask import Flask, render_template, Response, request
+from flask import Flask, render_template
 from flask_socketio import SocketIO, emit
+from node_pipeline import start_pipeline
+
 import globals
-from main import main
+
 
 app = Flask(__name__)
 socketio = SocketIO(app)
 
-
-def gen():
-    """Generator function which yields img frames 
-    to be displayed in the front-end"""
-    while True:
-        
-        ret, jpeg = cv2.imencode('.jpeg', globals.img)
-        frame = jpeg.tobytes()
-        yield (b'--frame\r\n'
-               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+globals.superInitialise()
 
 @app.route('/')
 def index():
     """Index route which initialises global variables
     and returns the homepage"""
-    globals.initialise()
-    return render_template('./index.html')
+    print(globals.ISACTIVE)
+    print(globals.CONNECTION)
+    if globals.ISACTIVE == False and globals.CONNECTION == False:
+        globals.initialise()
+        globals.CONNECTION = True
+        return render_template('./index.html')
+    return render_template('server_full.html')
+    
 
-@app.route('/start')
+@socketio.on('start')
 def start():
-    """When start button is clicked, GET request (AJAX)
-    is sent to this route to get the peekingduck pipeline
-    running"""
-    main()
-    return ""
-
-@app.route('/video_feed')
-def video_feed():
-    """Route that updates video frames using the global
-    img variable"""
-    return Response(gen(),
-    mimetype='multipart/x-mixed-replace; boundary=frame')
-
+    """When start button is clicked, WebSocket event is triggered
+    which starts the main programme"""
+    start_pipeline()
+    
 
 @socketio.on('feedback')
 def send_feedback():
@@ -52,7 +40,7 @@ def send_feedback():
     on the front end"""
     data = {
         "repCount": globals.repCount,
-        "summary": globals.mainFeedback,
+        "mainFeedback": globals.mainFeedback,
         "repFeedback": globals.repFeedback,
         "emotionFeedback": globals.emotionFeedback,
     }
@@ -78,11 +66,23 @@ def change_difficulty(difficulty):
     for backend to receive when user changes difficulty
      in front end"""
     globals.difficulty = difficulty
-    print(globals.difficulty)
 
+
+@socketio.on('video')
+def handle_video(data):
+    globals.url = data['url']
+
+@socketio.on('disconnect')
+def reset_connection():
+    globals.killSwitch = True
+    globals.CONNECTION = False
 
 if __name__ == '__main__':
     # ssl_context=('cert.pem', 'key.pem')
     # debug=True
-    socketio.run(app,  host="0.0.0.0", allow_unsafe_werkzeug=True, ssl_context=('cert.pem', 'key.pem'))
+    # allow_unsafe_werkzeug=True
+    # gunicorn -w 1 --threads 100 app:app 
+    # use this command to run production ready server
+    socketio.run(app,  host="0.0.0.0", ssl_context=('cert.pem', 'key.pem'), allow_unsafe_werkzeug=True)
+    
 

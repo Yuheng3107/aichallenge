@@ -2,3 +2,9 @@ venv/
 Training_Data/
 .ipynb
 .npy
+.git
+.gitignore
+.ipynb_checkpoints
+__pycache__/
+.pyc
+/root/.deepface
