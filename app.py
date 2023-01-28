@@ -1,6 +1,7 @@
 import json
 from flask import Flask, render_template, make_response
-from flask_socketio import SocketIO, emit
+from flask_socketio import SocketIO, emit, send
+from numpy import broadcast
 from node_pipeline import start_pipeline
 
 import globals
@@ -83,6 +84,12 @@ def kill_peeking_duck():
 @app.route('/lobby')
 def send_to_lobby():
     return render_template('lobby.html')
+
+@socketio.on('message')
+def handle_message(msg):
+    send(msg, broadcast=True)
+
+
 
 if __name__ == '__main__':
     # ssl_context=('cert.pem', 'key.pem')

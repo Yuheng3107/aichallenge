@@ -1,10 +1,22 @@
 {% extends "base_template.html" %} 
 
+{% block head %} 
+<!-- Add Javascript Logic for interactivity -->
+<script src="{{url_for('static', filename='js/lobby.js')}}" defer></script>
+<!-- Add socketio.js for websocket support -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+    integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
+    crossorigin="anonymous"></script>
+{% endblock %}
+
 {% block title %} 
 Lobby
 {% endblock %} 
 {% block main %} 
 <main>
     Application is busy. Please wait a moment before refreshing the page.
+    <ul id="messages"></ul>
+    <input type="text" id="myMessage">
+    <button id="sendButton">Send</button>
 </main>
 {% endblock main %}
