@@ -16,10 +16,8 @@ def index():
     """Index route which initialises global variables
     and returns the homepage"""
     print(globals.ISACTIVE)
-    print(globals.CONNECTION)
-    if globals.ISACTIVE == False and globals.CONNECTION == False:
+    if globals.ISACTIVE == False:
         globals.initialise()
-        globals.CONNECTION = True
         return render_template('./index.html')
     return render_template('server_full.html')
     
@@ -76,9 +74,9 @@ def handle_video(data):
     globals.url = data['url']
 
 @socketio.on('disconnect')
-def reset_connection():
-    globals.killSwitch = True
-    globals.CONNECTION = False
+def reset_connection(data):
+    if data['started']:
+        globals.killSwitch = True
 
 @app.route('/lobby')
 def send_to_lobby():

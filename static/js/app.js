@@ -298,7 +298,7 @@ toggleContainer.addEventListener('click', () => {
 // Listens for disconnect events
 
 window.onbeforeunload = () => {
-    socket.emit('disconnect');
+    socket.emit('disconnect',{"started": started});
 }
 
 // Flips camera when button is clicked
