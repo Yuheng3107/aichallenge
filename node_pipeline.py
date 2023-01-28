@@ -22,7 +22,7 @@ def start_pipeline():
         ]
     )
     runner.run()
-    print("Peekingduck Stopped")
+    print("PeekingDuck Stopped")
     globals.ISACTIVE = False
 
 if __name__ == "__main__":

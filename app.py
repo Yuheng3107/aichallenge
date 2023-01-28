@@ -15,7 +15,7 @@ globals.superInitialise()
 def index():
     """Index route which initialises global variables
     and returns the homepage"""
-    print(globals.ISACTIVE)
+    print(f"PeekingDuck Running: {globals.ISACTIVE}")
     if globals.ISACTIVE == False:
         globals.initialise()
         return render_template('./index.html')
