@@ -170,7 +170,7 @@ startButton.addEventListener('click', (e) => {
 
 endButton.addEventListener('click', () => {
     socket.emit('endExercise');
-    mainFeedback.classList.add("w-50", "fs-4", "card", "p-3", "mt-3");
+    mainFeedback.classList.add("fs-4", "card", "p-3", "mt-3");
     form.style.display = 'flex';
     endButton.style.display = 'none';
     repInfo.style.display = 'none';
@@ -204,7 +204,7 @@ form.addEventListener('submit', (e) => {
     endButton.style.display = 'flex';
     form.style.display = 'none';
 
-    mainFeedback.classList.remove("w-50", "fs-4", "card", "p-3", "mt-3");
+    mainFeedback.classList.remove("fs-4", "card", "p-3", "mt-3");
     repInfo.style.display='flex';
 
     // Display camera position requirement as alert box
