@@ -159,10 +159,6 @@ startButton.addEventListener('click', (e) => {
           else {
               window.alert("getUserMedia API not supported on your browser");
           }
-        
-
-        
-
         // updates feedback every 0.5s
         setInterval(getFeedback, feedbackInterval);
         // adds spinner at same time as feedback is updated
@@ -345,9 +341,12 @@ function functionName() {
 // kicks everyone out when someone runs a PeekingDuck instance
 socket.on('kickout', () => {
     if (!started) {
-        
         window.location.href += "lobby"
     }
+})
+
+socket.on('disconnect', () => {
+    alert("Error: Disconnected. Please refresh the page.")
 })
 
 // Listens to change in screen orientation and changes video height and width to suit the change

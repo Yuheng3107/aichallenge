@@ -249,10 +249,14 @@ class Node(AbstractNode):
             #none of that error
             if count == 0:
                 continue
+            if self.glossary[globals.currentExercise,i,0] == "":
+                continue
             feedback.append(f" {self.glossary[globals.currentExercise,i,0]} {count} times")
         for i,count in enumerate(largeErrorCount):
             #none of that error
             if count == 0:
+                continue
+            if self.glossary[globals.currentExercise,i,1] == "":
                 continue
             feedback.append(f" {self.glossary[globals.currentExercise,i,1]} {count} times")
         feedback.append(f" {perfectReps} perfect reps.")
@@ -326,19 +330,15 @@ class Node(AbstractNode):
             feedback += "No Frames Detected"
             return feedback
         angleDifferences /= np.pi
-        
+
         if timeDifference == 1:
             # time error
-            hasError = True
             self.repTimeError += 1
             feedback += "Rep time was too short. "
 
-        # hasError tracks if there is any feedback
-        hasError = False
         for i, difference in enumerate(angleDifferences):
             if difference == 0.:
                 continue
-            hasError = True
             if (difference > 0):
                 # angle needs to be smaller, as it is larger than ideal pose
                 self.smallErrorCount[i] += 1
@@ -348,7 +348,7 @@ class Node(AbstractNode):
                 self.largeErrorCount[i] += 1
                 feedback += f"{self.glossary[globals.currentExercise,i,1]}. "
 
-        if hasError == False:
+        if feedback[:2] == ": ":
             # perfect rep
             self.perfectReps += 1
             feedback += "Perfect!"
