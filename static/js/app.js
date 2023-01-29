@@ -25,23 +25,23 @@ const feedbackInterval = 500;
 
 const startButton = document.querySelector('.start-button');
 const endButton = document.querySelector('.end-button');
+const form = document.querySelector('#changeExercise');
 const repInfo = document.querySelector('#rep-info-group');
 const repCount = document.querySelector('#rep-count');
 const repFeedback = document.querySelector("#rep-feedback");
 const feedback = document.querySelector('#feedback');
-const form = document.querySelector('#changeExercise');
 const showLogButton = document.querySelector("#show-log-button");
 const feedbackList = document.querySelector('#feedback-list');
 const mainFeedback = document.querySelector('#main-feedback');
-const textToSpeechButton = document.querySelector('.text-to-speech');
 const emotionFeedback = document.querySelector('#emotion-feedback');
+const textToSpeechButton = document.querySelector('.text-to-speech');
 const difficultyButton = document.querySelector('#difficulty');
+const changeViewButtons = document.querySelectorAll('.change-view');
+const camPosition = document.querySelector("#cam-position");
 const video = document.querySelector("#video");
 const canvas = document.querySelector("#canvas");
-const camPosition = document.querySelector("#cam-position");
 const toggleContainer = document.querySelector(".toggle-container")  
 const spinner = document.querySelector('#spinner');
-const changeViewButtons = document.querySelectorAll('.change-view');
 
 let userAgent = navigator.userAgent;
 let browserName = "others";
@@ -92,7 +92,7 @@ let started = false;
 let socket = io("/app");
 
 document.addEventListener('DOMContentLoaded', (event) => {
-    //hide the repcount and repfeedback on page load since there's no content
+    //hide the repcount, repfeedback on page load since there's no content, end exercise button also
     
     if (!repCount.textContent) {
         repCount.style.display = 'none';
@@ -100,6 +100,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     if (!repFeedback.textContent) {
         repFeedback.style.display = 'none';
     }
+    endButton.style.display = 'none';
 })
 
 startButton.addEventListener('click', (e) => {
@@ -111,6 +112,7 @@ startButton.addEventListener('click', (e) => {
         socket.emit('start');
         console.log("PeekingDuck running");
         startButton.style.display = "none";
+        form.style.display = "none";
         
         if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
             // checks that browser supports getting camera feed from user
@@ -169,7 +171,9 @@ startButton.addEventListener('click', (e) => {
 endButton.addEventListener('click', () => {
     socket.emit('endExercise');
     mainFeedback.classList.add("w-50", "fs-4", "card", "p-3", "mt-3");
-    repInfo.style.display='none';
+    form.style.display = 'flex';
+    endButton.style.display = 'none';
+    repInfo.style.display = 'none';
     console.log('end button clicked');
 });
 
@@ -197,7 +201,9 @@ form.addEventListener('submit', (e) => {
 
     repCount.style.display = 'flex';
     repFeedback.style.display = 'flex';
-    
+    endButton.style.display = 'flex';
+    form.style.display = 'none';
+
     mainFeedback.classList.remove("w-50", "fs-4", "card", "p-3", "mt-3");
     repInfo.style.display='flex';
 
