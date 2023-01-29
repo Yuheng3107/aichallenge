@@ -119,9 +119,5 @@ if __name__ == '__main__':
     # allow_unsafe_werkzeug=True
     # gunicorn -w 1 --threads 100 app:app 
     # use this command to run production ready server
-<<<<<<< HEAD
-    socketio.run(app,  host="0.0.0.0", ssl_context=('cert.pem', 'key.pem'), allow_unsafe_werkzeug=True, debug=True)
-=======
     # ssl_context=('cert.pem', 'key.pem'), 
     socketio.run(app,  host="0.0.0.0", ssl_context=('cert.pem', 'key.pem'), allow_unsafe_werkzeug=True)
->>>>>>> 9ad03966e762d92fa495ddd36a6dd85087743f49
