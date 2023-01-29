@@ -18,8 +18,10 @@ myMessage.addEventListener('keypress', (e) => {
     }
 });
 
+
+
 socket.on('message', (msg) => {
     let li = document.createElement('li');
     li.innerText = msg;
-    messages.appendChild(li);
+    messages.insertBefore(li, messages.firstChild);
 });

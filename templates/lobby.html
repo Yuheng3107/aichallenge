@@ -7,6 +7,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
     integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
     crossorigin="anonymous"></script>
+<!-- Styling for lobby -->
+<link rel="stylesheet" href="{{url_for('static', filename='css/lobby.css')}}">
 {% endblock %}
 
 {% block title %} 
@@ -15,14 +17,14 @@ FitAI: Lobby
 {% block main %} 
 <main>
     <h4 class="text-center">Lobby</h4>
-    <p class="lead text-center align-items-center">
-        Application is busy. Please wait a moment before going back to the homepage.
-    </p>
-    <p>
-        <h4>Chat</h4>
+    <p class="lead text-center align-items-center"> Our application is currently being used. Please kindly wait a moment before going back to the <a href="/" class="link-secondary">homepage.</a></p>
+    <div id="chat" class="text-center">
+        <h4>Chat (Most Recent)</h4>
         <ul id="messages"></ul>
-        <input type="text" id="myMessage">
-        <button id="sendButton" class ="btn btn-secondary">Send</button>
-    </p>
+        <input type="text" id="myMessage" class="text-center">
+        <button id="sendButton" class ="btn btn-secondary ms-1">Send</button>
+    </div>
+        
+
 </main>
 {% endblock main %}
