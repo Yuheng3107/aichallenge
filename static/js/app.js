@@ -1,5 +1,3 @@
-
-
 function getFeedback() {
     socket.emit('feedback');
 }
@@ -38,12 +36,21 @@ const emotionFeedback = document.querySelector('#emotion-feedback');
 const textToSpeechButton = document.querySelector('.text-to-speech');
 const difficultyButton = document.querySelector('#difficulty');
 const changeViewButtons = document.querySelectorAll('.change-view');
-const camPosition = document.querySelector("#cam-position");
+const alerter = document.querySelector("#alerter");
 const video = document.querySelector("#video");
 const canvas = document.querySelector("#canvas");
 const toggleContainer = document.querySelector(".toggle-container")  
 const spinner = document.querySelector('#spinner');
 const feedbackButton = document.querySelector('#feedback-button');
+
+const alert = (message, type) => {
+    alerter.innerHTML = [
+      `<div class="alert alert-${type} alert-dismissible mt-3" role="alert">`,
+      `   <div>${message}</div>`,
+      '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+      '</div>'
+    ].join('')
+}
 
 let userAgent = navigator.userAgent;
 let browserName = "others";
@@ -85,11 +92,32 @@ if ('speechSynthesis' in window) {
 }
 else {
     // replace with overlay and div pop-up in the future
-    window.alert('text to speech not available');
+    window.alert('text to speech not available','info');
 }
 let started = false;
 // initialises io with namespace /app
 let socket = io("/app");
+let mainSocket = io();
+
+//AFK check
+let inactivityTime = function () {
+    let time;
+    let almostTime;
+    window.onload = resetTimer;
+    document.onclick = resetTimer;
+    function logout() {
+        location.reload();
+    }
+    function almostLogout() {
+        alert("Inactivity detected. You will be logged out in 1 min if action is not detected.",'danger');
+    }
+    function resetTimer() {
+        clearTimeout(time);
+        clearTimeout(almostTime);
+        time = setTimeout(logout, 300000);
+        almostTime = setTimeout(almostLogout, 240000);
+    }
+};
 
 document.addEventListener('DOMContentLoaded', (event) => {
     //hide the repcount, repfeedback on page load since there's no content, end exercise button also
@@ -113,6 +141,8 @@ startButton.addEventListener('click', (e) => {
         socket.emit('start');
         console.log("PeekingDuck running");
         startButton.style.display = "none"; 
+        //start AFK check
+        inactivityTime()
 
         if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
             // checks that browser supports getting camera feed from user
@@ -154,7 +184,7 @@ startButton.addEventListener('click', (e) => {
             });
           }
           else {
-              window.alert("getUserMedia API not supported on your browser");
+              window.alert("getUserMedia API not supported on your browser", 'danger');
           }
         // updates feedback every 0.5s
         setInterval(getFeedback, feedbackInterval);
@@ -175,19 +205,6 @@ endButton.addEventListener('click', () => {
     // make endExercise button disappear
     endButton.style.display = 'none';
 });
-
-const alert = (message, type) => {
-
-    camPosition.innerHTML = [
-      `<div class="alert alert-${type} alert-dismissible mt-3" role="alert">`,
-      `   <div>${message}</div>`,
-      '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
-      '</div>'
-    ].join('')
-
-    // refactored so only one alert shows
-  }
-
 
 //When exercise choice is confirmed, a form is submitted
 form.addEventListener('submit', (e) => {
@@ -340,12 +357,16 @@ function functionName() {
 // kicks everyone out when someone runs a PeekingDuck instance
 socket.on('kickout', () => {
     if (!started) {
-        window.location.href += "lobby"
+        window.location.href += "lobby";
     }
 })
 
+mainSocket.on('forceKickout', () => {
+    window.location.href += "lobby";
+})
+
 socket.on('disconnect', () => {
-    alert("Error: Disconnected. Please refresh the page.")
+    alert("Error: Disconnected. Please refresh the page.");
 })
 
 // Listens to change in screen orientation and changes video height and width to suit the change

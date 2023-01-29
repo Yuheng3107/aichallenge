@@ -15,7 +15,7 @@
 FitAI: Lobby
 {% endblock %} 
 {% block main %} 
-<main>
+<main class="d-flex flex-column align-items-lg-center container">
     <h4 class="text-center">Lobby</h4>
     <p class="lead text-center align-items-center"> Our application is currently being used. Please kindly wait a moment before going back to the <a href="/" class="link-secondary">homepage.</a></p>
     <div id="chat" class="text-center">
@@ -24,5 +24,6 @@ FitAI: Lobby
         <input type="text" id="myMessage" class="text-center">
         <button id="sendButton" class ="btn btn-secondary ms-1">Send</button>
     </div>
+    <div id="alerter"></div>
 </main>
 {% endblock main %}

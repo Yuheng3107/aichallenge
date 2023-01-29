@@ -1,9 +1,10 @@
 import json
 from flask import Flask, render_template, make_response, redirect
-from flask_socketio import SocketIO, emit, send
+from flask_socketio import SocketIO, emit, send, disconnect
 from node_pipeline import start_pipeline
 
 import globals
+from numpy import broadcast
 
 
 app = Flask(__name__)
@@ -57,7 +58,12 @@ def kill_peeking_duck():
     if globals.ISACTIVE:
         # Kills PeekingDuck if PeekingDuck is running
         globals.killSwitch = True
+        emit('peekingduckFree', broadcast=True)
 
+@socketio.on('resetServer')
+def reset_server():
+    kill_peeking_duck()
+    emit('forceKickout',broadcast=True)
 
 ### UI METHODS (FEEDBACK)
 ##########
