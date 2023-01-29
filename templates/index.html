@@ -36,15 +36,16 @@
         <span id="rep-count"></span>
         <p id="rep-feedback"></p>
     </div>
-    
+    <span id="spinner"></span>
     <p id="main-feedback-group" class="text-center">
-        <span id="spinner"></span>
         <span id="main-feedback" class="text-center"></span>
     </p>
-    
+    <a id="feedback-button" class="btn btn-secondary" href="/errors" target="_blank">View Errors</a>
     <p id="emotion-feedback"></p>
-    <button id="show-log-button"><span>Show Feedback Log</span><img
-            src="{{url_for('static', filename='svg/expand-icon.svg')}}" alt="expand icon" /></button>
+    <button id="show-log-button">
+        <span>Show Feedback Log</span>
+        <img src="{{url_for('static', filename='svg/expand-icon.svg')}}" alt="expand icon" />
+    </button>
     <ul id="feedback-list"></ul>
     <button class="start-button btn btn-success mt-3">Start Camera</button>
     <form class="flex-row mt-3" id="changeExercise">
@@ -57,7 +58,6 @@
     </form>
     <button class="end-button btn btn-secondary">End Exercise</button>
     <div id="cam-position"></div>
-    
 </main>
 {% endblock %}
 
