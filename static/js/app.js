@@ -25,6 +25,7 @@ const feedbackInterval = 500;
 
 const startButton = document.querySelector('.start-button');
 const endButton = document.querySelector('.end-button');
+// form is the startExercise button form
 const form = document.querySelector('#changeExercise');
 const repInfo = document.querySelector('#rep-info-group');
 const repCount = document.querySelector('#rep-count');
@@ -45,7 +46,7 @@ const spinner = document.querySelector('#spinner');
 
 let userAgent = navigator.userAgent;
 let browserName = "others";
-         
+
 if (userAgent.match(/chrome|chromium|crios/i)){
     browserName = "chrome";
 }
@@ -69,6 +70,7 @@ else
 let synth;
 let textToSpeech = false;
 let loading = true;
+let exerciseStarted = false;
 let constraints = {
     video: {
     facingMode: "user"
@@ -112,7 +114,7 @@ startButton.addEventListener('click', (e) => {
         socket.emit('start');
         console.log("PeekingDuck running");
         startButton.style.display = "none";
-        form.style.display = "none";
+        form.style.visibility = "";
         
         if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
             // checks that browser supports getting camera feed from user
@@ -175,6 +177,11 @@ endButton.addEventListener('click', () => {
     endButton.style.display = 'none';
     repInfo.style.display = 'none';
     console.log('end button clicked');
+    // make startExercise form appear
+    form.style.display = "flex";
+    form.style.visibility = "";
+    // make endExercise button disappear
+    endButton.style.display = "none";
 });
 
 const alert = (message, type) => {
@@ -202,7 +209,7 @@ form.addEventListener('submit', (e) => {
     repCount.style.display = 'flex';
     repFeedback.style.display = 'flex';
     endButton.style.display = 'flex';
-    form.style.display = 'none';
+    form.style.visibility = 'hidden';
 
     mainFeedback.classList.remove("fs-4", "card", "p-3", "mt-3");
     repInfo.style.display='flex';
@@ -228,6 +235,8 @@ form.addEventListener('submit', (e) => {
             break;
     }
     alert(`Please place camera at ${camPosReq.position} height for ${camPosReq.exercise}`, 'warning');
+
+
 });
 
 // Listens for feedback event from server which updates
@@ -257,6 +266,8 @@ socket.on('feedback', (stringData) => {
         // if it has finished loading, remove spinner
         spinner.innerHTML = "";
         loading = false;
+        // display start exercise form
+        form.style.visibility = "";
     }
     mainFeedback.innerText = data.mainFeedback
     emotionFeedback.innerText = data.emotionFeedback;
