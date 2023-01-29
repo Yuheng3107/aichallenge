@@ -43,6 +43,7 @@ const video = document.querySelector("#video");
 const canvas = document.querySelector("#canvas");
 const toggleContainer = document.querySelector(".toggle-container")  
 const spinner = document.querySelector('#spinner');
+const feedbackButton = document.querySelector('#feedback-button');
 
 let userAgent = navigator.userAgent;
 let browserName = "others";
@@ -78,8 +79,6 @@ let constraints = {
   }
 };
 
-
-
 if ('speechSynthesis' in window) {
     synth = window.speechSynthesis;
     textToSpeech = true;
@@ -87,7 +86,6 @@ if ('speechSynthesis' in window) {
 else {
     // replace with overlay and div pop-up in the future
     window.alert('text to speech not available');
-
 }
 let started = false;
 // initialises io with namespace /app
@@ -95,7 +93,6 @@ let socket = io("/app");
 
 document.addEventListener('DOMContentLoaded', (event) => {
     //hide the repcount, repfeedback on page load since there's no content, end exercise button also
-    
     if (!repCount.textContent) {
         repCount.style.display = 'none';
     }
@@ -103,7 +100,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
         repFeedback.style.display = 'none';
     }
     endButton.style.display = 'none';
-    form.style.display = "none";
+    form.style.display = 'none';
+    feedbackButton.style.display = 'none';
 })
 
 startButton.addEventListener('click', (e) => {
@@ -146,7 +144,6 @@ startButton.addEventListener('click', (e) => {
                             canvas.width = settings.width;
                             canvas.height = settings.height;
                         }
-                        
                         break;
                     }
                 }
@@ -173,9 +170,10 @@ endButton.addEventListener('click', () => {
     repInfo.style.display = 'none';
     console.log('end button clicked');
     // make startExercise form appear
-    form.style.display = "flex";
+    form.style.display = 'flex';
+    feedbackButton.style.display = 'block';
     // make endExercise button disappear
-    endButton.style.display = "none";
+    endButton.style.display = 'none';
 });
 
 const alert = (message, type) => {
@@ -204,6 +202,7 @@ form.addEventListener('submit', (e) => {
     repFeedback.style.display = 'flex';
     endButton.style.display = 'block';
     form.style.display = 'none';
+    feedbackButton.style.display = 'none';
 
     mainFeedback.classList.remove("fs-4", "card", "p-3", "mt-3");
     repInfo.style.display='flex';
