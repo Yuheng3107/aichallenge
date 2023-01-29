@@ -5,7 +5,19 @@
 body {
     overscroll-behavior-y: contain !important;
     min-height: 100vh;
- }
+}
+
+main {
+    padding:1% 2% 0% 2%;
+}
+
+h3 {
+    text-align: center;
+    font-size: large;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
 .video-feed {
     margin-top: 2rem;
     width: 50vw;
