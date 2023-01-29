@@ -1,6 +1,6 @@
 
 import numpy as np
-
+import sys
 def superInitialise():
     global ISACTIVE
     
@@ -9,6 +9,8 @@ def superInitialise():
 
     ISACTIVE = False
     displayVideoOnBackend = True
+    if sys.platform == "darwin":
+        displayVideoOnBackend = False
 def initialise():
 
 
