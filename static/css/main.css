@@ -4,6 +4,7 @@
 /* To prevent accidental refresh of page on mobile */
 body {
     overscroll-behavior-y: contain !important;
+    min-height: 100vh;
  }
 .video-feed {
     margin-top: 2rem;
@@ -86,6 +87,10 @@ body {
     overflow: auto;
     border-radius: 0.5rem;
     padding: 1rem 2rem;
+}
+
+#spinner {
+    align-self: center;
 }
 
 /* #region TOGGLE BUTTON FOR DIFFICULTY */

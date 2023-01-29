@@ -35,8 +35,8 @@
         <span id="rep-count"></span>
         <p id="rep-feedback"></p>
     </div>
+    <span id="spinner"></span>
     <p id="main-feedback-group" class="text-center">
-        <span id="spinner"></span>
         <span id="main-feedback" class="text-center"></span>
     </p>
     
@@ -45,7 +45,7 @@
             src="{{url_for('static', filename='svg/expand-icon.svg')}}" alt="expand icon" /></button>
     <ul id="feedback-list"></ul>
     <button class="start-button btn btn-success mt-3">Start Camera</button>
-    <form class="d-flex flex-row mt-3" id="changeExercise" style="display: none;">
+    <form class="flex-row mt-3" id="changeExercise">
         <select class="form-select" name="exerciseId" id="changeExercise">
             <option selected value="0">Squat (Side)</option>
             <option value="1">Squat (Front)</option>
@@ -53,7 +53,7 @@
         </select>
         <input class="ms-2 btn btn-outline-info d-inline" type="submit" value="Start Exercise">
     </form>
-    <button class="end-button btn btn-secondary" style="display: none;">End Exercise</button>
+    <button class="end-button btn btn-secondary">End Exercise</button>
     <div id="cam-position"></div>
     
 </main>
