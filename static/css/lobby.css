@@ -2,7 +2,7 @@
 
 ul {
     list-style-type: none;
-    overflow-y: scroll;
+    overflow-y: auto;
     max-height: 20vh;
 }
 
