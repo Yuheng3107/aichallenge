@@ -286,13 +286,13 @@ textToSpeechButton.addEventListener('click', () => {
         textToSpeech = false;
         textToSpeechButton.classList.remove('btn-danger');
         textToSpeechButton.classList.add('btn-success');
-        textToSpeechButton.innerText = "Turn On Text-To-Speech";
+        textToSpeechButton.innerText = "Enable Text-To-Speech";
     }
     else {
         textToSpeech = true;
         textToSpeechButton.classList.remove('btn-success');
         textToSpeechButton.classList.add('btn-danger');
-        textToSpeechButton.innerText = "Turn Off Text-To-Speech";
+        textToSpeechButton.innerText = "Disable Text-To-Speech";
     }
 })
 
