@@ -14,10 +14,16 @@ Lobby
 {% endblock %} 
 {% block main %} 
 <main>
-    Application is busy. Please wait a moment before going back to the homepage.
-    <ul id="messages"></ul>
-    <input type="text" id="myMessage">
-    <button id="sendButton">Send</button>
-    
+    <p style="text-align: center; font-size: x-large;">
+        Application is busy. Please wait a moment before going back to the homepage.
+        <br>
+        <button id="backButton">Back to Homepage</button> 
+    </p>
+    <p>
+        <h4>Chat</h4>
+        <ul id="messages"></ul>
+        <input type="text" id="myMessage">
+        <button id="sendButton">Send</button>
+    </p>
 </main>
 {% endblock main %}

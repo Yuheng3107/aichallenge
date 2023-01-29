@@ -82,8 +82,8 @@ class Node(AbstractNode):
 
         self.angleThresholds = np.array([
             [0.,0.,0.,0.,0.13,0.,0.,0.,0.15,0.,0.],
-            [0.,0.,0.,0.,0.,0.33,0.,0.28,0.,0.,0.],
-            [0.,0.,0.,0.,0.,0.,0.,0.,0.08,0.,0.25]],dtype=np.float32)
+            [0.,0.,0.,0.,0.,0.26,0.,0.35,0.,0.,0.],
+            [0.,0.,0.,0.,0.,0.,0.,0.,0.23,0.,0.3]],dtype=np.float32)
         """
         Array(N,K) containing the differences in angle required for feedback to be given
             N: number of exercises
@@ -243,6 +243,8 @@ class Node(AbstractNode):
                 feedback (list (string)): errors made in rep
         """
         feedback = []
+        if self.repTimeError != 0:
+            feedback.append(f" Rep times were too short {self.repTimeError} times")
         for i,count in enumerate(smallErrorCount):
             #none of that error
             if count == 0:
@@ -253,8 +255,6 @@ class Node(AbstractNode):
             if count == 0:
                 continue
             feedback.append(f" {self.glossary[globals.currentExercise,i,1]} {count} times")
-        if self.repTimeError != 0:
-            feedback.append(f" Rep times were too short {self.repTimeError} times")
         feedback.append(f" {perfectReps} perfect reps.")
         return feedback
 
@@ -283,7 +283,7 @@ class Node(AbstractNode):
         ### Emotion feedback
         emotionAverage = compareEmotions(self.selectedEmotionFrames,self.selectedEmotionFrameCount)
         emotionFeedback, currentEmotion = self.emotionFeedback(emotionAverage,self.emotionThresholds)
-        if currentEmotion != 0:
+        if currentEmotion != 0 and globals.currentExercise == 1:
             globals.emotionFeedback = emotionFeedback
             globals.currentEmotion = currentEmotion
         print(f"Emotions: {emotionAverage}")
@@ -326,6 +326,12 @@ class Node(AbstractNode):
             feedback += "No Frames Detected"
             return feedback
         angleDifferences /= np.pi
+        
+        if timeDifference == 1:
+            # time error
+            hasError = True
+            self.repTimeError += 1
+            feedback += "Rep time was too short. "
 
         # hasError tracks if there is any feedback
         hasError = False
@@ -341,12 +347,6 @@ class Node(AbstractNode):
                 # angle needs to be greater, as it is smaller than ideal pose
                 self.largeErrorCount[i] += 1
                 feedback += f"{self.glossary[globals.currentExercise,i,1]}. "
-
-        if timeDifference == 1:
-            # time error
-            hasError = True
-            self.repTimeError += 1
-            feedback += "Rep time was too short. "
 
         if hasError == False:
             # perfect rep
@@ -418,15 +418,12 @@ class Node(AbstractNode):
                 scoreThreshold (float): the threshold within which score has to be for the frame to be selected.
 
             Returns:
-                output (int): 1 if selected, 0 if not selected, 2 if selectedFrames is full, -1 if invalid
+                output (int): 1 if selected, 0 if not selected, -1 if invalid
         """
 
         # error catch for invalid frame
         if score == -1:
             return -1
-        # check if selectedFrames is full
-        if self.selectedFrameCount == self.selectedFrames.shape[0]-1:
-            return 2
         # test if score is lesser than threshold
         if score < scoreThreshold:
             return 1
@@ -439,18 +436,22 @@ class Node(AbstractNode):
 
             Args:
                 curPose (Array(11)[float]): the current pose detected by the camera.
-                frameStatus (int):  
+                frameStatus (int):
+            
+            Returns:
+                hasSpace (bool): False if no issue, True if frames full
         """
+        hasSpace = True
         if frameStatus == -1:
             return -1
-        if frameStatus == 2:
-            return 2
         # switching from in key pose to rest pose
         if self.inPose == True:
-            # add frame if not invalid
-            self.selectedFrames[self.selectedFrameCount] = curPose
-            self.selectedFrameCount += 1
-
+            # add frame if selectedFrames is not full
+            if self.selectedFrameCount < self.selectedFrames.shape[0]-1:
+                self.selectedFrames[self.selectedFrameCount] = curPose
+                self.selectedFrameCount += 1
+            else:
+                hasSpace = False
             # if currently in key pose but person in a rest pose
             if frameStatus == 0:
                 self.switchPoseCount += 1
@@ -476,7 +477,7 @@ class Node(AbstractNode):
             # reset switchPoseCount
             if frameStatus == 0:
                 self.switchPoseCount = 0
-        return None
+        return hasSpace
 
 ### EMOTIONS METHODS
 ### These methods are for emotion detection
@@ -540,11 +541,12 @@ class Node(AbstractNode):
             
             # FRAME STATUS
             frameStatus = self.shouldSelectFrames(score, self.scoreThresholds[globals.currentExercise])
+            hasSpace = self.checkPose(curPose,frameStatus)
 
             #default message
             globals.mainFeedback = ["Exercise in progress"]
 
-            if frameStatus == 2:
+            if hasSpace == False:
                 globals.mainFeedback = ["Frames filled up"]
             
             # check for not in frame
@@ -554,7 +556,6 @@ class Node(AbstractNode):
                     globals.mainFeedback = ["Please position yourself in the image"]
             else:
                 self.invalidFrameCount = 0
-                self.checkPose(curPose,frameStatus)
             
         ### EMOTION METHODS
             if globals.currentExercise == 1:
