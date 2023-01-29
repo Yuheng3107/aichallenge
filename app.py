@@ -27,7 +27,14 @@ def index():
 @app.route('/lobby')
 def send_to_lobby():
     return render_template('lobby.html')
-    
+
+@app.route('/errors')
+def send_to_errors():
+    return render_template('errors.html')
+
+@app.route('/about')
+def send_to_about():
+    return render_template('about.html')
 
 @socketio.on('start', namespace='/app')
 def start():

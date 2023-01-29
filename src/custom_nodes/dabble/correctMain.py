@@ -111,15 +111,15 @@ class Node(AbstractNode):
             ['',''],['','']],
             #Front Squats
             [['',''],['',''],['',''],['',''],['',''],
-            ['Knees collapse inwards','Feet may be too wide apart'],
+            ['Knees collapse inwards','Feet too wide apart'],
             ['',''],
             ['Bending down too little','Bending down too much'],
             ['',''],['',''],['','']],
             #Side Push-ups
             [['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],
-            ['Back too straightened','Back sagging'],
+            ['Back too straight','Back sagging'],
             ['',''],
-            ['legs not parallel with ground','Legs too parallel with ground']]])
+            ['Legs not parallel with ground','Legs too parallel with ground']]])
         """
         Array(N) containing the text descriptions of each angle
             N: number of exercises

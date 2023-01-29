@@ -103,6 +103,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         repFeedback.style.display = 'none';
     }
     endButton.style.display = 'none';
+    form.style.display = "none";
 })
 
 startButton.addEventListener('click', (e) => {
@@ -113,9 +114,8 @@ startButton.addEventListener('click', (e) => {
         started = true;
         socket.emit('start');
         console.log("PeekingDuck running");
-        startButton.style.display = "none";
-        form.style.visibility = "";
-        
+        startButton.style.display = "none"; 
+
         if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
             // checks that browser supports getting camera feed from user
             // if so use the getUserMedia API to get video from the user, after
@@ -172,12 +172,12 @@ startButton.addEventListener('click', (e) => {
 
 endButton.addEventListener('click', () => {
     socket.emit('endExercise');
-    mainFeedback.classList.add("w-50", "fs-4", "card", "p-3", "mt-3");
+    mainFeedback.classList.add("fs-4", "card", "p-3", "mt-3");
+    endButton.style.display = 'none';
     repInfo.style.display = 'none';
     console.log('end button clicked');
     // make startExercise form appear
     form.style.display = "flex";
-    form.style.visibility = "";
     // make endExercise button disappear
     endButton.style.display = "none";
 });
@@ -206,10 +206,10 @@ form.addEventListener('submit', (e) => {
 
     repCount.style.display = 'flex';
     repFeedback.style.display = 'flex';
-    endButton.style.display = 'flex';
-    form.style.visibility = 'hidden';
+    endButton.style.display = 'block';
+    form.style.display = 'none';
 
-    mainFeedback.classList.remove("w-50", "fs-4", "card", "p-3", "mt-3");
+    mainFeedback.classList.remove("fs-4", "card", "p-3", "mt-3");
     repInfo.style.display='flex';
 
     // Display camera position requirement as alert box
@@ -265,7 +265,7 @@ socket.on('feedback', (stringData) => {
         spinner.innerHTML = "";
         loading = false;
         // display start exercise form
-        form.style.visibility = "";
+        form.style.display = "flex";
     }
     mainFeedback.innerText = data.mainFeedback
     emotionFeedback.innerText = data.emotionFeedback;

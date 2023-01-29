@@ -4,11 +4,29 @@
 /* To prevent accidental refresh of page on mobile */
 body {
     overscroll-behavior-y: contain !important;
- }
+    min-height: 100vh;
+}
+
+main {
+    padding:1% 2% 0% 2%;
+}
+
+h3 {
+    text-align: center;
+    font-size: large;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
 .video-feed {
     margin-top: 2rem;
     width: 50vw;
     height: 60vh;
+}
+
+.abs {
+    position: absolute;
+    left:46%;
 }
 
 #rep-info-group {
@@ -31,6 +49,7 @@ body {
     display: flex;
     flex-direction: row;
     justify-content: center;
+    align-items: center;
     width: calc(50vw - 0.3rem);
 }
 
@@ -38,7 +57,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: var(--rep-feedback-color);
+    width: 50vw;
 }
 
 #rep-count {
@@ -85,6 +104,10 @@ body {
     overflow: auto;
     border-radius: 0.5rem;
     padding: 1rem 2rem;
+}
+
+#spinner {
+    align-self: center;
 }
 
 /* #region TOGGLE BUTTON FOR DIFFICULTY */
@@ -136,24 +159,6 @@ body {
 /* #endregion */
 
 
-
-
-/* #region RESPONSIVE DESIGN */
-@media only screen and (max-width: 768px) {
-    .video-feed {
-        margin-top: 2rem;
-        width: 100%;
-        height: unset;
-    }
-    #rep-count {
-        font-size: 2rem;
-        min-width: 3rem;
-    }
-}
-
-
-/* #endregion */
-
 /* Styles for icon to change camera view */
 #change-view, #change-view-hover {
     width: 2rem;
@@ -173,7 +178,6 @@ body {
 /* endregion */
 
 
-
 /* #region RESPONSIVE DESIGN */
 @media only screen and (max-width: 768px) {
     .video-feed {
@@ -185,42 +189,25 @@ body {
         font-size: 2rem;
         min-width: 3rem;
     }
-}
-
-/* #endregion */
-
-
-
-
-/* #region RESPONSIVE DESIGN */
-@media only screen and (max-width: 768px) {
-    .video-feed {
-        margin-top: 2rem;
+    #rep-info-group {
+        width: 95vw;
+    }
+    #rep-feedback {
         width: 100%;
-        height: unset;
     }
-    #rep-count {
-        font-size: 2rem;
-        min-width: 3rem;
+    #main-feedback-group {
+        width: 95vw;
     }
-}
-
-/* #endregion */
-
-
-
-
-/* #region RESPONSIVE DESIGN */
-@media only screen and (max-width: 768px) {
-    .video-feed {
-        margin-top: 2rem;
+    #main-feedback {
         width: 100%;
-        height: unset;
     }
-    #rep-count {
-        font-size: 2rem;
-        min-width: 3rem;
+    #feedback-list {
+        width: 95vw;
     }
+    .abs {
+        left:30%;
+    }
+    
 }
 
 /* #endregion */
