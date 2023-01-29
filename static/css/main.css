@@ -12,6 +12,11 @@ body {
     height: 60vh;
 }
 
+.abs {
+    position: absolute;
+    left:46%;
+}
+
 #rep-info-group {
     margin-top: 1rem;
     display: flex;
@@ -186,6 +191,9 @@ body {
     }
     #feedback-list {
         width: 95vw;
+    }
+    .abs {
+        left:30%;
     }
     
 }

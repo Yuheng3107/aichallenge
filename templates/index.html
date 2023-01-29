@@ -12,8 +12,8 @@
 
 {% block title %} Gym Poser {% endblock %} 
 
-{% block navbar_items %} 
-<div class="d-flex align-items-center justify-content-center">
+{% block navbar_items %}
+<li class="nav-item d-flex align-items-center justify-content-center">
     <div id="change-view-group" class="me-2">
         <img class="change-view" id="change-view" src="{{url_for('static', filename='svg/camera-flip.svg')}}" alt="Camera Flip Icon">
         <img class="change-view" id="change-view-hover" src="{{url_for('static', filename='svg/camera-flip-outline.svg')}}" alt="Camera Flip Icon Hover">
@@ -23,8 +23,9 @@
         <div id="difficulty-toggle"></div>
     </div>
     <span class="toggle-label ms-1 me-3">Expert</span>
-    <button class="text-to-speech btn btn-danger mt-2">Turn Off Text-To-Speech</button>
-</div>
+    <button class="text-to-speech btn btn-danger mt-2">Turn Off Text-To-Speech</button>   
+</li>
+
 {% endblock %} 
 
 {% block main %} 
