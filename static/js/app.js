@@ -114,7 +114,7 @@ startButton.addEventListener('click', (e) => {
         socket.emit('start');
         console.log("PeekingDuck running");
         startButton.style.display = "none";
-        form.style.display = "none";
+        form.style.visibility = "";
         
         if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
             // checks that browser supports getting camera feed from user
@@ -173,10 +173,13 @@ startButton.addEventListener('click', (e) => {
 endButton.addEventListener('click', () => {
     socket.emit('endExercise');
     mainFeedback.classList.add("w-50", "fs-4", "card", "p-3", "mt-3");
-    form.style.display = 'flex';
-    endButton.style.display = 'none';
     repInfo.style.display = 'none';
     console.log('end button clicked');
+    // make startExercise form appear
+    form.style.display = "flex";
+    form.style.visibility = "";
+    // make endExercise button disappear
+    endButton.style.display = "none";
 });
 
 const alert = (message, type) => {
@@ -204,7 +207,7 @@ form.addEventListener('submit', (e) => {
     repCount.style.display = 'flex';
     repFeedback.style.display = 'flex';
     endButton.style.display = 'flex';
-    form.style.display = 'none';
+    form.style.visibility = 'hidden';
 
     mainFeedback.classList.remove("w-50", "fs-4", "card", "p-3", "mt-3");
     repInfo.style.display='flex';
@@ -230,6 +233,8 @@ form.addEventListener('submit', (e) => {
             break;
     }
     alert(`Please place camera at ${camPosReq.position} height for ${camPosReq.exercise}`, 'warning');
+
+
 });
 
 // Listens for feedback event from server which updates
@@ -260,7 +265,7 @@ socket.on('feedback', (stringData) => {
         spinner.innerHTML = "";
         loading = false;
         // display start exercise form
-        form.style.display = "block";
+        form.style.visibility = "";
     }
     mainFeedback.innerText = data.mainFeedback
     emotionFeedback.innerText = data.emotionFeedback;
