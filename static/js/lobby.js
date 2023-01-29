@@ -1,6 +1,5 @@
 let socket = io();
 const sendButton = document.querySelector('#sendButton');
-const backButton = document.querySelector('#backButton');
 const myMessage = document.querySelector('#myMessage');
 const messages = document.querySelector('#messages');
 
@@ -17,10 +16,6 @@ myMessage.addEventListener('keypress', (e) => {
     if (e.key === "Enter") {
         sendButton.click();
     }
-});
-
-backButton.addEventListener('click', (e) => {
-    window.location.href = window.location.href.substring(0,window.location.href.length-6);
 });
 
 socket.on('message', (msg) => {
