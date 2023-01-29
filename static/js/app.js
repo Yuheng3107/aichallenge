@@ -25,6 +25,7 @@ const feedbackInterval = 500;
 
 const startButton = document.querySelector('.start-button');
 const endButton = document.querySelector('.end-button');
+// form is the startExercise button form
 const form = document.querySelector('#changeExercise');
 const repInfo = document.querySelector('#rep-info-group');
 const repCount = document.querySelector('#rep-count');
@@ -45,7 +46,7 @@ const spinner = document.querySelector('#spinner');
 
 let userAgent = navigator.userAgent;
 let browserName = "others";
-         
+
 if (userAgent.match(/chrome|chromium|crios/i)){
     browserName = "chrome";
 }
@@ -69,6 +70,7 @@ else
 let synth;
 let textToSpeech = false;
 let loading = true;
+let exerciseStarted = false;
 let constraints = {
     video: {
     facingMode: "user"
@@ -257,6 +259,8 @@ socket.on('feedback', (stringData) => {
         // if it has finished loading, remove spinner
         spinner.innerHTML = "";
         loading = false;
+        // display start exercise form
+        form.style.display = "block";
     }
     mainFeedback.innerText = data.mainFeedback
     emotionFeedback.innerText = data.emotionFeedback;
