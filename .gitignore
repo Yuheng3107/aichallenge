@@ -1,6 +1,7 @@
 *.pyc
-*.mp4
 *.zip
 venv/*
-.vscode/settings.json 
-
+Training_Data/*
+__pycache__/*
+.ipynb_checkpoints/*
+.vscode/*
