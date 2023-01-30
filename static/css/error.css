@@ -1,9 +1,18 @@
-video {
+iframe.horizontal {
     height: 60vh;
+}
+
+iframe.vertical {
+    width: 40vw;
+    height: 30vh;
 }
 
 .video {
     display: flex;
     justify-content: center;
     
+}
+
+iframe {
+    border: none;
 }
