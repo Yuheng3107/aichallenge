@@ -18,8 +18,8 @@ window.mobileCheck = function() {
 const feedbackInterval = 500;
 
 const startButton = document.querySelector('#start-button');
-const startButtonGroup = document.querySelector('.start-button-group');
-const endButton = document.querySelector('.end-button');
+const startButtonGroup = document.querySelector('#start-button-group');
+const endButton = document.querySelector('#end-button');
 // form is the startExercise button form
 const form = document.querySelector('#changeExercise');
 const repInfo = document.querySelector('#rep-info-group');
