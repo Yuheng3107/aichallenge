@@ -1,5 +1,4 @@
 let socket = io();
-let appSocket = io('/app');
 const sendButton = document.querySelector('#sendButton');
 const myMessage = document.querySelector('#myMessage');
 const messages = document.querySelector('#messages');
@@ -36,9 +35,6 @@ socket.on('message', (msg) => {
     messages.insertBefore(li, messages.firstChild);
 });
 
-appSocket.on('peekingduckFree', () => {
-    alert('Application is now free to use.','success');
-})
 
 function resetServer() {
     socket.emit('resetServer');

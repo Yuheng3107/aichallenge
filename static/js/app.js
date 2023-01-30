@@ -95,26 +95,6 @@ let started = false;
 let socket = io("/app");
 let mainSocket = io();
 
-//AFK check
-let inactivityTime = function () {
-    let time;
-    let almostTime;
-    window.onload = resetTimer;
-    document.onclick = resetTimer;
-    function logout() {
-        location.reload();
-    }
-    function almostLogout() {
-        alert("Inactivity detected. You will be logged out in 1 min if action is not detected.",'danger');
-    }
-    function resetTimer() {
-        clearTimeout(time);
-        clearTimeout(almostTime);
-        time = setTimeout(logout, 300000);
-        almostTime = setTimeout(almostLogout, 240000);
-    }
-};
-
 document.addEventListener('DOMContentLoaded', (event) => {
     //hide the repcount, repfeedback on page load since there's no content, end exercise button also
     if (!repCount.textContent) {
@@ -200,6 +180,27 @@ endButton.addEventListener('click', () => {
     endButton.style.display = 'none';
 });
 
+//AFK check
+let inactivityTime = function () {
+    let time;
+    let almostTime;
+    window.onload = resetTimer;
+    document.onclick = resetTimer;
+    document.onmousemove  = resetTimer;
+    function logout() {
+        location.reload();
+    }
+    function almostLogout() {
+        alert("Inactivity detected. You will be logged out in 1 min if action is not detected.",'danger');
+    }
+    function resetTimer() {
+        clearTimeout(time);
+        clearTimeout(almostTime);
+        time = setTimeout(logout, 300000);
+        almostTime = setTimeout(almostLogout, 240000);
+    }
+};
+
 //When exercise choice is confirmed, a form is submitted
 form.addEventListener('submit', (e) => {
     // prevents default form submission 
@@ -238,7 +239,7 @@ form.addEventListener('submit', (e) => {
             camPosReq = {exercise: "Push-Up (Front)", position:"ground"};
             break;
     }
-    alert(`Please place camera at ${camPosReq.position} height for ${camPosReq.exercise}`, 'warning');
+    alert(`Please place camera vertically at ${camPosReq.position} height for ${camPosReq.exercise}`, 'warning');
 
 
 });

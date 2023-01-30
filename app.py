@@ -4,8 +4,6 @@ from flask_socketio import SocketIO, emit, send, disconnect
 from node_pipeline import start_pipeline
 
 import globals
-from numpy import broadcast
-
 
 app = Flask(__name__)
 socketio = SocketIO(app, manage_session=True, cookie={}, monitor_clients=True)

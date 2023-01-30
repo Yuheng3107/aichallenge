@@ -82,7 +82,7 @@ class Node(AbstractNode):
 
         self.angleThresholds = np.array([
             [[0.,0.],[0.,0.],[0.,0.],[0.,0.],[0.14,0.13],[0.,0.],[0.,0.],[0.,0.],[0.15,0.],[0.,0.],[0.,0.]],
-            [[0.,0.],[0.,0.],[0.,0.],[0.,0.],[0.,0.],[0.26,0.],[0.,0.],[0.4,0.35],[0.,0.],[0.,0.],[0.,0.]],
+            [[0.,0.],[0.,0.],[0.,0.],[0.,0.],[0.,0.],[0.26,0.],[0.,0.],[0.3,0.2],[0.,0.],[0.,0.],[0.,0.]],
             [[0.,0.],[0.,0.],[0.,0.],[0.,0.],[0.,0.],[0.,0.],[0.,0.],[0.,0.],[0.,0.23],[0.,0.],[0.3,0.]]],dtype=np.float32)
         """
         Array(N,K,2) containing the differences in angle required for feedback to be given
@@ -245,19 +245,19 @@ class Node(AbstractNode):
             Returns:
                 feedback (list (string)): errors made in rep
         """
-        feedback = [f"{globals.repCount} Reps completed."]
+        feedback = [f"{globals.repCount} Reps completed"]
         if self.repTimeError != 0:
-            feedback.append(f" Rep times were too short {self.repTimeError} times.")
+            feedback.append(f" Rep times were too short {self.repTimeError} times")
         for i,count in enumerate(smallErrorCount):
             #none of that error
             if count == 0:
                 continue
-            feedback.append(f" {self.glossary[globals.currentExercise,i,0]} {count} times.")
+            feedback.append(f" {self.glossary[globals.currentExercise,i,0]} {count} times")
         for i,count in enumerate(largeErrorCount):
             #none of that error
             if count == 0:
                 continue
-            feedback.append(f" {self.glossary[globals.currentExercise,i,1]} {count} times.")
+            feedback.append(f" {self.glossary[globals.currentExercise,i,1]} {count} times")
         feedback.append(f" {perfectReps} perfect reps.")
         return feedback
 
@@ -272,6 +272,7 @@ class Node(AbstractNode):
         repTime = time.time() - self.repStartTime
         #anomaly, rep time too short
         if repTime < 1.5:
+            self.resetFrames()
             return None
 
         globals.repCount += 1
@@ -286,6 +287,8 @@ class Node(AbstractNode):
         ### Emotion feedback
         emotionAverage = compareEmotions(self.selectedEmotionFrames,self.selectedEmotionFrameCount)
         emotionFeedback, currentEmotion = self.emotionFeedback(emotionAverage,self.emotionThresholds)
+        if globals.currentExercise != 1:
+            globals.emotionFeedback = ""
         if currentEmotion != 0 and globals.currentExercise == 1:
             globals.emotionFeedback = emotionFeedback
             globals.currentEmotion = currentEmotion
@@ -458,8 +461,8 @@ class Node(AbstractNode):
             # if currently in key pose but person in a rest pose
             if frameStatus == 0:
                 self.switchPoseCount += 1
-                # if 5 rest frames in a row
-                if self.switchPoseCount > 10:
+                # if 6 rest frames in a row
+                if self.switchPoseCount > 5:
                     # transition into rest pose
                     self.finishRep()
                     

@@ -3,10 +3,24 @@
 {% block title %} 
 FitAI: About
 {% endblock %} 
+
+{% block navbar_items %}
+<li class="nav-item">
+    <a class="nav-link" href="#instructions">Instructions</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="#information">Information</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="#about">About</a>
+</li>
+{% endblock %} 
+
 {% block main %} 
 <main>
     <section>
-        <h4 class="text-center">Instructions</h4>
+        <h4 class="text-center" id="instructions">Instructions</h4>
+        <h5>Tutorial</h5>
         <span>To start exercising, do the following: </span>
         <ol>
             <li>Click on the green "Start Camera" button</li>
@@ -16,26 +30,54 @@ FitAI: About
             <li>Start doing the exercise. Verbal hints on how to improve your form for each rep will be read out by the browser</li>
             <li>When you are done, cick on "End Exercise" to see a summary of your form. You can also click on "Show Feedback Log" so see the history of feedback on each of your reps.</li>
         </ol>
-        <span>Do note that you will be logged out after 5 minutes of inactivity while using the application.</span>
+        <h5>Tips</h5>
+        <ul>
+            
+            <li>For 'Right side' exercises, the camera should be set up directly to your right. </li>
+            <li>Camera should be at table height for squats and floor height for push-ups.</li>
+            <li>Camera angle should be vertical. For squats, the camera should be able to see your feet.</li>
+            <li>For best training results, please time each rep at about 2-3s.</li>
+        </li>
     </section>
    
     <section>
-        <h4 class="text-center">About</h4>
+        <h4 class="text-center" id ="information">Information</h4>
+        <h5>Application Information</h5>
+        <ul>
+            <li>We currently support 3 exercises: Side Squats, Front Squats, and Side Push-Ups.</li>
+            <li>Unfortunately, as of now, it can only support one connection due to computing constraints.</li>
+            <li>The website supports both Desktop and Mobile access, in portrait and landscape mode.</li>
+            <li>The browsers we support Chrome, Safari, and Microsoft Edge. Firefox on phone cannot be used in landscape.</li>
+            <li>Do note that you will be logged out after 5 minutes of inactivity while using the application.</li>
+        </ul>
+        <h5>Data Privacy</h5>
+        <ul>
+            <li>Do note that by using the website, you are sending your image data to us.</li>
+            <li>We do not store or distribute this data in any way, shape, or form.</li>
+        </ul>
+        <h5>Disclaimer</h5>
         <p>
-            This is the Website for the National AI Student Challenge 2022. We have used PeekingDuck as our core tool for Computer Vision. <br>
-            Unfortunately, as of now, it can only support one connection due to computing constraints. The website supports both Desktop and Mobile access to work as an exercise aid.<br>
-            We currently support 3 exercises: Side Squats, Front Squats, and Side Push-Ups. For best training results, please time each rep at about 2-3s.<br>
-            Additionally, please ensure that the camera can see your whole body, especially your feet.<br>
-            For more information, check our <a href="https://github.com/Yuheng3107/aichallenge">Github Repo</a>
+            We are not responible for any injuries caused by using our application. <br>
+            This application only serves as a guide for users, it does not serve as a replacement for professional health advice. <br>
+            If you have any pre-existing health conditions, consult an expert on whether or not these exercises are safe for you to perform.
         </p>
     </section>
-    
+        
     <section>
-        <h4 class="text-center">Security</h4>
+        <h4 class="text-center" id="about">About</h4>
+        <h5>Background</h5>
         <p>
-            Do note that by using the website, you are sending your image over to ME. </br>
-            We do not store this data in any way, shape, or form, but the data is sent and processed by my computer.
+            This is the Website for the National AI Student Challenge 2022. We have used PeekingDuck as our core tool for Computer Vision. <br>
+            For more information, check our <a class="link link-light" href="https://github.com/Yuheng3107/aichallenge">Github Repo</a>
         </p>
+        <h5>Credits</h5>
+        <span>Creators:</span>
+        <ul>
+            <li>CPL Ivan</li>
+            <li>CPL(NS) Yu Heng</li>
+            <li>Zi Win</li>
+            <li>Jem</li>
+        </ul>
     </section>
 </main>
 {% endblock main %}
