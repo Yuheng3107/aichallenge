@@ -1,0 +1,8 @@
+video {
+    height: 60vh;
+}
+
+.video {
+    display: flex;
+    justify-content: center;
+}

@@ -1,5 +1,11 @@
 {% extends "base_template.html" %} 
 
+{% block head %} 
+<!-- Add Javascript Logic for interactivity -->
+<script src="{{url_for('static', filename='js/error.js')}}" defer></script>
+<!-- Add Custom Styling -->
+<link rel="stylesheet" href="{{url_for('static', filename='css/error.css')}}">
+{% endblock %}
 {% block title %} 
 FitAI: Errors
 {% endblock %} 
@@ -7,7 +13,10 @@ FitAI: Errors
 <main>
 <h4 class="text-center">Errors</h4>
     <p class="lead text-center">Index of errors FitAI can point out & how to fix them</p>
-    <h5>Rep time too short</h5>
+    <div class="video">
+        <video type="video/mp4" src="{{url_for('static', filename='videos/Side_Squat.mp4')}}" controls muted></video>
+    </div>
+    
     <div id="side-squats">
         <h5>Side Squats</h5>
         <ul>
@@ -17,6 +26,10 @@ FitAI: Errors
             <li>Back too straight</li>    
         </ul>
     </div>
+    <div class="video">
+        <video type="video/mp4" src="{{url_for('static', filename='videos/Front_Squat.mp4')}}" controls muted></video>
+    </div>
+    
     <div id="front-squats">
         <h5>Front Squats</h5>
         <ul>
@@ -26,6 +39,10 @@ FitAI: Errors
             <li>Bending down too much</li>    
         </ul>
     </div>
+    <div class="video">
+        <video type="video/mp4" src="{{url_for('static', filename='videos/Side_Push_Up.mp4')}}" controls muted></video>
+    </div>
+    
     <div id="side-push-ups">
         <h5>Side Push-Ups</h5>
         <ul>
@@ -35,6 +52,6 @@ FitAI: Errors
             <li>Legs too parallel with ground</li>    
         </ul>
     </div>
-    
+    <h5>Rep time too short</h5>
 </main>
 {% endblock main %}
