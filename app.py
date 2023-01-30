@@ -25,10 +25,6 @@ def index():
         return render_template('./index.html')
     return redirect('/lobby')  
 
-@app.route('/.wellknown/acme-challenge/nBXliU2lDp4nT2WnjXTSC-A6gWT03Todrzu33E3w9lc')
-def acmechallenge():
-    return app.send_static_file('nBXliU2lDp4nT2WnjXTSC-A6gWT03Todrzu33E3w9lc')
-
 @app.route('/lobby')
 def send_to_lobby():
     return render_template('lobby.html')
@@ -126,4 +122,4 @@ if __name__ == '__main__':
     # gunicorn -w 1 --threads 100 app:app 
     # use this command to run production ready server
     # ssl_context=('cert.pem', 'key.pem'), 
-    socketio.run(app,  host="0.0.0.0", ssl_context=('cert.pem', 'key.pem'), allow_unsafe_werkzeug=True, debug=True)
+    socketio.run(app,  host="0.0.0.0", ssl_context=('cert.pem', 'key.pem'), allow_unsafe_werkzeug=True)

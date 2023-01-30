@@ -367,7 +367,7 @@ mainSocket.on('forceKickout', () => {
 })
 
 socket.on('disconnect', () => {
-    alert("Error: Disconnected. Please refresh the page.");
+    alert("Error: Disconnected. Please refresh the page.",'danger');
 })
 
 // Listens to change in screen orientation and changes video height and width to suit the change
