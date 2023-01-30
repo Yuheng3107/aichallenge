@@ -9,6 +9,7 @@ def superInitialise():
 
     ISACTIVE = False
     displayVideoOnBackend = True
+    # Disable spycam on Mac as it doesn't work
     if sys.platform == "darwin":
         displayVideoOnBackend = False
 def initialise():

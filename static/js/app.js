@@ -8,10 +8,6 @@ function getVideoFrames() {
     socket.emit('video', {'url': dataURL});
 }
 
-function setSpinner() {
-    spinner.innerHTML = `<i class="fa fa-spinner fa-spin"></i>`;
-}
-
 // check if browser is mobile (cause mobile has weird resizing of image)
 window.mobileCheck = function() {
     let check = false;
@@ -40,7 +36,6 @@ const alerter = document.querySelector("#alerter");
 const video = document.querySelector("#video");
 const canvas = document.querySelector("#canvas");
 const toggleContainer = document.querySelector(".toggle-container")  
-const spinner = document.querySelector('#spinner');
 const feedbackButton = document.querySelector('#feedback-button');
 
 const alert = (message, type) => {
@@ -85,6 +80,7 @@ let constraints = {
     //  tries to get camera that faces user
   }
 };
+let firstTimeLoading = true;
 
 if ('speechSynthesis' in window) {
     synth = window.speechSynthesis;
@@ -188,8 +184,6 @@ startButton.addEventListener('click', (e) => {
           }
         // updates feedback every 0.5s
         setInterval(getFeedback, feedbackInterval);
-        // adds spinner at same time as feedback is updated
-        setTimeout(setSpinner, feedbackInterval);
     }
 });
 
@@ -270,16 +264,23 @@ socket.on('feedback', (stringData) => {
         }
     }
     
+    // loads spinner if it is first time loading
+    if (firstTimeLoading && data.mainFeedback == "Loading...") {
+        mainFeedback.innerHTML = `<i class="fa fa-spinner fa-spin"></i>&nbsp;${data.mainFeedback}`;
+        firstTimeLoading = false;
+        return;
+    }
     // Check whether peekingduck pipeline is still loading
     // faster to check bool than string, reduce lag, short-circuit first arg
     if (loading && data.mainFeedback != "Loading...") {
-        // if it has finished loading, remove spinner
-        spinner.innerHTML = "";
         loading = false;
         // display start exercise form
         form.style.display = "flex";
     }
-    mainFeedback.innerText = data.mainFeedback
+    if (!loading) {
+        mainFeedback.innerText = data.mainFeedback;
+    }
+    
     emotionFeedback.innerText = data.emotionFeedback;
 })
 

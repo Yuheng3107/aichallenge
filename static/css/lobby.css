@@ -1,6 +1,6 @@
 ul {
     list-style-type: none;
     overflow-y: auto;
-    max-height: 60vh;
+    max-height: 30vh;
 }
 

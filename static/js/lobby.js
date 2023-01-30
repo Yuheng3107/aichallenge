@@ -4,6 +4,7 @@ const sendButton = document.querySelector('#sendButton');
 const myMessage = document.querySelector('#myMessage');
 const messages = document.querySelector('#messages');
 const alerter = document.querySelector('#alerter');
+const clearChatButton = document.querySelector('#clearChatButton');
 
 const alert = (message, type) => {
     alerter.innerHTML = [
@@ -42,3 +43,7 @@ appSocket.on('peekingduckFree', () => {
 function resetServer() {
     socket.emit('resetServer');
 }
+
+clearChatButton.addEventListener('click', () => {
+    messages.innerHTML = '';
+})
