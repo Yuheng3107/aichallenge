@@ -6,52 +6,169 @@
 <!-- Add Custom Styling -->
 <link rel="stylesheet" href="{{url_for('static', filename='css/error.css')}}">
 {% endblock %}
+
 {% block title %} 
 FitAI: Errors
 {% endblock %} 
+
+{% block navbar_items %}
+<li class="nav-item">
+    <a class="nav-link" href="#rep-time">Rep Time</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="#squats-side">Squats (Right Side)</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="#squats-front">Squats (Front)</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="#push-up">Push-Up (Right Side)</a>
+</li>
+{% endblock %} 
+
 {% block main %} 
 <main>
-<h4 class="text-center">Errors</h4>
+    <h4 class="text-center">Errors</h4>
     <p class="lead text-center">Index of errors FitAI can point out & how to fix them</p>
     <div class="video">
         <video type="video/mp4" src="{{url_for('static', filename='videos/Side_Squat.mp4')}}" controls muted></video>
     </div>
+    <div id="rep-time">
+        <h4 class="text-center">Rep time too short</h4>
+    </div>
     
-    <div id="side-squats">
-        <h5>Side Squats</h5>
-        <ul>
-            <li>Butt not low enough</li>
-            <li>Butt too low</li>
-            <li>Leaning forward too much</li>
-            <li>Back too straight</li>    
-        </ul>
+    <div id="squats-side">
+        <h4 class="text-center">Squats (Right Side)</h4>
+        <h5>Leaning forward too much</h5>
+        <h5>Back too straight</h5>  
+        <h5>Squat not low enough</h5>
+        <p>
+            <h6>What is it?</h6>
+            Not reaching full depth during squats is commonly referred to as “Partial squat," and can reduce the effectiveness of the exercise and raise the risk of injury.
+        </p> 
+        <p>
+            <h6>Dangers of it:</h6>
+            <ol>
+                <li>Stresses your lower back, knee caps, and hip.</li>
+                <li>Discomfort and feeling of tightness at your hip and leg as it reduces the range of motion in your hip and leg.</li>
+                <li>Not an effective movement as it suffers from a partial range of motion, leading to imbalances in muscle development.</li>
+            </ol>
+        </p>
+        <p>
+            <h6>How to fix it?</h6>
+            <ol>
+                <li>Focus on proper Squat form → Aim to get your hip crease to your knee level. Make sure you are maintaining a neutral spine and pushing your hips back as you lower into the squat.</li>
+                <li>Improve mobility → High level of tightness at your hips, hamstrings, and calves can prevent you from reaching full depth in your squats. Incorporate stretching and mobility exercises such as Hip Flexor, Hamstring, Calf stretches into your routine to improve flexibility in these areas.</li>
+                <li>Use a wider stance → A wider stance can help you reach deeper into your squat by opening up your hips. You can start with a stance that is just slightly wider than shoulder-width apart.</li>
+                <li>Practice, practice, practice → The more you practice your squats, the more comfortable and stronger you will become which will aid you in squatting deeper.</li>
+            </ol>
+        </p>
+        <h5>Squat too low</h5>
+        <p>
+            <h6>What is it?</h6>
+            Squatting too low refers to an excessive range of motion, where it resulted in you squatting below the proper depth.The Proper squat depth is achieved when the hips are parallel with the knees or slightly below, while maintaining proper form.
+        </p> 
+        <p>
+            <h6>Dangers of it:</h6>
+            <ol>
+                <li>Increased stress on the knees and lower back.</li>
+                <li>Increased risk of knee and lower back injuries.</li>
+                <li>Reduced activation of the glutes and legs, leading to ineffective workout</li>
+            </ol>
+        </p>
+        <p>
+            <h6>How to fix it?</h6>
+            <ol>
+                <li>Focus on proper Squat form → Aim to get your hip crease to your knee level. Make sure you are maintaining a neutral spine and pushing your hips back as you lower into the squat.</li>
+                <li>Use a box or bench → Place a box or bench behind you, and squat down until you touch it with your hips. This will help you gauge the proper squat depth and serve as a visual cue for where to stop.</li>
+                <li>Work on hip and ankle mobility →  Improve flexibility to allow for better range of motion. You can do stretching & mobility exercises such as hip flexor stretch, lateral lunge, and ankle mobility drills such as ankle rotation, calf stretch. </li>
+                <li>Practice, practice, practice → The more you practice your squats, the more comfortable and flexible you will become which will aid you in squatting the proper depth.</li>
+            </ol>
+        </p>  
     </div>
     <div class="video">
         <video type="video/mp4" src="{{url_for('static', filename='videos/Front_Squat.mp4')}}" controls muted></video>
     </div>
     
-    <div id="front-squats">
-        <h5>Front Squats</h5>
-        <ul>
-            <li>Knees collapse inwards</li>
-            <li>Feet too wide apart</li>
-            <li>Bending down too little</li>
-            <li>Bending down too much</li>    
-        </ul>
+    <div id="squats-front">
+        <h4 class="text-center">Squats (Front)</h4>
+        <h5>Knees collapse inwards</h5>
+            <p>
+                <h6>What is it?</h6>
+                The mistake detected is known as Knee Valgus, where the knee is caving in during the squat.
+            </p> 
+            <p>
+                <h6>Dangers of it:</h6>
+                <ol>
+                    <li>Leads to Connective Tissue Injury.</li>
+                    <li>Ligament damage.</li>
+                    <li>Chronic Knee Cap Pain.</li>
+                </ol>
+            </p>
+            <p>
+                <h6>How to fix it?</h6>
+                <ol>
+                    <li>Strengthen your glutes (butt) → Weak glute can result in poor adductive rotation of the legs. You can do more glute exercises such as RNT split squat, and glute bridges to strengthen your glutes.</li>
+                    <li>Strengthen your core → Incorporate exercises that target your core muscles, such as planks, side planks, and bird dogs, into your workout routine to help improve your overall stability and posture.</li>
+                    <li>Increase ankle mobility  → High degree of ankle mobility allow you to maintain the arches of your foot while you squat. You can do calf stretches or simple ankle mobility drills such as ankle circles, ankle pumps and ankle rotation.</li>
+                    <li>Correct range of motion → Feet should be just outside of hip width, and toes slightly pointed out. Aim to drive knee out in the direction of your toes.</li>
+                </ol>
+            </p>
+        <h5>Squat not low enough</h5>
+        <p>
+            <h6>What is it?</h6>
+            Not reaching full depth during squats is commonly referred to as “Partial squat," and can reduce the effectiveness of the exercise and raise the risk of injury.
+        </p> 
+        <p>
+            <h6>Dangers of it:</h6>
+            <ol>
+                <li>Stresses your lower back, knee caps, and hip.</li>
+                <li>Discomfort and feeling of tightness at your hip and leg as it reduces the range of motion in your hip and leg.</li>
+                <li>Not an effective movement as it suffers from a partial range of motion, leading to imbalances in muscle development.</li>
+            </ol>
+        </p>
+        <p>
+            <h6>How to fix it?</h6>
+            <ol>
+                <li>Focus on proper Squat form → Aim to get your hip crease to your knee level. Make sure you are maintaining a neutral spine and pushing your hips back as you lower into the squat.</li>
+                <li>Improve mobility → High level of tightness at your hips, hamstrings, and calves can prevent you from reaching full depth in your squats. Incorporate stretching and mobility exercises such as Hip Flexor, Hamstring, Calf stretches into your routine to improve flexibility in these areas.</li>
+                <li>Use a wider stance → A wider stance can help you reach deeper into your squat by opening up your hips. You can start with a stance that is just slightly wider than shoulder-width apart.</li>
+                <li>Practice, practice, practice → The more you practice your squats, the more comfortable and stronger you will become which will aid you in squatting deeper.</li>
+            </ol>
+        </p>
+        <h5>Squat too low</h5>
+        <p>
+            <h6>What is it?</h6>
+            Squatting too low refers to an excessive range of motion, where it resulted in you squatting below the proper depth.The Proper squat depth is achieved when the hips are parallel with the knees or slightly below, while maintaining proper form.
+        </p> 
+        <p>
+            <h6>Dangers of it:</h6>
+            <ol>
+                <li>Increased stress on the knees and lower back.</li>
+                <li>Increased risk of knee and lower back injuries.</li>
+                <li>Reduced activation of the glutes and legs, leading to ineffective workout</li>
+            </ol>
+        </p>
+        <p>
+            <h6>How to fix it?</h6>
+            <ol>
+                <li>Focus on proper Squat form → Aim to get your hip crease to your knee level. Make sure you are maintaining a neutral spine and pushing your hips back as you lower into the squat.</li>
+                <li>Use a box or bench → Place a box or bench behind you, and squat down until you touch it with your hips. This will help you gauge the proper squat depth and serve as a visual cue for where to stop.</li>
+                <li>Work on hip and ankle mobility →  Improve flexibility to allow for better range of motion. You can do stretching & mobility exercises such as hip flexor stretch, lateral lunge, and ankle mobility drills such as ankle rotation, calf stretch. </li>
+                <li>Practice, practice, practice → The more you practice your squats, the more comfortable and flexible you will become which will aid you in squatting the proper depth.</li>
+            </ol>
+        </p>
     </div>
     <div class="video">
         <video type="video/mp4" src="{{url_for('static', filename='videos/Side_Push_Up.mp4')}}" controls muted></video>
     </div>
     
-    <div id="side-push-ups">
-        <h5>Side Push-Ups</h5>
-        <ul>
-            <li>Back sagging</li>
-            <li>Back too straight</li>
-            <li>Legs not parallel with ground</li>
-            <li>Legs too parallel with ground</li>    
-        </ul>
+    <div id="push-up">
+        <h4 class="text-center">Push-Up (Right Side)</h4>
+        <h5>Back sagging</h5>
+        <h5>Back too straight</h5>
+        <h5>Legs not parallel with ground</h5>
+        <h5>Legs too parallel with ground</h5>    
     </div>
-    <h5>Rep time too short</h5>
 </main>
 {% endblock main %}
