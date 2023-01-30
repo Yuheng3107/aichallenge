@@ -81,13 +81,14 @@ class Node(AbstractNode):
         """
 
         self.angleThresholds = np.array([
-            [0.,0.,0.,0.,0.13,0.,0.,0.,0.15,0.,0.],
-            [0.,0.,0.,0.,0.,0.26,0.,0.35,0.,0.,0.],
-            [0.,0.,0.,0.,0.,0.,0.,0.,0.23,0.,0.3]],dtype=np.float32)
+            [[0.,0.],[0.,0.],[0.,0.],[0.,0.],[0.14,0.13],[0.,0.],[0.,0.],[0.,0.],[0.15,0.],[0.,0.],[0.,0.]],
+            [[0.,0.],[0.,0.],[0.,0.],[0.,0.],[0.,0.],[0.26,0.],[0.,0.],[0.4,0.35],[0.,0.],[0.,0.],[0.,0.]],
+            [[0.,0.],[0.,0.],[0.,0.],[0.,0.],[0.,0.],[0.,0.],[0.,0.],[0.,0.],[0.,0.23],[0.,0.],[0.3,0.]]],dtype=np.float32)
         """
-        Array(N,K) containing the differences in angle required for feedback to be given
+        Array(N,K,2) containing the differences in angle required for feedback to be given
             N: number of exercises
             K: key angles (11)
+            2: too large (0) or too small (1)
         """
 
         self.evalRepTime = np.array([2.5,2.5,2],dtype=np.float32)
@@ -105,24 +106,26 @@ class Node(AbstractNode):
         self.glossary = np.array(
             #Side Squats
             [[['',''],['',''],['',''],['',''],
-            ['Butt not low enough','Butt too low'],
+            ['Squat not low enough','Squat too low'],
             ['',''],['',''],['',''],
-            ['Leaning forward too much','Back too straight'],
+            ['Leaning forward too much',''],
             ['',''],['','']],
             #Front Squats
             [['',''],['',''],['',''],['',''],['',''],
-            ['Knees collapse inwards','Feet too wide apart'],
+            ['Knees collapse inwards',''],
             ['',''],
-            ['Bending down too little','Bending down too much'],
+            ['Squat not low enough','Squat too low'],
             ['',''],['',''],['','']],
             #Side Push-ups
             [['',''],['',''],['',''],['',''],['',''],['',''],['',''],['',''],
-            ['Back too straight','Back sagging'],
+            ['','Sagging back'],
             ['',''],
-            ['Legs not parallel with ground','Legs too parallel with ground']]])
+            ['Not going low enough','']]])
         """
-        Array(N) containing the text descriptions of each angle
+        Array(N,K,2) containing the text descriptions of each angle
             N: number of exercises
+            K: key angles (11)
+            2: too large (0) or too small (1)
         """
         if globals.displayVideoOnBackend:
             cv2.destroyAllWindows()
@@ -242,23 +245,19 @@ class Node(AbstractNode):
             Returns:
                 feedback (list (string)): errors made in rep
         """
-        feedback = []
+        feedback = [f"{globals.repCount} Reps completed."]
         if self.repTimeError != 0:
-            feedback.append(f" Rep times were too short {self.repTimeError} times")
+            feedback.append(f" Rep times were too short {self.repTimeError} times.")
         for i,count in enumerate(smallErrorCount):
             #none of that error
             if count == 0:
                 continue
-            if self.glossary[globals.currentExercise,i,0] == "":
-                continue
-            feedback.append(f" {self.glossary[globals.currentExercise,i,0]} {count} times")
+            feedback.append(f" {self.glossary[globals.currentExercise,i,0]} {count} times.")
         for i,count in enumerate(largeErrorCount):
             #none of that error
             if count == 0:
                 continue
-            if self.glossary[globals.currentExercise,i,1] == "":
-                continue
-            feedback.append(f" {self.glossary[globals.currentExercise,i,1]} {count} times")
+            feedback.append(f" {self.glossary[globals.currentExercise,i,1]} {count} times.")
         feedback.append(f" {perfectReps} perfect reps.")
         return feedback
 
@@ -324,6 +323,7 @@ class Node(AbstractNode):
                 feedback (string): errors made in rep
         """
         feedback = f"Rep {globals.repCount}: "
+        hasError = False
 
         #check for no frames
         if angleDifferences[0] == -99:
@@ -335,6 +335,7 @@ class Node(AbstractNode):
             # time error
             self.repTimeError += 1
             feedback += "Rep time was too short. "
+            hasError = True
 
         for i, difference in enumerate(angleDifferences):
             if difference == 0.:
@@ -343,12 +344,14 @@ class Node(AbstractNode):
                 # angle needs to be smaller, as it is larger than ideal pose
                 self.smallErrorCount[i] += 1
                 feedback += f"{self.glossary[globals.currentExercise,i,0]}. "
+                hasError = True
             else:
                 # angle needs to be greater, as it is smaller than ideal pose
                 self.largeErrorCount[i] += 1
                 feedback += f"{self.glossary[globals.currentExercise,i,1]}. "
+                hasError = True
 
-        if feedback[:2] == ": ":
+        if hasError == False:
             # perfect rep
             self.perfectReps += 1
             feedback += "Perfect!"

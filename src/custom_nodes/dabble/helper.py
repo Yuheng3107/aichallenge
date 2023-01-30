@@ -26,7 +26,7 @@ def compareAngles(evalPose: np.ndarray, angleThresholds: np.ndarray, selectedFra
         Args:
             evalPose (Array(11)[float]): the ideal pose to be compared against.
             curPose (Array(11)[float]): the current pose detected by the camera.
-            angleThresholds (Array(11)[float]): the threshold of angle differences
+            angleThresholds (Array(11,2)[float]): the threshold of angle differences. [n,0] is too small, [n,1] is too large
             selectedFrames (Array(X,11)[float]): Array containing the store of frames to be evaluated
             selectedFrameCount: X - Number of frames in selectedFrames 
 
@@ -51,11 +51,14 @@ def compareAngles(evalPose: np.ndarray, angleThresholds: np.ndarray, selectedFra
     print(differences)
 
     for i, x in enumerate(differences):
-        if angleThresholds[i] == 0.:
+        # j is 0 when diff is + , 1 when diff is -
+        j = 0
+        if x < 0:
+            j = 1
+        if angleThresholds[i][j] == 0.:
             continue
-        # if difference is significant enough
-        if abs(x) > angleThresholds[i]:
-            angleDifferences[i] = differences[i]
+        if abs(x) > angleThresholds[i][j]:
+            angleDifferences[i] = x
     return angleDifferences
 
 def compareTime(evalTime:np.float32, repTime:np.float32):
