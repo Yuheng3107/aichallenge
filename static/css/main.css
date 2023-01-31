@@ -8,7 +8,7 @@ body {
 }
 
 main {
-    padding: 1% 15% 0% 15%;
+    padding: 1% 25% 0% 25%;
 }
 
 h3 {
@@ -213,6 +213,9 @@ h3 {
 @media only screen and (max-height:576px) {
     .abs {
         display:none;
+    }
+    main {
+        padding: 1% 10% 0% 10%;
     }
 }
 
