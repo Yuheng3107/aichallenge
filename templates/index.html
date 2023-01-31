@@ -49,7 +49,12 @@
         <img src="{{url_for('static', filename='svg/expand-icon.svg')}}" alt="expand icon" />
     </button>
     <ul id="feedback-list"></ul>
-    <button class="start-button btn btn-success mt-3">Start Camera</button>
+    <div id="start-button-group" class="d-flex flex-column align-items-lg-center container">
+        <button id="start-button" class="btn btn-success mt-3">Start Camera</button>
+        <a class="btn btn-secondary mt-3" href="instructions">Instructions</a>
+    </div>
+    
+
     <form class="flex-row mt-3" id="changeExercise">
         <select class="form-select" name="exerciseId" id="changeExercise">
             <option selected value="0">Squat (Right Side)</option>
@@ -58,7 +63,7 @@
         </select>
         <input class="ms-2 btn btn-outline-info d-inline" type="submit" value="Start Exercise">
     </form>
-    <button class="end-button btn btn-secondary">End Exercise</button>
+    <button id="end-button" class="btn btn-secondary">End Exercise</button>
     <div id="alerter"></div>
 </main>
 {% endblock %}

@@ -23,6 +23,10 @@ def index():
         return render_template('./index.html')
     return redirect('/lobby')  
 
+@app.route('/instructions')
+def send_to_instructions():
+    return render_template('instructions.html')
+
 @app.route('/lobby')
 def send_to_lobby():
     return render_template('lobby.html')
