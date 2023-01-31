@@ -106,10 +106,6 @@ h3 {
     padding: 1rem 2rem;
 }
 
-#spinner {
-    align-self: center;
-}
-
 /* #region TOGGLE BUTTON FOR DIFFICULTY */
 .toggle-container {
     display: inline-block;
