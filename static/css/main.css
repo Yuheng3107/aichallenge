@@ -175,6 +175,9 @@ h3 {
 }
 /* endregion */
 
+.spacer {
+    height: 7vh;
+}
 /* #region RESPONSIVE DESIGN */
 @media only screen and (max-width: 768px) {
     main {
