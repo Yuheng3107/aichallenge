@@ -11,6 +11,7 @@
 FitAI: Errors
 {% endblock %} 
 
+<<<<<<< HEAD
 {% block main %} 
     <nav class="fixed-top navbar navbar-expand-md bg-body-tertiary">
         <div class="container-fluid">
@@ -20,6 +21,10 @@ FitAI: Errors
             </button>
             <div id="collapsingNavbar" class="navbar-collapse collapse">
                 <ul class="navbar-nav">
+=======
+{% block nav %}
+<ul class="navbar-nav"> 
+>>>>>>> 6ac2b1bbcd222f4b7f5258cb221c0f52b7903f02
                     <li class="nav-item">
                         <a class="nav-link" href="/">App</a>
                     </li>
@@ -48,11 +53,11 @@ FitAI: Errors
 </li>
 <li class="nav-item">
     <a class="push-up-nav-item nav-link" href="#push-up">Push-Up (Side)</a>
-</li>             
-                </ul>
-            </div>
-        </div>
-    </nav> 
+</li>
+</ul>
+{% endblock %}
+
+{% block main %} 
 <main>
     <h4 class="text-center">Errors</h4>
     <p class="lead text-center">Index of mistakes FitAI can point out & how to fix them</p>
