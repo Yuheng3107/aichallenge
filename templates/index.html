@@ -59,14 +59,14 @@
     <p id="main-feedback-group" class="text-center">
         <span id="main-feedback" class="text-center"></span>
     </p>
-    <a id="feedback-button" class="btn btn-secondary" href="/errors" target="_blank">View Errors</a>
+    <a id="feedback-button" class="btn btn-secondary" href="/errors" target="_blank">About Errors</a>
     <p id="emotion-feedback"></p>
     <button id="show-log-button">
         <span>Show Feedback Log</span>
         <img src="{{url_for('static', filename='svg/expand-icon.svg')}}" alt="expand icon" />
     </button>
     <ul id="feedback-list"></ul>
-    <div id="start-button-group" class="d-flex flex-column align-items-lg-center container">
+    <div id="start-button-group" class="flex-column align-items-lg-center container" style="display: flex;">
         <button id="start-button" class="btn btn-success mt-3">Start Camera</button>
         <a class="btn btn-secondary mt-3" href="instructions">Instructions</a>
     </div>

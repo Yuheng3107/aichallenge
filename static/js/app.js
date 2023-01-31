@@ -107,6 +107,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     endButton.style.display = 'none';
     form.style.display = 'none';
     feedbackButton.style.display = 'none';
+    showLogButton.style.display = 'none';
 })
 
 startButton.addEventListener('click', (e) => {
@@ -117,7 +118,8 @@ startButton.addEventListener('click', (e) => {
         started = true;
         socket.emit('start');
         console.log("PeekingDuck running");
-        startButtonGroup.style.display = "none"; 
+        startButtonGroup.style.display = 'none'; 
+        showLogButton.style.display = 'block';
         //start AFK check
         inactivityTime()
 

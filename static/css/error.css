@@ -16,3 +16,9 @@ iframe.vertical {
 iframe {
     border: none;
 }
+
+img {
+    justify-self: center;
+    align-self: center;
+    width: 100%;
+}
