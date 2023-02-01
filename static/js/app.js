@@ -121,7 +121,8 @@ let mainSocket = io();
 ////////
 
 document.addEventListener('DOMContentLoaded', (event) => {
-    // hide buttons and feedback on page load
+    // hide unnecessary buttons and feedback on page load
+
     if (!repCount.textContent) {
         repCount.style.display = 'none';
     }
@@ -141,10 +142,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
 ////////
 
 startButton.addEventListener('click', (e) => {
-    //when start button is pressed
+    // when start button is pressed, send event to backend, 
+    // do front end start processes, change ui
 
     console.log('start button clicked');
-    // runs python script that starts Peekingduck
     if (!started) {
         // runs python script that starts Peekingduck if PeekingDuck is not already running
         started = true;
@@ -205,7 +206,9 @@ startButton.addEventListener('click', (e) => {
 });
 
 endButton.addEventListener('click', () => {
-    // when exercise ends
+    // when exercise ends, send event to backend,
+    // change ui
+
     socket.emit('endExercise');
 
     // hide rep feedback and end button 
@@ -222,7 +225,8 @@ endButton.addEventListener('click', () => {
 });
 
 form.addEventListener('submit', (e) => {
-    // When exercise choice is confirmed, a form is submitted
+    // When exercise choice is confirmed, send event to backend, 
+    // change ui, display alert
 
     // prevents default form submission 
     e.preventDefault();
@@ -274,7 +278,8 @@ form.addEventListener('submit', (e) => {
 ////////
 
 showLogButton.addEventListener('click', (event) => {
-    // Show Rep Log
+    // When log button is pressed, toggle rep log
+
     showLogButton.classList.toggle('active');
     feedbackList.classList.toggle('active');
     if (showLogButton.classList.contains("active")) {
@@ -285,7 +290,8 @@ showLogButton.addEventListener('click', (event) => {
 })
 
 textToSpeechButton.addEventListener('click', () => {
-    // Enable/disable narrator
+    // toggle narrator
+
     if (textToSpeech) {
         textToSpeech = false;
         textToSpeechButton.classList.remove('btn-danger');
@@ -301,7 +307,8 @@ textToSpeechButton.addEventListener('click', () => {
 })
 
 toggleContainer.addEventListener('click', () => {
-    // Change Difficulty
+    // change difficulty
+
     if (toggleContainer.classList.contains('active')) {
         socket.emit('changeDifficulty', 'Beginner');
     }
@@ -313,6 +320,7 @@ toggleContainer.addEventListener('click', () => {
 
 changeViewButtons.forEach(button => {
     // Flips camera when button is clicked
+
     button.addEventListener('click', () => {
         // toggle between front and back camera
         if (constraints.video.facingMode == "user") {
@@ -335,7 +343,9 @@ changeViewButtons.forEach(button => {
 ////////
 
 socket.on('feedback', (stringData) => {
-    // Listens for feedback event from server which updates front end 
+    // Listens for feedback event from server,
+    // which updates front end data
+
     let data = JSON.parse(stringData);
     // if repCount changes, update text display on screen
     if (Number(repCount.textContent) != data["repCount"]) {
@@ -353,6 +363,16 @@ socket.on('feedback', (stringData) => {
             synth.speak(speech);
         }
     }
+
+    // sentimental analysis
+    emotionFeedback.innerText = data.emotionFeedback; 
+
+    // check if loading
+    if (!loading) {
+        // update main feedback
+        mainFeedback.innerText = data.mainFeedback;
+        return;
+    } 
     
     // loads spinner if it is first time loading
     if (firstTimeLoading && data.mainFeedback == "Loading...") {
@@ -367,27 +387,22 @@ socket.on('feedback', (stringData) => {
         // display start exercise form
         form.style.display = "flex";
     }
-    if (!loading) {
-        mainFeedback.innerText = data.mainFeedback;
-    }
-    
-    emotionFeedback.innerText = data.emotionFeedback;
 }) 
 
-// kicks everyone out when someone runs a PeekingDuck instance
 socket.on('kickout', () => {
+    // kicks everyone out when someone runs a PeekingDuck instance 
     if (!started) {
         window.location.href += "lobby";
     }
 })
 
-// force kick for server reset
 mainSocket.on('forceKickout', () => {
+    // force kick for server reset 
     window.location.href += "lobby";
 })
 
-// disconnect
 socket.on('disconnect', () => {
+    // disconnect
     alert("Error: Disconnected. Please refresh the page.",'danger');
 }) 
 
@@ -397,9 +412,11 @@ socket.on('disconnect', () => {
 ////////
 
 // change mobile screen orientation
-window.addEventListener('resize', functionName);
+window.addEventListener('resize', resizing);
 let innerWidth = window.innerWidth;
-function functionName() {
+function resizing() {
+    // if orientation change, resize camera output
+
     if (innerWidth === window.innerWidth) return;
     innerWidth = window.innerWidth;
     if(window.innerWidth > window.innerHeight) {
@@ -412,9 +429,9 @@ function functionName() {
     }
 }
 
-// AFK check
 let inactivityTime = function () {
     //AFK check
+
     let time;
     let almostTime;
     window.onload = resetTimer;
