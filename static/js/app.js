@@ -436,19 +436,32 @@ let inactivityTime = function () {
 
     let time;
     let almostTime;
+
+    // actions to reset logout timer
     window.onload = resetTimer;
     document.onclick = resetTimer;
     document.onmousemove  = resetTimer;
+
     function logout() {
+        // reload page to logout user after 5 mins of inactivity
+
         location.reload();
     }
     function almostLogout() {
+        // alert user that they are AFK 1 min before kick out
+
         alert("Inactivity detected. You will be logged out in 1 min if action is not detected.",'danger');
     }
     function resetTimer() {
+        // on action, reset timer
+
         clearTimeout(time);
         clearTimeout(almostTime);
+
+        // at 5 mins, logout
         time = setTimeout(logout, 300000);
+
+        // at 4 mins, alert
         almostTime = setTimeout(almostLogout, 240000);
     }
 };
