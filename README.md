@@ -1,6 +1,14 @@
 # National AI Student Challenge 2022
 This is the GitHub Repo for the National AI Student Challenge 2022. We have used [PeekingDuck](https://github.com/aisingapore/PeekingDuck) as our core tool for Computer Vision.
 
+To try our app immediately, you can click [this link](https://fitai.click), or you can click [this link](https://fitai.ddns.net) if the first link is not working.
+
+If you have having trouble connecting, do confirm that you are using a secure connection (HTTPS, with a Lock sign on the browser) to connect to our website.
+
+You can see the instructions at the [instructions page](https://fitai.click/instructions) of our site.
+
+# To run our application yourself
+
 There are *two modes* in which you can run our app in. 
 
 The first is developer mode, where you can see the poses drawn onto the picture, and is used by us natively for testing/debugging. You can try out this mode to better understand how our model works.

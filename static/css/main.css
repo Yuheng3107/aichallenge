@@ -203,9 +203,11 @@ h3 {
         width: 95vw;
     }
     .abs {
-        left:30%;
+        left: 30%;
     }
-    
+    .spacer {
+        height: 10vh;
+    }
 }
 /* landscape */
 @media only screen and (max-height:576px) {

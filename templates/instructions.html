@@ -44,31 +44,44 @@ FitAI: About
     <section class="mb-3">
         <h4 class="text-center" id="instructions">Instructions</h4>
         <span>To start exercising, do the following: </span>
-        <ol>
-            <p>
-                <img src="{{url_for('static', filename='images/homescreen.jpg')}}" alt="homescreen"/>
-                <li>Click on the green "Start Camera" button and allow the website to use your camera when prompted.</li>
-                <li>Wait for the application to load.</li>    
-            </p>
-            <p>
-                <img src="{{url_for('static', filename='images/startexercise.jpg')}}" alt="start exercise"/>
-                <li>Select an exercise from the drop down list, and then click "Start Exercise".</li>    
-            </p>
-            <p>
-                <img src="{{url_for('static', filename='images/inrep.jpg')}}" alt="in rep"/>
-                <li>Position your camera according to the instructions in the orange alert box. More information on camera placement can be found below, or by clicking "Tutorial" in the navigation bar and going to the Tips section.</li>
-                <li>Start doing the exercise. Verbal instructions on how to improve your form for each rep will be read out by the browser. The information can also be seen within the green box.</li>
-                <li>Any issues encountered by the application, such as being unable to see you fully, will be displayed within the blue box.</li>
-                <li>If you are performing an exercise where the application can see your face (front squats), feedback based on sentimental analysis will be displayed within the yellow box.</li>
-                <li>When you are done, cick on "End Exercise" to see a summary of your form.</li>    
-            </p>
-            <p>
-                <img src="{{url_for('static', filename='images/finishexercise.jpg')}}" alt="finish exercise"/>
-                <li>A summary of your reps and the feedback given will be displayed within the green box.</li>
-                <li>The full log of each rep can by displayed by clicking the Show Feedback Log link in the blue box.</li>
-                <li>More information on the feedback given can be found by clicking the "About Errors" button or by clicking "Form" in the navigation bar, as highlighted by the yellow boxes.</li>
-            </p>
-        </ol>
+        <p>
+            <img src="{{url_for('static', filename='images/homescreen.jpg')}}" alt="homescreen"/>        
+            <ol>
+                <li><u>Start Application (Red Circle):</u><br>
+                Click on the green "Start Camera" button and allow the website to use your camera when prompted.</li>
+            </ol>
+        <p>
+            <img src="{{url_for('static', filename='images/startexercise.jpg')}}" alt="start exercise"/>
+            <ol start="2">
+                <li><u>Start Exercise(Red Circle):</u><br>
+                When the application finishes loading, select an exercise from the drop down list, and then click "Start Exercise".</li>    
+            </ol>
+        <p>
+            <img src="{{url_for('static', filename='images/inrep.jpg')}}" alt="in rep"/>
+            <ol start="3">
+                <li><u<Camera position (Orange Boxes):</u><br>
+                Position your camera according to the instructions in the alert box. More information on camera placement can be found in the "Tips" section.</li>
+                <li><u>Rep Feedback (Green Box):</u><br>
+                Start doing the exercise. Rep count and instructions to improve your form will be seen on screen. It will also be read out by a narrator.</li>
+                <li><u>Technical Issues (Blue Box):</u><br>
+                Any issues encountered by the application, such as being unable to see you fully, will be displayed here.</li>
+                <li><u>Sentimental Analysis (Orange box):</u><br>
+                If you are performing an exercise where the application can see your face (front squats), feedback based on sentimental analysis will be displayed here.</li>
+                <li><u>Next (Red Circle):</u><br>
+                When you are done, cick on "End Exercise" to see a summary of your form.</li>    
+            </ol>
+        </p>
+        <p>
+            <img src="{{url_for('static', filename='images/finishexercise.jpg')}}" alt="finish exercise"/> 
+            <ol start="8">
+                <li><u>Summary of Feedback (Green Box):</u><br>
+                A summary of your reps and the feedback given will be displayed here.</li>
+                <li><u>Show Feedback Log (Blue Box):</u><br>
+                The full log of each rep can by displayed by clicking this link.</li>
+                <li><u>About Errors (Yellow Boxes):</u><br>
+                More information on the feedback given can be found by clicking "About Errors" or by clicking "Form" in the navigation bar.</li>
+            </ol>
+        </p>
     </section>
     <section class="mb-3">
         <h4 class="text-center" id="tips">Tips</h4>
@@ -82,13 +95,14 @@ FitAI: About
     </section>
     <section class="mb-3">
         <h4 class="text-center" id="advanced">Advanced Settings</h4>
+        <img src="{{url_for('static', filename='images/advanced.jpg')}}" alt="advanced settings" class="mt-0"/>
         <ol>
-            <img src="{{url_for('static', filename='images/advanced.jpg')}}" alt="advanced settings" class="mt-0"/>
-            <li>For 'Right Side' exercises, the camera should be set up directly to your right, as seen in the pictures above.</li>
-            <li>Camera should be at table height for squats and floor height for push-ups.</li>
-            <li>Camera angle should be vertical. For squats, the camera should be able to see your feet, as seen in the pictures above.</li>
-            <li>Examples of camera views include the images above and the videos taken in the "Form" page.</li>
-            <li>For best training results, please time each rep at about 3-4s.</li>
+            <li><u>Toggle Text-To-Speech (Green Box):</u><br>
+            Disable or enable narrator to read out rep feedback.</li>
+            <li><u>Toggle Beginner or Expert (Blue Box):</u><br>
+            Beginner mode advices users to exercise within their limit, Expert mode advices users to exercise near or close to failure.</li>
+            <li><u>Flip Camera (Yellow Box):</u><br>
+            Changes active camera on devices with multiple cameras. Only supported on some browsers and devices.</li>
         </ol>
     </section>
 {% endblock main %}
