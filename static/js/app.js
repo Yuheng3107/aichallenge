@@ -107,7 +107,7 @@ if ('speechSynthesis' in window) {
 }
 else {
     // replace with overlay and div pop-up in the future
-    window.alert('text to speech not available','info');
+    alert('text to speech not available','info');
 }
 let started = false;
 // initialises io with namespace /app
@@ -198,7 +198,7 @@ startButton.addEventListener('click', (e) => {
             });
           }
           else {
-              window.alert("getUserMedia API not supported on your browser", 'danger');
+              alert("getUserMedia API not supported on your browser", 'danger');
           }
         // updates feedback every 0.5s
         setInterval(getFeedback, feedbackInterval);
@@ -364,7 +364,7 @@ socket.on('feedback', (stringData) => {
         }
     }
 
-    // sentimental analysis
+    // display fatigue level from backend to frontend
     emotionFeedback.innerText = data.emotionFeedback; 
 
     // check if loading
@@ -390,7 +390,7 @@ socket.on('feedback', (stringData) => {
 }) 
 
 socket.on('kickout', () => {
-    // kicks everyone out when someone runs a PeekingDuck instance 
+    // kicks everyone on the application page out when someone runs a PeekingDuck instance 
     if (!started) {
         window.location.href += "lobby";
     }
@@ -402,7 +402,7 @@ mainSocket.on('forceKickout', () => {
 })
 
 socket.on('disconnect', () => {
-    // disconnect
+    // if person is disconnected, alert them that they have disconnected
     alert("Error: Disconnected. Please refresh the page.",'danger');
 }) 
 
