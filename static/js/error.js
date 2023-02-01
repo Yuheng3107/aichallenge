@@ -7,14 +7,12 @@ function getElementByClass(className) {
 }
 
 const sections = [
-    getElementById('rep-time'),
     getElementById('squats-side'),
     getElementById('squats-front'),
     getElementById('push-up')
 ];
 
 const navItems = {
-    'rep-time': getElementByClass('rep-time-nav-item'),
     'squats-side': getElementByClass('squat-side-nav-item'),
     'squats-front': getElementByClass('squat-front-nav-item'),
     'push-up': getElementByClass('push-up-nav-item')
