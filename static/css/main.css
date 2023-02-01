@@ -106,10 +106,6 @@ h3 {
     padding: 1rem 2rem;
 }
 
-#spinner {
-    align-self: center;
-}
-
 /* #region TOGGLE BUTTON FOR DIFFICULTY */
 .toggle-container {
     display: inline-block;
@@ -176,7 +172,7 @@ h3 {
 /* endregion */
 
 .spacer {
-    height: 7vh;
+    height: 5vh;
 }
 /* #region RESPONSIVE DESIGN */
 @media only screen and (max-width: 768px) {
@@ -207,9 +203,11 @@ h3 {
         width: 95vw;
     }
     .abs {
-        left:30%;
+        left: 30%;
     }
-    
+    .spacer {
+        height: 10vh;
+    }
 }
 /* landscape */
 @media only screen and (max-height:576px) {
@@ -218,6 +216,9 @@ h3 {
     }
     main {
         padding: 1% 10% 0% 10%;
+    }
+    .spacer {
+        height: 15vh;
     }
 }
 

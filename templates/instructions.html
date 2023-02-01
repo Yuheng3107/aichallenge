@@ -1,4 +1,8 @@
 {% extends "base_template.html" %} 
+{% block head %} 
+<!-- Styling for lobby -->
+<link rel="stylesheet" href="{{url_for('static', filename='css/instructions.css')}}">
+{% endblock %}
 
 {% block title %} 
 FitAI: About
@@ -6,44 +10,99 @@ FitAI: About
 
 {% block nav %}
 <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/">App</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="instructions">Tutorial</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="errors">Form</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="lobby">Lobby</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="about">About</a>
-                    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="/">App</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" href="instructions">Tutorial</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="errors">Form</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="lobby">Lobby</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="about">About</a>
+    </li>
+</ul>
+<ul class="navbar-nav ms-auto">
+    <li class="nav-item">
+        <a class="nav-link text-center" href="#instructions">Instructions</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-center" href="#tips">Tips</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-center" href="#advanced">Advanced</a>
+    </li> 
 </ul>
 {% endblock %} 
 
 {% block main %} 
 <main>
-    <section>
+    <section class="mb-3">
         <h4 class="text-center" id="instructions">Instructions</h4>
-        <h5>Tutorial</h5>
         <span>To start exercising, do the following: </span>
+        <p>
+            <img src="{{url_for('static', filename='images/homescreen.jpg')}}" alt="homescreen"/>        
+            <ol>
+                <li><u>Start Application (Red Circle):</u><br>
+                Click on the green "Start Camera" button and allow the website to use your camera when prompted.</li>
+            </ol>
+        <p>
+            <img src="{{url_for('static', filename='images/startexercise.jpg')}}" alt="start exercise"/>
+            <ol start="2">
+                <li><u>Start Exercise(Red Circle):</u><br>
+                When the application finishes loading, select an exercise from the drop down list, and then click "Start Exercise".</li>    
+            </ol>
+        <p>
+            <img src="{{url_for('static', filename='images/inrep.jpg')}}" alt="in rep"/>
+            <ol start="3">
+                <li><u<Camera position (Orange Boxes):</u><br>
+                Position your camera according to the instructions in the alert box. More information on camera placement can be found in the "Tips" section.</li>
+                <li><u>Rep Feedback (Green Box):</u><br>
+                Start doing the exercise. Rep count and instructions to improve your form will be seen on screen. It will also be read out by a narrator.</li>
+                <li><u>Technical Issues (Blue Box):</u><br>
+                Any issues encountered by the application, such as being unable to see you fully, will be displayed here.</li>
+                <li><u>Sentimental Analysis (Orange box):</u><br>
+                If you are performing an exercise where the application can see your face (front squats), feedback based on sentimental analysis will be displayed here.</li>
+                <li><u>Next (Red Circle):</u><br>
+                When you are done, cick on "End Exercise" to see a summary of your form.</li>    
+            </ol>
+        </p>
+        <p>
+            <img src="{{url_for('static', filename='images/finishexercise.jpg')}}" alt="finish exercise"/> 
+            <ol start="8">
+                <li><u>Summary of Feedback (Green Box):</u><br>
+                A summary of your reps and the feedback given will be displayed here.</li>
+                <li><u>Show Feedback Log (Blue Box):</u><br>
+                The full log of each rep can by displayed by clicking this link.</li>
+                <li><u>About Errors (Yellow Boxes):</u><br>
+                More information on the feedback given can be found by clicking "About Errors" or by clicking "Form" in the navigation bar.</li>
+            </ol>
+        </p>
+    </section>
+    <section class="mb-3">
+        <h4 class="text-center" id="tips">Tips</h4>
         <ol>
-            <li>Click on the green "Start Camera" button.</li>
-            <li>Wait for the application to load.</li>
-            <li>Select an exercise from the drop down list, and then click "Start Exercise".</li>
-            <li>Position your camera according to the instruction in the yellow alert box. More information on camera placement can be found below.</li>
-            <li>Start doing the exercise. Verbal hints on how to improve your form for each rep will be read out by the browser.</li>
-            <li>When you are done, cick on "End Exercise" to see a summary of your form. You can also click on "Show Feedback Log" so see the history of feedback on each of your reps.</li>
-        </ol>
-        <h5>Tips</h5>
-        <ul>
-            <li>For 'Right Side' exercises, the camera should be set up directly to your right. </li>
+            <li>For 'Right Side' exercises, the camera should be set up directly to your right, as seen in the pictures above.</li>
             <li>Camera should be at table height for squats and floor height for push-ups.</li>
-            <li>Camera angle should be vertical. For squats, the camera should be able to see your feet.</li>
-            <li>For best training results, please time each rep at about 2-3s.</li>
-        </li>
+            <li>Camera angle should be vertical. For squats, the camera should be able to see your feet, as seen in the pictures above.</li>
+            <li>Examples of camera views include the images above and the videos taken in the "Form" page.</li>
+            <li>For best training results, please time each rep at about 3-4s.</li>
+        </ol>
+    </section>
+    <section class="mb-3">
+        <h4 class="text-center" id="advanced">Advanced Settings</h4>
+        <img src="{{url_for('static', filename='images/advanced.jpg')}}" alt="advanced settings" class="mt-0"/>
+        <ol>
+            <li><u>Toggle Text-To-Speech (Green Box):</u><br>
+            Disable or enable narrator to read out rep feedback.</li>
+            <li><u>Toggle Beginner or Expert (Blue Box):</u><br>
+            Beginner mode advices users to exercise within their limit, Expert mode advices users to exercise near or close to failure.</li>
+            <li><u>Flip Camera (Yellow Box):</u><br>
+            Changes active camera on devices with multiple cameras. Only supported on some browsers and devices.</li>
+        </ol>
     </section>
 {% endblock main %}
