@@ -411,12 +411,14 @@ socket.on('disconnect', () => {
 // MISC FUNCTIONS
 ////////
 
-// change mobile screen orientation
-window.addEventListener('resize', resizing);
+// change mobile screen orientation if it is mobile
+if (window.mobileCheck()) {
+    window.addEventListener('resize', resizing);
+}
+
 let innerWidth = window.innerWidth;
 function resizing() {
-    // if orientation change, resize camera output
-
+    // if orientation change and it's mobile, resize camera output
     if (innerWidth === window.innerWidth) return;
     innerWidth = window.innerWidth;
     if(window.innerWidth > window.innerHeight) {
