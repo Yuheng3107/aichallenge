@@ -44,31 +44,35 @@ FitAI: About
     <section class="mb-3">
         <h4 class="text-center" id="instructions">Instructions</h4>
         <span>To start exercising, do the following: </span>
-        <ol>
-            <p>
-                <img src="{{url_for('static', filename='images/homescreen.jpg')}}" alt="homescreen"/>
+        <p>
+            <img src="{{url_for('static', filename='images/homescreen.jpg')}}" alt="homescreen"/>        
+            <ol>
                 <li>Click on the green "Start Camera" button and allow the website to use your camera when prompted.</li>
                 <li>Wait for the application to load.</li>    
-            </p>
-            <p>
-                <img src="{{url_for('static', filename='images/startexercise.jpg')}}" alt="start exercise"/>
+            </ol>
+        <p>
+            <img src="{{url_for('static', filename='images/startexercise.jpg')}}" alt="start exercise"/>
+            <ol start="3">
                 <li>Select an exercise from the drop down list, and then click "Start Exercise".</li>    
-            </p>
-            <p>
-                <img src="{{url_for('static', filename='images/inrep.jpg')}}" alt="in rep"/>
+            </ol>
+        <p>
+            <img src="{{url_for('static', filename='images/inrep.jpg')}}" alt="in rep"/>
+            <ol start="4">
                 <li>Position your camera according to the instructions in the orange alert box. More information on camera placement can be found below, or by clicking "Tutorial" in the navigation bar and going to the Tips section.</li>
                 <li>Start doing the exercise. Verbal instructions on how to improve your form for each rep will be read out by the browser. The information can also be seen within the green box.</li>
                 <li>Any issues encountered by the application, such as being unable to see you fully, will be displayed within the blue box.</li>
                 <li>If you are performing an exercise where the application can see your face (front squats), feedback based on sentimental analysis will be displayed within the yellow box.</li>
                 <li>When you are done, cick on "End Exercise" to see a summary of your form.</li>    
-            </p>
-            <p>
-                <img src="{{url_for('static', filename='images/finishexercise.jpg')}}" alt="finish exercise"/>
+            </ol>
+        </p>
+        <p>
+            <img src="{{url_for('static', filename='images/finishexercise.jpg')}}" alt="finish exercise"/> 
+            <ol start="9">
                 <li>A summary of your reps and the feedback given will be displayed within the green box.</li>
                 <li>The full log of each rep can by displayed by clicking the Show Feedback Log link in the blue box.</li>
                 <li>More information on the feedback given can be found by clicking the "About Errors" button or by clicking "Form" in the navigation bar, as highlighted by the yellow boxes.</li>
-            </p>
-        </ol>
+            </ol>
+        </p>
     </section>
     <section class="mb-3">
         <h4 class="text-center" id="tips">Tips</h4>
@@ -82,8 +86,8 @@ FitAI: About
     </section>
     <section class="mb-3">
         <h4 class="text-center" id="advanced">Advanced Settings</h4>
+                    <img src="{{url_for('static', filename='images/advanced.jpg')}}" alt="advanced settings" class="mt-0"/>
         <ol>
-            <img src="{{url_for('static', filename='images/advanced.jpg')}}" alt="advanced settings" class="mt-0"/>
             <li>For 'Right Side' exercises, the camera should be set up directly to your right, as seen in the pictures above.</li>
             <li>Camera should be at table height for squats and floor height for push-ups.</li>
             <li>Camera angle should be vertical. For squats, the camera should be able to see your feet, as seen in the pictures above.</li>
