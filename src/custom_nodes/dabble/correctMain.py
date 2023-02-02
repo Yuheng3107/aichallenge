@@ -247,7 +247,7 @@ class Node(AbstractNode):
         """
         feedback = [f"{globals.repCount} Reps completed"]
         if self.repTimeError != 0:
-            feedback.append(f" Rep times were too short {self.repTimeError} times")
+            feedback.append(f" Rep were too fast {self.repTimeError} times")
         for i,count in enumerate(smallErrorCount):
             #none of that error
             if count == 0:
@@ -337,7 +337,7 @@ class Node(AbstractNode):
         if timeDifference == 1:
             # time error
             self.repTimeError += 1
-            feedback += "Rep time was too short. "
+            feedback += "Rep too fast. "
             hasError = True
 
         for i, difference in enumerate(angleDifferences):
