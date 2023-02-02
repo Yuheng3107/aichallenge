@@ -28,15 +28,26 @@ FitAI: About
     </li>
     <li class="nav-item">
         <a class="nav-link text-center" href="#about">About Us</a>
-    </li>           
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-center" href="#credits">Credits</a>
+    </li>        
 </ul>
 {% endblock %}
 
 {% block main %} 
 <main style="text-justify: auto;">
     <section>
-        <h4 class="text-center" id ="information">Information</h4>
-        <h5>Application Information</h5>
+        <h4 class="text-center">About</h4>
+        <section class="lead text-center">
+            Details about our application, <br>
+            Our features, and how our approach is unique. 
+        </section>
+    </section>
+
+    <section class="mb-4">
+        <h4 class="text-center" id ="information">General Information</h4>
+        <h5>Application Details</h5>
         <ul>
             <li>We currently support 3 exercises: Side Squats, Front Squats, and Side Push-Ups.</li>
             <li>Unfortunately, as of now, it can only support one connection due to computing constraints.</li>
@@ -56,23 +67,48 @@ FitAI: About
             If you have any pre-existing health conditions, consult an expert on whether or not these exercises are safe for you to perform.
         </p>
     </section>
-        
-    <section>
+
+    <section class="mb-4">
         <h4 class="text-center" id="about">About Us</h4>
         <h5>Background</h5>
         <p>
             This is the Website for the National AI Student Challenge 2022. We have used PeekingDuck as our core tool for Computer Vision. <br>
             For more information, you may visit our <a class="link link-dark" href="https://github.com/Yuheng3107/aichallenge">Github Repo</a>.
         </p>
-        <h5>Credits</h5>
-        Creators:
+        <h5>Our Application</h5>
+        <p>
+            Our application, Fit AI, aims to help Singaporeans in their fitness journey by improving their workout performance and reducing the frequency of sports injuries incurred during exercise by improving their workout form. 
+            Fit AI analyses the user’s exercise form to determine if they are exercising with proper form. 
+            During the exercise, individualised feedback on the specific mistakes made by the user is provided in real-time, allowing the user to pinpoint the mistakes made and correct their form.
+        </p>
+        <p>
+            Fit AI also detects the emotions of the user when they are exercising to gauge their level of fatigue. 
+            This helps beginners train within their own limits, preventing overexertion, thus reducing the risk of sports injuries. 
+            In contrast, for more experienced and athletic individuals, this feature can enhance their fitness level by ensuring that their workout is vigorous enough to provide sufficient stimulus to maximise workout effectiveness.
+        </p>
+        <h5>Our Approach</h5>
+        <p>
+            Currently, individuals turn to 1) fitness instructors, 2) online fitness resources, or 3) their social circle to improve their workout performance. 
+            The limitations of the afore-mentioned practices are, in respective order, 1) High Cost, 2) Lack of customizability as online resources are unable to correct the user’s form in real-time, and 3) Lack of accessibility and flexibility, as others may not be available anywhere and anytime to provide help.
+        </p>
+        <p>
+            Our approach is unique because it uses cutting-edge technology, i.e Computer Vision and Machine Learning, to solve some of the biggest pain points fitness enthusiasts face, setting our approach apart in the fitness industry, which has lagged behind in terms of digital innovation. 
+            Fitness Applications in the market are oversaturated with Fitness Tracking applications which merely offer Workout Logging and exercise videos, but do not offer the capability to provide real-time personalised feedback to the user to correct their exercise form, which is a massive pain point that most new fitness enthusiasts face. 
+            In addition, we are also the first in the industry to use facial detection to track fatigue levels of our users, preventing overexertion for beginners, whilst pushing the experienced to hit their fitness goals. Combined with the ease of accessing our web app, For the reasons above, we have competitive edge to in revolutionising the digital innovation space in the fitness industry.
+        </p>
+    </section>
+
+    <section class="mb-4">
+        <h4 class="text-center" id="credits">Credits</h5>
+        <h5>Creators:</h5>
         <ul>
             <li>Ivan Yap</li>
             <li>Yu Heng</li>
             <li>Zi Win</li>
             <li>Jem</li>
         </ul>
-        Our thanks to AI Challenge 2023 for providing us with this opportunity.
+        A huge thanks to AI Challenge 2023 for providing us with this opportunity.
     </section>
+
 </main>
 {% endblock main %}

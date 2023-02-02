@@ -41,9 +41,15 @@ FitAI: About
 
 {% block main %} 
 <main>
-    <section class="mb-3">
+    <section class="mb-4">
+        <h4 class="text-center">Tutorial</h4>
+        <section class="lead text-center">
+            Information on how to use our application, <br>
+            Tips on how to get the most out of it, and help on a few advanced settings. <br>
+            For more information about our application, visit our <a href="about#information" class="link-secondary">about</a> page.
+        </section>
         <h4 class="text-center" id="instructions">Instructions</h4>
-        <span>To start exercising, do the following: </span>
+        <h5>To start exercising, do the following:</h5>
         <section>
             <img src="{{url_for('static', filename='images/homescreen.jpg')}}" alt="homescreen">        
             <ol>
@@ -82,10 +88,12 @@ FitAI: About
                 The full log of feedback for each rep can by displayed by clicking this link.</li>
                 <li><u>About Errors (Yellow Boxes):</u><br>
                 More information on the feedback given can be found by clicking "About Errors" or by clicking "Form" in the navigation bar.</li>
+                <li><u>Start Another Exercise (Red Circle):</u><br>
+                To resume exercising, select an exercise from the drop down list, and then click "Start Exercise".</li>
             </ol>
         </section>
     </section>
-    <section class="mb-3">
+    <section class="mb-4">
         <h4 class="text-center" id="tips">Tips</h4>
         <ol>
             <li>For 'Right Side' exercises, the camera should be set up directly to your right, as seen in the pictures above.</li>
@@ -95,7 +103,7 @@ FitAI: About
             <li>For best training results, please time each rep at about 3-4s.</li>
         </ol>
     </section>
-    <section class="mb-3">
+    <section class="mb-4">
         <h4 class="text-center" id="advanced">Advanced Settings</h4>
         <img src="{{url_for('static', filename='images/advanced.jpg')}}" alt="advanced settings" class="mt-0">
         <ol>

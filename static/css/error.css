@@ -18,7 +18,8 @@ iframe {
 }
 
 img {
+    display: flex;
     justify-self: center;
     align-self: center;
-    width: 100%;
+    height: 20rem;
 }
