@@ -64,9 +64,7 @@ After this, run:
 Once the installation is successful, you can proceed to running our app using the terminal.
 
 ### Running the web server on your terminal
-To run the web server locally, type  
-```python3 app.py```   
-in the terminal.
+To run the web server locally, type ```python3 app.py``` in the terminal.
 
 If the server is successfully running, the prompt
 ```werkzeug  INFO:   * Running on http://127.0.0.1:5000 (Press CTRL+C to quit)``` should appear on your terminal, and you can paste ```http://127.0.0.1:5000``` in your web browser (either Google Chrome or Microsoft Edge) to access the application web page.
