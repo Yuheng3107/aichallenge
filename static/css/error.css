@@ -22,4 +22,5 @@ img {
     justify-self: center;
     align-self: center;
     height: 20rem;
+    width-max: 100%;
 }
