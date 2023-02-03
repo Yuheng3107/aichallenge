@@ -57,7 +57,7 @@ Deactivating the virtual environment:
 ### Setting up your Virtual Environment
 
 After this, run:
-```conda install cuda-nvcc```
+```conda install cuda-nvcc``` and 
 ```pip install -r requirements.txt```
  to install the required dependencies for our app.  
 
