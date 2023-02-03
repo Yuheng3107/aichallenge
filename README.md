@@ -7,8 +7,8 @@ If you have having trouble connecting, do confirm that you are using a secure co
 
 You can see the instructions at the [instructions page](https://fitai.click/instructions) of our site.
 
-# To run our server yourself
-Running our server requires the installation of git, a Version Control Software (to clone the repository), as well as Python3 to run the code, TensorFlow for GPU integration, and finally, a web browser such as Google Chrome or Safari to view the website.
+# To run our server locally
+Running our server locally requires the installation of git, a Version Control Software (to clone the repository), as well as Python3 to run the code, TensorFlow for GPU integration, and finally, a web browser such as Google Chrome or Safari to view the website.
 
 ### Specs
 The server requires a GPU and around 3GB of Ram. It can be run on a CPU, but performance will be much worse. Accuracy of the programme is not guaranteed on a CPU.
@@ -22,7 +22,7 @@ Python (Version 3.9) can be downloaded via [this link](https://www.python.org/do
 ### Installing TensorFlow
 You can view TensorFlow's guide for installation via [this link](https://www.tensorflow.org/install/pip).
 
-### Installing a web browser that supports multi-part responses
+### Installing a web browser
 Google Chrome can be downloaded via [this link](https://www.google.com/intl/en_sg/chrome/).
 
 ## To try out our app, please clone this git repository
@@ -65,5 +65,5 @@ To run the web server locally, type    ```python3 app.py```    in the terminal.
 If the server is successfully running, the prompt
 ```werkzeug  INFO:   * Running on http://127.0.0.1:5000 (Press CTRL+C to quit)``` should appear on your terminal, and you can paste ```http://127.0.0.1:5000``` in your web browser to access the application web page.
 
-### Allowing other people to connect to your web server.
+### To allow 
 You may view a guide on how to port forward via [this link](https://www.lifewire.com/how-to-port-forward-4163829).
