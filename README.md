@@ -21,7 +21,6 @@ Python (Version 3.9) can be downloaded via [this link](https://www.python.org/do
 
 ### Installing TensorFlow
 You can view TensorFlow's guide for installation via [this link](https://www.tensorflow.org/install/pip).
-Additionally, it appears to be necessary to ```conda install cuda-nvcc```
 
 ### Installing a web browser that supports multi-part responses
 Google Chrome can be downloaded via [this link](https://www.google.com/intl/en_sg/chrome/).
