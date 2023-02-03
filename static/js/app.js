@@ -12,6 +12,7 @@ function getVideoFrames() {
     // send video to backend, draw on frontend
     canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
     let dataURL = canvas.toDataURL('image/jpeg', 0.1);
+    console.log(dataURL);
     socket.emit('video', {'url': dataURL});
 }
 
