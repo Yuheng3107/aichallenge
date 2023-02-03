@@ -19,7 +19,6 @@ def index():
     and returns the homepage"""
     print(f"Connection. PeekingDuck Running: {globals.ISACTIVE}")
     if globals.ISACTIVE == False:
-        globals.initialise()
         return render_template('./index.html')
     return redirect('/lobby')  
 
