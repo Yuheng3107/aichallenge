@@ -52,18 +52,19 @@ Deactivating the virtual environment:
 
 ### Setting up your Virtual Environment
 
-After this, run:   
-```conda install cuda-nvcc``` and   
+After this, run the following commands in your command line to to install the required dependencies for our app:   
+```conda install cuda-nvcc```
 ```pip install -r requirements.txt```
- to install the required dependencies for our app.  
+  
 
 Once the installation is successful, you can proceed to running our app using the terminal.
 
 ### Running the web server on your terminal
-To run the web server locally, type    ```python3 app.py```    in the terminal.
+To run the web server locally, run the following command while in the aichallenge directory:    
+```python3 app.py``` 
 
 If the server is successfully running, the prompt
-```werkzeug  INFO:   * Running on http://127.0.0.1:5000 (Press CTRL+C to quit)``` should appear on your terminal, and you can paste ```http://127.0.0.1:5000``` in your web browser to access the application web page.
+```werkzeug  INFO:   * Running on http://127.0.0.1:5000 (Press CTRL+C to quit)``` should appear on your command line, and you can paste ```http://127.0.0.1:5000``` in your web browser to access the application web page.
 
-### To allow 
+### To allow others to connect to your server
 You may view a guide on how to port forward via [this link](https://www.lifewire.com/how-to-port-forward-4163829).
