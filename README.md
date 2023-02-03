@@ -11,7 +11,7 @@ You can see the instructions at the [instructions page](https://fitai.click/inst
 Running our server locally requires the installation of git, a Version Control Software (to clone the repository), as well as Python3 to run the code, TensorFlow for GPU integration, and finally, a web browser such as Google Chrome or Safari to view the website.
 
 ### Specs
-The server requires a GPU and around 3GB of Ram. It can be run on a CPU, but performance will be much worse. Accuracy of the programme is not guaranteed on a CPU.
+The server requires a GPU and around 3GB of dedicated GPU memory. It can be run on a CPU, but performance will be much worse. Accuracy of the programme is not guaranteed on a CPU.
 
 ### Installing Git
 Git can be installed by visiting [this link](https://git-scm.com/downloads).
@@ -32,12 +32,12 @@ This can be done by doing the following:
 For Windows:  
 Go to File Explorer and type cmd, and press Enter.  
 
-Then paste the following command into the command line (black screen that pops up)    
+Then paste the following command into the command line (black screen that pops up):    
 ```git clone https://github.com/Yuheng3107/aichallenge```
 
 After cloning the git repository, there will be a new directory called aichallenge created. 
 
-You can move into that directory by typing ```cd aichallenge``` into the terminal.
+You can move into that directory by typing ```cd aichallenge``` into the command line.
 
 In order to run our app, we highly recommend setting up a virtual environment in order to prevent conflicts in package dependencies. If you followed the TensorFlow tutorial, you should now have a conda virtual environment set up.
 
