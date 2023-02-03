@@ -7,24 +7,21 @@ If you have having trouble connecting, do confirm that you are using a secure co
 
 You can see the instructions at the [instructions page](https://fitai.click/instructions) of our site.
 
-# To run our application yourself
+# To run our server yourself
+Running our server requires the installation of git, a Version Control Software (to clone the repository), as well as Python3 to run the code, TensorFlow for GPU integration, and finally, a browser such as Google Chrome or Microsoft Edge which supports multi-part responses which are required to stream the PeekingDuck image data onto the web application. 
 
-There are *two modes* in which you can run our app in. 
+### Specs
+The server requires a GPU and around 3GB of Ram. It can be run on a CPU, but performance will be much worse. Accuracy of the programme is not guaranteed on a CPU.
 
-The first is developer mode, where you can see the poses drawn onto the picture, and is used by us natively for testing/debugging. You can try out this mode to better understand how our model works.
-
-The second is the production web server mode (unfortunately it can only support one connection at a time currently), which we intend to deploy to the cloud for the end-user, where they can use it on both Desktop and Mobile to aid in their exercise.
-
-Please see the prequisites required for running our app in its respective modes.
-
-## Prerequisites for Dev Mode
-Running our app in development mode requires the installation of git, a Version Control Software (to clone the repository), as well as Python3 to run the code, and finally, a browser such as Google Chrome or Microsoft Edge which supports multi-part responses which are required to stream the PeekingDuck image data onto the web application.
-
-### Installing Git  
+### Installing Git
 Git can be installed by visiting [this link](https://git-scm.com/downloads).
 
 ### Installing Python
 Python (Version 3.9) can be downloaded via [this link](https://www.python.org/downloads/).
+
+### Installing TensorFlow
+You can view TensorFlow's guide for installation via [this link](https://www.tensorflow.org/install/pip).
+Additionally, it appears to be necessary to conda install cuda-nvcc
 
 ### Installing a web browser that supports multi-part responses
 Google Chrome can be downloaded via [this link](https://www.google.com/intl/en_sg/chrome/).
@@ -46,31 +43,28 @@ called aichallenge created.
 
 You can move into that directory by typing ```cd aichallenge``` into the terminal.
 
-In order to run our app, we highly recommend setting up a virtual environment in order to prevent conflicts in package dependencies. We shall be using [venv](https://docs.python.org/3/library/venv.html) for our app.
+In order to run our app, we highly recommend setting up a virtual environment in order to prevent conflicts in package dependencies. If you followed the TensorFlow tutorial, you should now have a conda virtual environment set up.
 
-### To use the virtual environment (venv), there are 2 steps required:
+Creating a virtual environment: 
+```conda create --name tf python=3.9```  
 
-1. Creating a virtual environment:  
-Windows: ```py -3 -m venv venv```  
-macOS/Linux: ```python3 -m venv venv```
+Activating the virtual environment:  
+```conda activate tf```  
 
-2. Activating the virtual environment:  
-Windows: ```venv\Scripts\activate```  
-macOS/Linux: ```. venv/bin/activate```
+Deactivating the virtual environment:
+```conda deactivate``` 
 
-When (venv) appears on the left of your terminal prompt, you have successfully installed and activated venv.
+### Setting up your Virtual Environment
 
 After this, run:
-```pip3 install -r requirements.txt```
+```pip install -r requirements.txt```
  to install the required dependencies for our app.  
 
 Once the installation is successful, you can proceed to running our app using the terminal.
 
-### Running the web server on your terminal (localhost)
-To run the web server locally, either type  
-```python3 app.py```  
-or
-```flask run```  
+### Running the web server on your terminal
+To run the web server locally, type  
+```python3 app.py```   
 in the terminal.
 
 If the server is successfully running, the prompt
