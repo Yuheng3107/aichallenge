@@ -1,8 +1,4 @@
 {% extends "base_template.html" %} 
-{% block head %} 
-<!-- Styling for lobby -->
-<link rel="stylesheet" href="{{url_for('static', filename='css/instructions.css')}}">
-{% endblock %}
 
 {% block title %} 
 FitAI: About
@@ -41,40 +37,48 @@ FitAI: About
 
 {% block main %} 
 <main>
-    <section class="mb-3">
+    <section class="mb-4">
+        <h4 class="text-center">Tutorial</h4>
+        <section class="lead text-center">
+            Information on how to use our application, <br>
+            Tips on how to get the most out of it, and help on a few advanced settings. <br>
+            For more information about our application, visit our <a href="about#information" class="link-secondary">about</a> page.
+        </section>
+    </section>
+    <section class="mb-4">
         <h4 class="text-center" id="instructions">Instructions</h4>
-        <span>To start exercising, do the following: </span>
-        <section>
-            <img src="{{url_for('static', filename='images/homescreen.jpg')}}" alt="homescreen">        
+        <section>To start exercising, do the following:</section>
+        <section class="mb-4">
+            <img class="rounded mx-auto d-block" style="width: 100%;" src="{{url_for('static', filename='images/homescreen.jpg')}}" alt="homescreen">        
             <ol>
                 <li><u>Start Application (Red Circle):</u><br>
                 Click on the green "Start Camera" button and allow the website to use your camera when prompted.</li>
             </ol>
         </section>
-        <section>
-            <img src="{{url_for('static', filename='images/startexercise.jpg')}}" alt="start exercise">
+        <section class="mb-4">
+            <img class="rounded mx-auto d-block" style="width: 100%;" src="{{url_for('static', filename='images/startexercise.jpg')}}" alt="start exercise">
             <ol start="2">
                 <li><u>Start Exercise (Red Circle):</u><br>
                 When the application finishes loading, select an exercise from the drop down list, and then click "Start Exercise".</li>    
             </ol>
         </section>
-        <section>
-            <img src="{{url_for('static', filename='images/inrep.jpg')}}" alt="in rep">
+        <section class="mb-4">
+            <img class="rounded mx-auto d-block" style="width: 100%;" src="{{url_for('static', filename='images/inrep.jpg')}}" alt="in rep">
             <ol start="3">
-                <li><u>Camera position (Orange Boxes):</u><br>
+                <li><u>Camera Position (Orange Boxes):</u><br>
                 Position your camera according to the instructions in the alert box. More information on camera placement can be found in the "Tips" section.</li>
                 <li><u>Rep Feedback (Green Box):</u><br>
                 Start doing the exercise. Rep count and instructions to improve your form will be seen on screen. It will also be read out by a narrator.</li>
                 <li><u>Technical Issues (Blue Box):</u><br>
                 Any issues encountered by the application, such as being unable to see you fully, will be displayed here.</li>
-                <li><u>Sentimental Analysis (Yellow box):</u><br>
+                <li><u>Fatigue Detection (Yellow Box):</u><br>
                 If you are performing an exercise where the application can see your face (front squats), feedback based on sentimental analysis will be displayed here.</li>
                 <li><u>End Exercise (Red Circle):</u><br>
-                When you are done, cick on "End Exercise" to see a summary of your form.</li>    
+                When you are done, cick on "End Exercise" to see a summary of your reps.</li>    
             </ol>
         </section>
-        <section>
-            <img src="{{url_for('static', filename='images/finishexercise.jpg')}}" alt="finish exercise"> 
+        <section class="mb-4">
+            <img class="rounded mx-auto d-block" style="width: 100%;" src="{{url_for('static', filename='images/finishexercise.jpg')}}" alt="finish exercise"> 
             <ol start="8">
                 <li><u>Summary of Feedback (Green Box):</u><br>
                 A summary of your reps and the feedback given will be displayed here.</li>
@@ -82,23 +86,27 @@ FitAI: About
                 The full log of feedback for each rep can by displayed by clicking this link.</li>
                 <li><u>About Errors (Yellow Boxes):</u><br>
                 More information on the feedback given can be found by clicking "About Errors" or by clicking "Form" in the navigation bar.</li>
+                <li><u>Start Another Exercise (Red Circle):</u><br>
+                To resume exercising, select an exercise from the drop down list, and then click "Start Exercise".</li>
             </ol>
         </section>
     </section>
-    <section class="mb-3">
+    <section class="mb-4">
         <h4 class="text-center" id="tips">Tips</h4>
         <ol>
-            <li>For 'Right Side' exercises, the camera should be set up directly to your right, as seen in the pictures above.</li>
+            <li>For 'Right Side' exercises, the camera should be set up facing your right side, as seen in the pictures above.</li>
             <li>Camera should be at table height for squats and floor height for push-ups.</li>
-            <li>Camera angle should be vertical. For squats, the camera should be able to see your feet, as seen in the pictures above.</li>
-            <li>Examples of camera views include the images above and the videos taken in the "Form" page.</li>
-            <li>For best training results, please time each rep at about 3-4s.</li>
+            <li>Camera should be placed vertical, and should either not be angled or be angled slightly downwards.</li>
+            <li>For squats, the camera should be able to see your feet, as seen in the pictures above.</li>
+            <li>Examples of what the camera should see include the images above and the videos taken in the "Form" page.</li>
+            <li>For best training results, please time each rep at about 3-4s for squats, and about 2.5-3 seconds for push-ups</li>
+            <li>For more information about our application, visit our <a href="about#information" class="link-secondary">about</a> page.</li>
         </ol>
     </section>
-    <section class="mb-3">
+    <section>
         <h4 class="text-center" id="advanced">Advanced Settings</h4>
-        <img src="{{url_for('static', filename='images/advanced.jpg')}}" alt="advanced settings" class="mt-0">
-        <ol>
+        <img class="rounded mx-auto d-block" style="width: 100%;" src="{{url_for('static', filename='images/advanced.jpg')}}" alt="advanced settings" class="mt-0">
+        <ol class="mb-0">
             <li><u>Toggle Text-To-Speech (Green Box):</u><br>
             Disable or enable narrator to read out rep feedback.</li>
             <li><u>Toggle Beginner or Expert (Blue Box):</u><br>
