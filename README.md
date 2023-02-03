@@ -21,7 +21,7 @@ Python (Version 3.9) can be downloaded via [this link](https://www.python.org/do
 
 ### Installing TensorFlow
 You can view TensorFlow's guide for installation via [this link](https://www.tensorflow.org/install/pip).
-Additionally, it appears to be necessary to conda install cuda-nvcc
+Additionally, it appears to be necessary to ```conda install cuda-nvcc```
 
 ### Installing a web browser that supports multi-part responses
 Google Chrome can be downloaded via [this link](https://www.google.com/intl/en_sg/chrome/).
@@ -57,6 +57,7 @@ Deactivating the virtual environment:
 ### Setting up your Virtual Environment
 
 After this, run:
+```conda install cuda-nvcc```
 ```pip install -r requirements.txt```
  to install the required dependencies for our app.  
 
@@ -70,60 +71,5 @@ in the terminal.
 If the server is successfully running, the prompt
 ```werkzeug  INFO:   * Running on http://127.0.0.1:5000 (Press CTRL+C to quit)``` should appear on your terminal, and you can paste ```http://127.0.0.1:5000``` in your web browser (either Google Chrome or Microsoft Edge) to access the application web page.
 
-### Run using Docker Containers (For Deployment on the Cloud i.e AWS or GCP or Azure, or you can do it locally to test it out)
-
-Note: Cloud is recommended for those with more experience, otherwise you can try running the docker container locally.
-
-First, you have to download Docker.
-
-#### Setting up Docker on the Cloud
-To run Docker on the Cloud (e.g EC2 instance on AWS), we can add the following code in our User data when launching a EC2 instance:
-```
-#!/bin/bash
-sudo yum update -y
-sudo amazon-linux-extras install docker
-sudo service docker start
-sudo usermod -a -G docker ec2-user
-```
-
-Do note that the instance requires at least 2GiB of memory to run as CV is computationally intensive.
-
-You can confirm that the Docker Daemon is running by running ```docker ps``` in the terminal and if ```CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES``` is returned, you can proceed to the next step.
-
-#### Setting up Docker Locally
-To download it locally, you can use [this link](https://www.docker.com/products/docker-desktop/) to download Docker Desktop.
-
-Simply open the App, and run docker ps in the terminal to confirm that the Docker Daemon is running. If ```CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES``` is returned, you can proceed to the next step.
-
-### Running the Docker Container
-First, we need to pull the image from Docker Hub:
-
-Paste ```docker pull yuheng3107/aichallenge:latest``` into the terminal (either cloud shell or locally).
-
-It will take a while to pull the image from DockerHub, so please wait patiently for a few minutes or so until the download is complete before proceeding to the next step:
-
-Run the Docker Container:
-Paste ```docker run -p 5000:5000 yuheng3107/aichallenge``` into the terminal.
-
-You can connect to the web server by pasting ```<your server's IP address/DNS hostname>:5000``` (Running on the Cloud), or ```http://127.0.0.1:5000``` (Running locally).
-
-#### How it works
-The Docker container is programmed to get image data from the front end and send it to the backend to be processed by PeekingDuck for the processing node to return the global feedback variables which the Flask Server and hence the front end can access by sending WebSocket requests in intervals.
-
-It uses a custom input node called webcam.py which uses PeekingDuck's VideoNoThread class to read the jpeg frames provided by the front end with the Canvas API, and puts the img in the data pool, just like input.visual.
-
-This was done because input.visual (which runs based on cv2.VideoCapture has no way of getting image data from the front end, as source=0 uses the camera in the backend (which servers/containers do not have), and hence a custom PeekingDuck node was made in collaboration with front end JS code to allow for this functionality).
-
-# How to use the web app
-
-After running the web server successfully and opening it in your chosen browser, you will be greeted with the following screen.
-
-![Screenshot of UI](https://i.imgur.com/7Pu5RtJ.png "Web App UI")
-
-To start exercising, do the following
-1. Click on the green "Start Camera" button
-2. Select an exercise from the drop down list, and then click "Start Exercise"
-3. Position your camera according to the instruction in the yellow alert box.
-4. Start doing the exercise. Verbal hints on how to improve your form for each rep will be read out by the browser
-5. When you are done, cick on "End Exercise" to see a summary of your form. You can also click on "Show Feedback Log" so see the history of feedback on each of your reps.
-
+### Allowing other people to connect to your web server.
+You may view a guide on how to port forward via [this link](https://www.lifewire.com/how-to-port-forward-4163829).
