@@ -34,8 +34,8 @@ This can be done by doing the following:
 For Windows:  
 Go to File Explorer and type cmd, and press Enter.  
 
-Then paste ```git clone https://github.com/Yuheng3107/aichallenge``` into the command line (black screen that pops up).   
-For macOS/Linux: Paste ```git clone https://github.com/Yuheng3107/aichallenge``` into the command line.
+Then paste the following command into the command line (black screen that pops up)    
+```git clone https://github.com/Yuheng3107/aichallenge```
 
 After cloning the git repository, there will be a new directory
 called aichallenge created. 
@@ -44,26 +44,26 @@ You can move into that directory by typing ```cd aichallenge``` into the termina
 
 In order to run our app, we highly recommend setting up a virtual environment in order to prevent conflicts in package dependencies. If you followed the TensorFlow tutorial, you should now have a conda virtual environment set up.
 
-Creating a virtual environment: 
+Creating a virtual environment:   
 ```conda create --name tf python=3.9```  
 
 Activating the virtual environment:  
 ```conda activate tf```  
 
-Deactivating the virtual environment:
+Deactivating the virtual environment:   
 ```conda deactivate``` 
 
 ### Setting up your Virtual Environment
 
-After this, run:
-```conda install cuda-nvcc``` and 
+After this, run:   
+```conda install cuda-nvcc``` and   
 ```pip install -r requirements.txt```
  to install the required dependencies for our app.  
 
 Once the installation is successful, you can proceed to running our app using the terminal.
 
 ### Running the web server on your terminal
-To run the web server locally, type ```python3 app.py``` in the terminal.
+To run the web server locally, type    ```python3 app.py```    in the terminal.
 
 If the server is successfully running, the prompt
 ```werkzeug  INFO:   * Running on http://127.0.0.1:5000 (Press CTRL+C to quit)``` should appear on your terminal, and you can paste ```http://127.0.0.1:5000``` in your web browser (either Google Chrome or Microsoft Edge) to access the application web page.
