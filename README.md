@@ -11,7 +11,7 @@ You can see the instructions at the [instructions page](https://fitai.click/inst
 Running our server locally requires the installation of git, a Version Control Software (to clone the repository), as well as Python3 to run the code, TensorFlow for GPU integration, and finally, a web browser such as Google Chrome or Safari to view the website.
 
 ### Specs
-The server requires a GPU and around 3GB of Ram. It can be run on a CPU, but performance will be much worse. Accuracy of the programme is not guaranteed on a CPU.
+The server requires a GPU and around 3GB of dedicated GPU memory. It can be run on a CPU, but performance will be much worse. Accuracy of the programme is not guaranteed on a CPU.
 
 ### Installing Git
 Git can be installed by visiting [this link](https://git-scm.com/downloads).
@@ -32,12 +32,12 @@ This can be done by doing the following:
 For Windows:  
 Go to File Explorer and type cmd, and press Enter.  
 
-Then paste the following command into the command line (black screen that pops up)    
+Then paste the following command into the command line (black screen that pops up):    
 ```git clone https://github.com/Yuheng3107/aichallenge```
 
 After cloning the git repository, there will be a new directory called aichallenge created. 
 
-You can move into that directory by typing ```cd aichallenge``` into the terminal.
+You can move into that directory by typing ```cd aichallenge``` into the command line.
 
 In order to run our app, we highly recommend setting up a virtual environment in order to prevent conflicts in package dependencies. If you followed the TensorFlow tutorial, you should now have a conda virtual environment set up.
 
@@ -52,20 +52,21 @@ Deactivating the virtual environment:
 
 ### Setting up your Virtual Environment
 
-After this, run:   
-```conda install cuda-nvcc``` and   
+After this, run the following commands in your command line to to install the required dependencies for our app:   
+```conda install cuda-nvcc```
 ```pip install -r requirements.txt```
- to install the required dependencies for our app.  
+  
 
 Once the installation is successful, you can proceed to running our app using the terminal.
 
 ### Running the web server on your terminal
-To run the web server locally, type    ```python3 app.py```    in the terminal.
+To run the web server locally, run the following command while in the aichallenge directory:    
+```python3 app.py``` 
 
 If the server is successfully running, the prompt
-```werkzeug  INFO:   * Running on http://127.0.0.1:5000 (Press CTRL+C to quit)``` should appear on your terminal, and you can paste ```http://127.0.0.1:5000``` in your web browser to access the application web page.
+```werkzeug  INFO:   * Running on http://127.0.0.1:5000 (Press CTRL+C to quit)``` should appear on your command line, and you can paste ```http://127.0.0.1:5000``` in your web browser to access the application web page.
 
-### To allow others to access your local server from the internet
+### To allow others to connect to your server
 You may view a guide on how to port forward via [this link](https://www.lifewire.com/how-to-port-forward-4163829).
 
 
