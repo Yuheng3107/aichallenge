@@ -65,5 +65,9 @@ To run the web server locally, type    ```python3 app.py```    in the terminal.
 If the server is successfully running, the prompt
 ```werkzeug  INFO:   * Running on http://127.0.0.1:5000 (Press CTRL+C to quit)``` should appear on your terminal, and you can paste ```http://127.0.0.1:5000``` in your web browser to access the application web page.
 
-### To allow 
+### To allow others to access your local server from the internet
 You may view a guide on how to port forward via [this link](https://www.lifewire.com/how-to-port-forward-4163829).
+
+
+
+
