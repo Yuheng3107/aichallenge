@@ -21,6 +21,7 @@ socket.on('connect', () => {
 // sends text in input to backend, and backend will send to all clients
 sendButton.addEventListener('click', (e) => {
     socket.send(myMessage.value);
+    myMessage.value = "";
 });
 
 myMessage.addEventListener('keypress', (e) => {
