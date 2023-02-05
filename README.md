@@ -3,7 +3,7 @@ This is the GitHub Repo for the National AI Student Challenge 2022. We have used
 
 To try our app immediately, you can click [this link](https://fitai.click), or you can click [this link](https://fitai.ddns.net) if the first link is not working. Do note that the second link will warn you that your connection is not private. Click on advanced and proceed to the website.
 
-If you have having trouble connecting, do confirm that you are using a secure connection (HTTPS, with a Lock sign on the browser) to connect to our website.
+If you have having trouble connecting, do confirm that the link should be a "https://" link, and not a "http://" link.
 
 You can see the instructions at the [instructions page](https://fitai.click/instructions) of our site.
 
