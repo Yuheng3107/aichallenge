@@ -1,16 +1,15 @@
 iframe.horizontal {
-    height: 60vh;
+    height: 50vh;
 }
 
 iframe.vertical {
-    width: 40vw;
     height: 30vh;
+    width: 30vw;
 }
 
 .video {
     display: flex;
     justify-content: center;
-    
 }
 
 iframe {
@@ -39,6 +38,10 @@ hr {
     }
     .long {
         height: auto;
+        width: 100%;
+    }
+    iframe.vertical {
+        width: 100%;
     }
 }
 
